@@ -173,12 +173,12 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                     </h3>
                   </div>
                   
-                  <div className="space-y-1">
+                  <div className="space-y-0">
                     {products && products.length > 0 ? (
                       products.map((product, idx) => (
-                        <div key={product.id} className="flex items-start gap-2.5 py-2">
+                        <div key={product.id} className="flex items-start gap-2.5 py-1.5">
                           <div className="flex-shrink-0 pt-0.5">
-                            <span className="text-primary font-semibold text-sm">{idx + 1}.</span>
+                            <span className="text-foreground font-medium text-xs">{idx + 1}.</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-semibold text-base mb-0.5" data-testid={`text-product-name-${idx}`}>
