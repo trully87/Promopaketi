@@ -38,6 +38,14 @@ Preferred communication style: Simple, everyday language.
 - Custom hooks for reusable logic (useToast, useIsMobile, useLanguage)
 - Type-safe data contracts shared between frontend and backend via `@shared` module
 
+**Dynamic Content Management**
+- Hero slider loads slides dynamically from database with fallback to hardcoded images
+- Navigation menu loads items dynamically from database with fallback to default menu
+- Admin can manage hero slides and menu items with full CRUD operations
+- Public endpoints filter by `isActive` flag, admin endpoints return all items for editability
+- Language codes use lowercase 'me' and 'en' throughout the system
+- Hero component auto-resets currentSlide index when totalSlides changes
+
 **Package Modal System**
 - Tab-based interface with 2 main tabs:
   - **"Kompletan Paket" (Complete Package)** - Text-only numbered list of all products with names and descriptions (no images)
@@ -59,6 +67,9 @@ Preferred communication style: Simple, everyday language.
 - Middleware chain: JSON parsing, URL encoding, request logging with timing
 - Protected routes using `requireAuth` middleware for admin functions
 - File upload handling with Multer (5MB limit, image files only)
+- Separate admin and public endpoints for content:
+  - Public: `/api/hero-slides` and `/api/menu-items` (active items only)
+  - Admin: `/api/admin/hero-slides` and `/api/admin/menu-items` (all items including inactive)
 
 **Authentication & Sessions**
 - Passport.js for authentication strategy implementation
@@ -84,6 +95,8 @@ Preferred communication style: Simple, everyday language.
 - `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing in EUR, category, images
 - `package_products` table: Individual items within packages with descriptions and specifications in both languages, images stored as jsonb array
 - `inquiries` table: Customer contact form submissions
+- `hero_slides` table: Homepage carousel slides with bilingual titles/subtitles, image paths, sort order, and active status
+- `menu_items` table: Navigation menu items with bilingual labels, paths, sort order, and active status
 
 **Pricing**
 - All prices stored and displayed in Euros (EUR)
