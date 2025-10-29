@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { eq } from 'drizzle-orm';
+import { eq, sql as dsql, desc, asc } from 'drizzle-orm';
 import * as schema from '@shared/schema';
 import type { 
   User, InsertUser, 
@@ -18,6 +18,24 @@ import type {
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle(sql, { schema });
 
+export interface PaginationOptions {
+  category?: string;
+  page: number;
+  pageSize: number;
+  sortBy?: string;
+  sortOrder?: string;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 export interface IStorage {
   // User methods
   getUser(id: string): Promise<User | undefined>;
@@ -26,6 +44,7 @@ export interface IStorage {
 
   // Package methods
   getAllPackages(): Promise<Package[]>;
+  getPackages(options: PaginationOptions): Promise<PaginatedResult<Package>>;
   getPackage(id: string): Promise<Package | undefined>;
   createPackage(pkg: InsertPackage): Promise<Package>;
   updatePackage(id: string, pkg: Partial<InsertPackage>): Promise<Package | undefined>;
@@ -101,6 +120,46 @@ export class DatabaseStorage implements IStorage {
   // Package methods
   async getAllPackages(): Promise<Package[]> {
     return await db.select().from(schema.packages);
+  }
+
+  async getPackages(options: PaginationOptions): Promise<PaginatedResult<Package>> {
+    const { category, page, pageSize, sortBy = 'createdAt', sortOrder = 'desc' } = options;
+    
+    // Build WHERE clause
+    const whereClause = category ? eq(schema.packages.category, category) : undefined;
+    
+    // Get total count for pagination using SQL COUNT
+    const countResult = await db
+      .select({ count: dsql<number>`count(*)::int` })
+      .from(schema.packages)
+      .where(whereClause);
+    
+    const total = Number(countResult[0]?.count ?? 0);
+    const totalPages = Math.ceil(total / pageSize);
+    
+    // Build data query with sorting
+    const sortColumn = sortBy === 'price' ? schema.packages.price : schema.packages.createdAt;
+    const orderByClause = sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn);
+    
+    // Apply pagination using SQL offset and limit
+    const offset = (page - 1) * pageSize;
+    const data = await db
+      .select()
+      .from(schema.packages)
+      .where(whereClause)
+      .orderBy(orderByClause)
+      .limit(pageSize)
+      .offset(offset);
+    
+    return {
+      data,
+      pagination: {
+        page,
+        pageSize,
+        total,
+        totalPages,
+      },
+    };
   }
 
   async getPackage(id: string): Promise<Package | undefined> {

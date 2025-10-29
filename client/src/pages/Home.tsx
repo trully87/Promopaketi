@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import Hero from '@/components/Hero';
 import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
@@ -14,6 +15,7 @@ import ecoImage from '@assets/stock_images/eco_friendly_natural_de0eebf0.jpg';
 
 export default function Home() {
   const { language, t } = useLanguage();
+  const [, setLocation] = useLocation();
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [contactPackage, setContactPackage] = useState<string | undefined>();
@@ -52,9 +54,10 @@ export default function Home() {
     );
   }
 
-  const newyearPackages = packages.filter(p => p.category === 'newyear');
-  const corporatePackages = packages.filter(p => p.category === 'corporate');
-  const ekoPackages = packages.filter(p => p.category === 'eko');
+  // Show only 4 featured packages per category on homepage
+  const newyearPackages = packages.filter(p => p.category === 'newyear').slice(0, 4);
+  const corporatePackages = packages.filter(p => p.category === 'corporate').slice(0, 4);
+  const ekoPackages = packages.filter(p => p.category === 'eko').slice(0, 4);
 
   return (
     <div className="min-h-screen">
@@ -62,76 +65,85 @@ export default function Home() {
 
       <section id="packages" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32">
-          <CategorySection
-            title={t('category.newyear')}
-            description={t('category.newyear.desc')}
-            image={standardNewyear}
-            onViewAll={() => document.getElementById('newyear-packages')?.scrollIntoView({ behavior: 'smooth' })}
-            align="left"
-          />
+          {/* New Year Packages */}
+          <div id="newyear-packages">
+            <CategorySection
+              title={t('category.newyear')}
+              description={t('category.newyear.desc')}
+              image={standardNewyear}
+              onViewAll={() => setLocation('/packages/newyear')}
+              align="left"
+            />
 
-          <div id="newyear-packages" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newyearPackages.map((pkg) => (
-              <PackageCard
-                key={pkg.id}
-                id={pkg.id}
-                name={language === 'me' ? pkg.nameME : pkg.nameEN}
-                price={pkg.price}
-                minOrder={pkg.minOrder}
-                image={pkg.image}
-                items={[]}
-                category={pkg.category as "newyear" | "corporate"}
-                onLearnMore={() => handleLearnMore(pkg)}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+              {newyearPackages.map((pkg) => (
+                <PackageCard
+                  key={pkg.id}
+                  id={pkg.id}
+                  name={language === 'me' ? pkg.nameME : pkg.nameEN}
+                  price={pkg.price}
+                  minOrder={pkg.minOrder}
+                  image={pkg.image}
+                  items={[]}
+                  category={pkg.category as "newyear" | "corporate"}
+                  onLearnMore={() => handleLearnMore(pkg)}
+                />
+              ))}
+            </div>
           </div>
 
-          <CategorySection
-            title={t('category.corporate')}
-            description={t('category.corporate.desc')}
-            image={corporateBox}
-            onViewAll={() => document.getElementById('corporate-packages')?.scrollIntoView({ behavior: 'smooth' })}
-            align="right"
-          />
+          {/* Corporate Packages */}
+          <div id="corporate-packages">
+            <CategorySection
+              title={t('category.corporate')}
+              description={t('category.corporate.desc')}
+              image={corporateBox}
+              onViewAll={() => setLocation('/packages/corporate')}
+              align="right"
+            />
 
-          <div id="corporate-packages" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {corporatePackages.map((pkg) => (
-              <PackageCard
-                key={pkg.id}
-                id={pkg.id}
-                name={language === 'me' ? pkg.nameME : pkg.nameEN}
-                price={pkg.price}
-                minOrder={pkg.minOrder}
-                image={pkg.image}
-                items={[]}
-                category={pkg.category as "newyear" | "corporate"}
-                onLearnMore={() => handleLearnMore(pkg)}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+              {corporatePackages.map((pkg) => (
+                <PackageCard
+                  key={pkg.id}
+                  id={pkg.id}
+                  name={language === 'me' ? pkg.nameME : pkg.nameEN}
+                  price={pkg.price}
+                  minOrder={pkg.minOrder}
+                  image={pkg.image}
+                  items={[]}
+                  category={pkg.category as "newyear" | "corporate"}
+                  onLearnMore={() => handleLearnMore(pkg)}
+                />
+              ))}
+            </div>
           </div>
 
-          <CategorySection
-            title={t('category.eko')}
-            description={t('category.eko.desc')}
-            image={ecoImage}
-            onViewAll={() => document.getElementById('eko-packages')?.scrollIntoView({ behavior: 'smooth' })}
-            align="left"
-          />
+          {/* Eco Packages */}
+          <div id="eko-packages">
+            <CategorySection
+              title={t('category.eko')}
+              description={t('category.eko.desc')}
+              image={ecoImage}
+              onViewAll={() => setLocation('/packages/eko')}
+              align="left"
+            />
 
-          <div id="eko-packages" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ekoPackages.map((pkg) => (
-              <PackageCard
-                key={pkg.id}
-                id={pkg.id}
-                name={language === 'me' ? pkg.nameME : pkg.nameEN}
-                price={pkg.price}
-                minOrder={pkg.minOrder}
-                image={pkg.image}
-                items={[]}
-                category={pkg.category}
-                onLearnMore={() => handleLearnMore(pkg)}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+              {ekoPackages.map((pkg) => (
+                <PackageCard
+                  key={pkg.id}
+                  id={pkg.id}
+                  name={language === 'me' ? pkg.nameME : pkg.nameEN}
+                  price={pkg.price}
+                  minOrder={pkg.minOrder}
+                  image={pkg.image}
+                  items={[]}
+                  category={pkg.category}
+                  onLearnMore={() => handleLearnMore(pkg)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
+import CategoryPage from "@/pages/CategoryPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import PackageForm from "@/pages/PackageForm";
@@ -23,9 +24,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/novogodisnji" component={Home} />
-      <Route path="/korporativni" component={Home} />
-      <Route path="/kontakt" component={Home} />
+      <Route path="/packages/:category" component={CategoryPage} />
       <Route path="/about" component={About} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />

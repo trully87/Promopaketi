@@ -111,11 +111,34 @@ export function registerRoutes(app: Express): http.Server {
     res.json({ url: `/uploads/${req.file.filename}` });
   });
 
-  // Package routes
+  // Package routes with optional pagination
   app.get("/api/packages", async (req: Request, res: Response) => {
     try {
-      const packages = await storage.getAllPackages();
-      res.json(packages);
+      // If no pagination parameters, return all packages (backward compatible)
+      const hasPaginationParams = req.query.page || req.query.pageSize;
+      
+      if (!hasPaginationParams) {
+        const packages = await storage.getAllPackages();
+        res.json(packages);
+        return;
+      }
+
+      // Otherwise, return paginated results
+      const category = req.query.category as string | undefined;
+      const page = parseInt(req.query.page as string) || 1;
+      const pageSize = parseInt(req.query.pageSize as string) || 12;
+      const sortBy = req.query.sortBy as string || 'createdAt';
+      const sortOrder = req.query.sortOrder as string || 'desc';
+
+      const result = await storage.getPackages({
+        category,
+        page,
+        pageSize,
+        sortBy,
+        sortOrder
+      });
+
+      res.json(result);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch packages" });
     }
