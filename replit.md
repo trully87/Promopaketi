@@ -2,7 +2,7 @@
 
 ## Overview
 
-Brain Box is a premium e-commerce web application specializing in luxury gift packages for the Serbian/Montenegrin market. The platform offers two main product categories: New Year's (Novogodišnji) packages and Corporate (Korporativni) packages, with full bilingual support (Serbian/Montenegrin and English). The application features a customer-facing storefront for browsing packages and submitting inquiries, alongside a comprehensive admin panel for managing products, content, contact information, About page, and newsletter subscribers.
+Brain Box is a premium e-commerce web application specializing in luxury gift packages for the Serbian/Montenegrin market. The platform offers multiple product categories including New Year's (Novogodišnji), Corporate (Korporativni), Eco (Eko), Local Producers (Lokalni Proizvođači), and Premium VIP packages, with full bilingual support (Serbian/Montenegrin and English). The application features a customer-facing storefront for browsing packages and submitting inquiries, alongside a comprehensive admin panel for managing products, categories, content, contact information, About page, and newsletter subscribers.
 
 ## User Preferences
 
@@ -68,8 +68,8 @@ Preferred communication style: Simple, everyday language.
 - Protected routes using `requireAuth` middleware for admin functions
 - File upload handling with Multer (5MB limit, image files only)
 - Separate admin and public endpoints for content:
-  - Public: `/api/hero-slides`, `/api/menu-items`, `/api/contact-info`, `/api/about-page` (active items or singleton data)
-  - Admin: `/api/admin/hero-slides`, `/api/admin/menu-items`, `/api/admin/contact-info`, `/api/admin/about-page`, `/api/admin/newsletter-subscribers` (all items including inactive, full CRUD access)
+  - Public: `/api/hero-slides`, `/api/menu-items`, `/api/contact-info`, `/api/about-page`, `/api/package-categories` (active items or singleton data)
+  - Admin: `/api/admin/hero-slides`, `/api/admin/menu-items`, `/api/admin/contact-info`, `/api/admin/about-page`, `/api/admin/newsletter-subscribers`, `/api/admin/package-categories` (all items including inactive, full CRUD access)
 - Newsletter subscription: `/api/newsletter/subscribe` (public endpoint for email collection)
 
 **Authentication & Sessions**
@@ -95,6 +95,7 @@ Preferred communication style: Simple, everyday language.
 - `users` table: Admin authentication with username/password
 - `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing in EUR, category, images
 - `package_products` table: Individual items within packages with descriptions and specifications in both languages, images stored as jsonb array
+- `package_categories` table: Dynamic package categories with bilingual labels (labelME, labelEN), unique value identifiers, sort order, and active status
 - `inquiries` table: Customer contact form submissions
 - `hero_slides` table: Homepage carousel slides with bilingual titles/subtitles, image paths, sort order, and active status
 - `menu_items` table: Navigation menu items with bilingual labels, paths, sort order, and active status
