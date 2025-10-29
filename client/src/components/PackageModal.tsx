@@ -176,7 +176,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                   <div className="space-y-2">
                     {products && products.length > 0 ? (
                       products.map((product, idx) => (
-                        <div key={product.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                        <div key={product.id} className="flex items-start gap-3 p-3 rounded-lg">
                           <div className="flex-shrink-0">
                             <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
                               <span className="text-primary font-bold text-sm">{idx + 1}</span>
