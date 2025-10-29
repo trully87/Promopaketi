@@ -8,7 +8,10 @@ import type {
   PackageProduct, InsertPackageProduct,
   Inquiry, InsertInquiry,
   HeroSlide, InsertHeroSlide,
-  MenuItem, InsertMenuItem
+  MenuItem, InsertMenuItem,
+  ContactInfo, InsertContactInfo,
+  AboutPage, InsertAboutPage,
+  NewsletterSubscriber, InsertNewsletterSubscriber
 } from '@shared/schema';
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -52,6 +55,21 @@ export interface IStorage {
   createMenuItem(item: InsertMenuItem): Promise<MenuItem>;
   updateMenuItem(id: string, item: Partial<InsertMenuItem>): Promise<MenuItem | undefined>;
   deleteMenuItem(id: string): Promise<boolean>;
+
+  // Contact info methods (singleton - only one row)
+  getContactInfo(): Promise<ContactInfo | undefined>;
+  updateContactInfo(id: string, info: Partial<InsertContactInfo>): Promise<ContactInfo | undefined>;
+  createContactInfo(info: InsertContactInfo): Promise<ContactInfo>;
+
+  // About page methods (singleton - only one row)
+  getAboutPage(): Promise<AboutPage | undefined>;
+  updateAboutPage(id: string, page: Partial<InsertAboutPage>): Promise<AboutPage | undefined>;
+  createAboutPage(page: InsertAboutPage): Promise<AboutPage>;
+
+  // Newsletter subscriber methods
+  getAllNewsletterSubscribers(): Promise<NewsletterSubscriber[]>;
+  createNewsletterSubscriber(subscriber: InsertNewsletterSubscriber): Promise<NewsletterSubscriber>;
+  getNewsletterSubscriberByEmail(email: string): Promise<NewsletterSubscriber | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -216,6 +234,64 @@ export class DatabaseStorage implements IStorage {
   async deleteMenuItem(id: string): Promise<boolean> {
     const result = await db.delete(schema.menuItems).where(eq(schema.menuItems.id, id));
     return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Contact info methods
+  async getContactInfo(): Promise<ContactInfo | undefined> {
+    const info = await db.select().from(schema.contactInfo).limit(1);
+    return info[0];
+  }
+
+  async updateContactInfo(id: string, info: Partial<InsertContactInfo>): Promise<ContactInfo | undefined> {
+    const updated = await db
+      .update(schema.contactInfo)
+      .set({ ...info, updatedAt: new Date() })
+      .where(eq(schema.contactInfo.id, id))
+      .returning();
+    return updated[0];
+  }
+
+  async createContactInfo(info: InsertContactInfo): Promise<ContactInfo> {
+    const created = await db.insert(schema.contactInfo).values(info).returning();
+    return created[0];
+  }
+
+  // About page methods
+  async getAboutPage(): Promise<AboutPage | undefined> {
+    const page = await db.select().from(schema.aboutPage).limit(1);
+    return page[0];
+  }
+
+  async updateAboutPage(id: string, page: Partial<InsertAboutPage>): Promise<AboutPage | undefined> {
+    const updated = await db
+      .update(schema.aboutPage)
+      .set({ ...page, updatedAt: new Date() })
+      .where(eq(schema.aboutPage.id, id))
+      .returning();
+    return updated[0];
+  }
+
+  async createAboutPage(page: InsertAboutPage): Promise<AboutPage> {
+    const created = await db.insert(schema.aboutPage).values(page).returning();
+    return created[0];
+  }
+
+  // Newsletter subscriber methods
+  async getAllNewsletterSubscribers(): Promise<NewsletterSubscriber[]> {
+    return await db.select().from(schema.newsletterSubscribers);
+  }
+
+  async createNewsletterSubscriber(subscriber: InsertNewsletterSubscriber): Promise<NewsletterSubscriber> {
+    const created = await db.insert(schema.newsletterSubscribers).values(subscriber).returning();
+    return created[0];
+  }
+
+  async getNewsletterSubscriberByEmail(email: string): Promise<NewsletterSubscriber | undefined> {
+    const subscriber = await db
+      .select()
+      .from(schema.newsletterSubscribers)
+      .where(eq(schema.newsletterSubscribers.email, email));
+    return subscriber[0];
   }
 }
 

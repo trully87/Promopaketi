@@ -5,7 +5,10 @@ import {
   insertPackageProductSchema, 
   insertInquirySchema,
   insertHeroSlideSchema,
-  insertMenuItemSchema
+  insertMenuItemSchema,
+  insertContactInfoSchema,
+  insertAboutPageSchema,
+  insertNewsletterSubscriberSchema
 } from "@shared/schema";
 import { requireAuth } from "./auth";
 import multer from "multer";
@@ -361,6 +364,97 @@ export function registerRoutes(app: Express): http.Server {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete menu item" });
+    }
+  });
+
+  // Contact info routes
+  app.get("/api/contact-info", async (req: Request, res: Response) => {
+    try {
+      const info = await storage.getContactInfo();
+      res.json(info || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch contact info" });
+    }
+  });
+
+  app.get("/api/admin/contact-info", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const info = await storage.getContactInfo();
+      res.json(info || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch contact info" });
+    }
+  });
+
+  app.patch("/api/admin/contact-info/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertContactInfoSchema.partial().parse(req.body);
+      const info = await storage.updateContactInfo(req.params.id, validated);
+      if (!info) {
+        return res.status(404).json({ error: "Contact info not found" });
+      }
+      res.json(info);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid contact info data", details: error });
+    }
+  });
+
+  // About page routes
+  app.get("/api/about", async (req: Request, res: Response) => {
+    try {
+      const page = await storage.getAboutPage();
+      res.json(page || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch about page" });
+    }
+  });
+
+  app.get("/api/admin/about", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const page = await storage.getAboutPage();
+      res.json(page || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch about page" });
+    }
+  });
+
+  app.patch("/api/admin/about/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertAboutPageSchema.partial().parse(req.body);
+      const page = await storage.updateAboutPage(req.params.id, validated);
+      if (!page) {
+        return res.status(404).json({ error: "About page not found" });
+      }
+      res.json(page);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid about page data", details: error });
+    }
+  });
+
+  // Newsletter routes
+  app.post("/api/newsletter/subscribe", async (req: Request, res: Response) => {
+    try {
+      const validated = insertNewsletterSubscriberSchema.parse(req.body);
+      
+      // Check if email already exists
+      const existing = await storage.getNewsletterSubscriberByEmail(validated.email);
+      if (existing) {
+        return res.status(409).json({ error: "Email already subscribed" });
+      }
+      
+      const subscriber = await storage.createNewsletterSubscriber(validated);
+      res.status(201).json(subscriber);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid subscriber data", details: error });
+    }
+  });
+
+  app.get("/api/admin/newsletter-subscribers", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const subscribers = await storage.getAllNewsletterSubscribers();
+      res.json(subscribers);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch newsletter subscribers" });
     }
   });
 
