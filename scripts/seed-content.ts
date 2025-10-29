@@ -83,24 +83,17 @@ async function seedContent() {
           isActive: 1
         },
         {
-          labelME: 'Novogodišnji paketi',
-          labelEN: 'New Year Packages',
+          labelME: 'Paketi',
+          labelEN: 'Packages',
           path: '#packages',
           sortOrder: 1,
-          isActive: 1
-        },
-        {
-          labelME: 'Korporativni paketi',
-          labelEN: 'Corporate Packages',
-          path: '#packages',
-          sortOrder: 2,
           isActive: 1
         },
         {
           labelME: 'Kontakt',
           labelEN: 'Contact',
           path: '#contact',
-          sortOrder: 3,
+          sortOrder: 2,
           isActive: 1
         }
       ];

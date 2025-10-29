@@ -120,7 +120,7 @@ export default function AdminDashboard() {
             </CardHeader>
           </Card>
 
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/menu")}>
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/menu-items")}>
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-md">

@@ -27,6 +27,13 @@ export default function Hero() {
   const hasSlides = slides.length > 0;
   const totalSlides = hasSlides ? slides.length : fallbackImages.length;
 
+  // Reset currentSlide if it exceeds the new totalSlides
+  useEffect(() => {
+    if (currentSlide >= totalSlides) {
+      setCurrentSlide(0);
+    }
+  }, [totalSlides, currentSlide]);
+
   // Auto-advance slides every 5 seconds (unless paused)
   useEffect(() => {
     if (isPaused || totalSlides === 0) return;

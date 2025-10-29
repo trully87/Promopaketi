@@ -24,7 +24,7 @@ function Router() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/hero-slider" component={HeroSliderManagement} />
-      <Route path="/admin/menu" component={MenuManagement} />
+      <Route path="/admin/menu-items" component={MenuManagement} />
       <Route path="/admin/packages/new" component={PackageForm} />
       <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />
