@@ -7,11 +7,15 @@ import { LanguageProvider } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
+import About from "@/pages/About";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import PackageForm from "@/pages/PackageForm";
 import HeroSliderManagement from "@/pages/HeroSliderManagement";
 import MenuManagement from "@/pages/MenuManagement";
+import ContactInfoManagement from "@/pages/ContactInfoManagement";
+import AboutPageManagement from "@/pages/AboutPageManagement";
+import NewsletterSubscribers from "@/pages/NewsletterSubscribers";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,10 +25,14 @@ function Router() {
       <Route path="/novogodisnji" component={Home} />
       <Route path="/korporativni" component={Home} />
       <Route path="/kontakt" component={Home} />
+      <Route path="/about" component={About} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/hero-slider" component={HeroSliderManagement} />
       <Route path="/admin/menu-items" component={MenuManagement} />
+      <Route path="/admin/contact-info" component={ContactInfoManagement} />
+      <Route path="/admin/about" component={AboutPageManagement} />
+      <Route path="/admin/newsletter-subscribers" component={NewsletterSubscribers} />
       <Route path="/admin/packages/new" component={PackageForm} />
       <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />
