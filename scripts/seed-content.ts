@@ -107,6 +107,55 @@ async function seedContent() {
       console.log(`Menu items already exist (${existingMenuItems.length} items)`);
     }
 
+    // Check if contact info already exists
+    const existingContactInfo = await db.select().from(schema.contactInfo);
+    
+    if (existingContactInfo.length === 0) {
+      console.log('Adding contact info...');
+      
+      const contactInfo = {
+        phone: '+382 67 123 456',
+        email: 'info@brainbox.me',
+        whatsapp: '+382 67 123 456',
+        viber: '+382 67 123 456',
+        addressME: 'Podgorica, Crna Gora',
+        addressEN: 'Podgorica, Montenegro',
+        mapLatitude: '42.4304',
+        mapLongitude: '19.2594'
+      };
+
+      await db.insert(schema.contactInfo).values(contactInfo);
+      
+      console.log('✓ Added contact info');
+    } else {
+      console.log(`Contact info already exists`);
+    }
+
+    // Check if about page already exists
+    const existingAboutPage = await db.select().from(schema.aboutPage);
+    
+    if (existingAboutPage.length === 0) {
+      console.log('Adding about page...');
+      
+      const aboutPage = {
+        titleME: 'O Nama',
+        titleEN: 'About Us',
+        contentME: 'Brain Box je vodeća kompanija specijalizovana za kreiranje premium poklon paketa i korporativnih poklona u Crnoj Gori. Sa godinama iskustva u industriji, naša misija je da pružimo jedinstvene i personalizovane poklon rešenja koja će ostaviti trajan utisak na vaše partnere, klijente i zaposlene.\n\nNaši paketi kombinuju pažljivo odabrane premium proizvode sa elegantnim pakovanjem i mogućnošću potpune personalizacije prema vašim potrebama. Bilo da tražite novogodišnje pakete ili korporativne poklone, garantujemo kvalitet i profesionalnost u svakom detalju.',
+        contentEN: 'Brain Box is a leading company specialized in creating premium gift packages and corporate gifts in Montenegro. With years of experience in the industry, our mission is to provide unique and personalized gift solutions that will leave a lasting impression on your partners, clients, and employees.\n\nOur packages combine carefully selected premium products with elegant packaging and the possibility of complete personalization according to your needs. Whether you are looking for New Year packages or corporate gifts, we guarantee quality and professionalism in every detail.',
+        missionME: 'Naša misija je da kreiramo nezaboravne poklon iskustva koja reflektuju vrednosti vaše kompanije i jačaju poslovne odnose.',
+        missionEN: 'Our mission is to create unforgettable gift experiences that reflect your company\'s values and strengthen business relationships.',
+        visionME: 'Želimo da postanemo regionalni lider u premium poklon pakovanjima, poznati po kreativnosti, kvalitetu i izvrsnoj usluzi.',
+        visionEN: 'We aim to become a regional leader in premium gift packaging, known for creativity, quality, and excellent service.',
+        image: ''
+      };
+
+      await db.insert(schema.aboutPage).values(aboutPage);
+      
+      console.log('✓ Added about page');
+    } else {
+      console.log(`About page already exists`);
+    }
+
     console.log('\n✓ Seeding completed successfully!');
     process.exit(0);
   } catch (error) {
