@@ -13,14 +13,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Upload, Plus, Trash2, Image as ImageIcon } from "lucide-react";
-import type { Package, PackageProduct } from "@shared/schema";
+import type { Package, PackageProduct, PackageCategory } from "@shared/schema";
 
 const packageFormSchema = z.object({
   nameME: z.string().min(1, "Name (ME) is required"),
   nameEN: z.string().min(1, "Name (EN) is required"),
   price: z.string().min(1, "Price is required"),
   minOrder: z.string().min(1, "Min order is required"),
-  category: z.enum(["newyear", "corporate"]),
+  category: z.string().min(1, "Category is required"),
   image: z.string().min(1, "Package image is required"),
   products: z.array(z.object({
     nameME: z.string().min(1, "Product name (ME) is required"),
@@ -52,6 +52,10 @@ export default function PackageForm() {
     enabled: isEditing,
   });
 
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<PackageCategory[]>({
+    queryKey: ["/api/package-categories"],
+  });
+
   const form = useForm<PackageFormData>({
     resolver: zodResolver(packageFormSchema),
     defaultValues: {
@@ -59,7 +63,7 @@ export default function PackageForm() {
       nameEN: "",
       price: "",
       minOrder: "30",
-      category: "newyear",
+      category: "",
       image: "",
       products: [],
     },
@@ -77,7 +81,7 @@ export default function PackageForm() {
         nameEN: existingPackage.nameEN,
         price: existingPackage.price.toString(),
         minOrder: existingPackage.minOrder.toString(),
-        category: existingPackage.category as "newyear" | "corporate",
+        category: existingPackage.category,
         image: existingPackage.image,
         products: existingProducts.map(p => ({
           nameME: p.nameME,
@@ -300,15 +304,24 @@ export default function PackageForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={categoriesLoading}>
                           <FormControl>
                             <SelectTrigger data-testid="select-category">
-                              <SelectValue placeholder="Select category" />
+                              <SelectValue placeholder={categoriesLoading ? "Loading categories..." : categories.length === 0 ? "No categories available" : "Select category"} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="newyear">New Year</SelectItem>
-                            <SelectItem value="corporate">Corporate</SelectItem>
+                            {categories.length === 0 && !categoriesLoading ? (
+                              <div className="px-2 py-4 text-sm text-muted-foreground text-center">
+                                No categories available. Please create categories first.
+                              </div>
+                            ) : (
+                              categories.map((category) => (
+                                <SelectItem key={category.id} value={category.value}>
+                                  {category.labelEN}
+                                </SelectItem>
+                              ))
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
