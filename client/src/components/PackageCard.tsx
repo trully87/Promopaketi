@@ -19,7 +19,10 @@ export default function PackageCard({ name, price, minOrder, image, items, categ
   const { t, language } = useLanguage();
 
   return (
-    <Card className="overflow-hidden hover-elevate transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+    <Card 
+      className="overflow-hidden hover-elevate transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+      onClick={onLearnMore}
+    >
       <div className="aspect-[3/4] overflow-hidden bg-muted">
         <img 
           src={image} 
@@ -64,7 +67,10 @@ export default function PackageCard({ name, price, minOrder, image, items, categ
       <CardFooter className="pt-4">
         <Button 
           className="w-full" 
-          onClick={onLearnMore}
+          onClick={(e) => {
+            e.stopPropagation();
+            onLearnMore();
+          }}
           data-testid={`button-learn-more-${name.toLowerCase().replace(/\s+/g, '-')}`}
         >
           {t('common.learnMore')}
