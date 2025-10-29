@@ -81,3 +81,39 @@ export const insertInquirySchema = createInsertSchema(inquiries).omit({
 
 export type InsertInquiry = z.infer<typeof insertInquirySchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
+
+// Hero slides for homepage carousel
+export const heroSlides = pgTable("hero_slides", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  titleME: text("title_me").notNull(),
+  titleEN: text("title_en").notNull(),
+  subtitleME: text("subtitle_me").notNull(),
+  subtitleEN: text("subtitle_en").notNull(),
+  image: text("image").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  isActive: integer("is_active").notNull().default(1), // 1 = active, 0 = inactive
+});
+
+export const insertHeroSlideSchema = createInsertSchema(heroSlides).omit({
+  id: true,
+});
+
+export type InsertHeroSlide = z.infer<typeof insertHeroSlideSchema>;
+export type HeroSlide = typeof heroSlides.$inferSelect;
+
+// Menu items for navigation
+export const menuItems = pgTable("menu_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  labelME: text("label_me").notNull(),
+  labelEN: text("label_en").notNull(),
+  path: text("path").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  isActive: integer("is_active").notNull().default(1), // 1 = active, 0 = inactive
+});
+
+export const insertMenuItemSchema = createInsertSchema(menuItems).omit({
+  id: true,
+});
+
+export type InsertMenuItem = z.infer<typeof insertMenuItemSchema>;
+export type MenuItem = typeof menuItems.$inferSelect;

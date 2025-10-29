@@ -1,6 +1,12 @@
 import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
-import { insertPackageSchema, insertPackageProductSchema, insertInquirySchema } from "@shared/schema";
+import { 
+  insertPackageSchema, 
+  insertPackageProductSchema, 
+  insertInquirySchema,
+  insertHeroSlideSchema,
+  insertMenuItemSchema
+} from "@shared/schema";
 import { requireAuth } from "./auth";
 import multer from "multer";
 import path from "path";
@@ -223,6 +229,138 @@ export function registerRoutes(app: Express): http.Server {
       res.json(inquiries);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch inquiries" });
+    }
+  });
+
+  // Hero slides routes
+  app.get("/api/hero-slides", async (req: Request, res: Response) => {
+    try {
+      const slides = await storage.getAllHeroSlides();
+      res.json(slides);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hero slides" });
+    }
+  });
+
+  app.get("/api/admin/hero-slides", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const slides = await storage.getAllHeroSlidesForAdmin();
+      res.json(slides);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hero slides" });
+    }
+  });
+
+  app.get("/api/hero-slides/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const slide = await storage.getHeroSlide(req.params.id);
+      if (!slide) {
+        return res.status(404).json({ error: "Hero slide not found" });
+      }
+      res.json(slide);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hero slide" });
+    }
+  });
+
+  app.post("/api/hero-slides", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertHeroSlideSchema.parse(req.body);
+      const slide = await storage.createHeroSlide(validated);
+      res.status(201).json(slide);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid hero slide data", details: error });
+    }
+  });
+
+  app.patch("/api/hero-slides/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertHeroSlideSchema.partial().parse(req.body);
+      const slide = await storage.updateHeroSlide(req.params.id, validated);
+      if (!slide) {
+        return res.status(404).json({ error: "Hero slide not found" });
+      }
+      res.json(slide);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid hero slide data", details: error });
+    }
+  });
+
+  app.delete("/api/hero-slides/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const success = await storage.deleteHeroSlide(req.params.id);
+      if (!success) {
+        return res.status(404).json({ error: "Hero slide not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete hero slide" });
+    }
+  });
+
+  // Menu items routes
+  app.get("/api/menu-items", async (req: Request, res: Response) => {
+    try {
+      const items = await storage.getAllMenuItems();
+      res.json(items);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch menu items" });
+    }
+  });
+
+  app.get("/api/admin/menu-items", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const items = await storage.getAllMenuItemsForAdmin();
+      res.json(items);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch menu items" });
+    }
+  });
+
+  app.get("/api/menu-items/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const item = await storage.getMenuItem(req.params.id);
+      if (!item) {
+        return res.status(404).json({ error: "Menu item not found" });
+      }
+      res.json(item);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch menu item" });
+    }
+  });
+
+  app.post("/api/menu-items", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertMenuItemSchema.parse(req.body);
+      const item = await storage.createMenuItem(validated);
+      res.status(201).json(item);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid menu item data", details: error });
+    }
+  });
+
+  app.patch("/api/menu-items/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertMenuItemSchema.partial().parse(req.body);
+      const item = await storage.updateMenuItem(req.params.id, validated);
+      if (!item) {
+        return res.status(404).json({ error: "Menu item not found" });
+      }
+      res.json(item);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid menu item data", details: error });
+    }
+  });
+
+  app.delete("/api/menu-items/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const success = await storage.deleteMenuItem(req.params.id);
+      if (!success) {
+        return res.status(404).json({ error: "Menu item not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete menu item" });
     }
   });
 

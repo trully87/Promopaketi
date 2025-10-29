@@ -10,6 +10,8 @@ import Home from "@/pages/Home";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import PackageForm from "@/pages/PackageForm";
+import HeroSliderManagement from "@/pages/HeroSliderManagement";
+import MenuManagement from "@/pages/MenuManagement";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +23,8 @@ function Router() {
       <Route path="/kontakt" component={Home} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/hero-slider" component={HeroSliderManagement} />
+      <Route path="/admin/menu" component={MenuManagement} />
       <Route path="/admin/packages/new" component={PackageForm} />
       <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />

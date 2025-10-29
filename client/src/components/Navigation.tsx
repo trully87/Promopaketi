@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Globe, Menu, X } from 'lucide-react';
 import { useLanguage, type Language } from '@/lib/i18n';
 import { useState } from 'react';
+import type { MenuItem } from '@shared/schema';
 import logo from '@assets/promo brain box2_1761751687022.png';
 
 export default function Navigation() {
@@ -10,12 +12,29 @@ export default function Navigation() {
   const { language, setLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { href: '/', label: t('nav.home') },
-    { href: '/novogodisnji', label: t('nav.newyear') },
-    { href: '/korporativni', label: t('nav.corporate') },
-    { href: '/kontakt', label: t('nav.contact') },
+  // Load menu items from database
+  const { data: menuItems = [] } = useQuery<MenuItem[]>({
+    queryKey: ["/api/menu-items"],
+  });
+
+  // Fallback menu items if database is empty
+  const fallbackNavLinks = [
+    { href: '/', labelME: t('nav.home'), labelEN: t('nav.home') },
+    { href: '/novogodisnji', labelME: t('nav.newyear'), labelEN: t('nav.newyear') },
+    { href: '/korporativni', labelME: t('nav.corporate'), labelEN: t('nav.corporate') },
+    { href: '/kontakt', labelME: t('nav.contact'), labelEN: t('nav.contact') },
   ];
+
+  // Use database menu items if available, otherwise use fallback
+  const navLinks = menuItems.length > 0
+    ? menuItems.map(item => ({
+        href: item.path,
+        label: language === 'me' ? item.labelME : item.labelEN
+      }))
+    : fallbackNavLinks.map(item => ({
+        href: item.href,
+        label: language === 'me' ? item.labelME : item.labelEN
+      }));
 
   const toggleLanguage = () => {
     setLanguage(language === 'me' ? 'en' : 'me');

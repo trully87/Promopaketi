@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, LogOut, Package as PackageIcon } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, Package as PackageIcon, ImageIcon, Menu } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { Package } from "@shared/schema";
 
@@ -104,6 +104,37 @@ export default function AdminDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {/* Content Management Quick Links */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/hero-slider")}>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <ImageIcon className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Hero Slider</CardTitle>
+                  <CardDescription>Manage homepage carousel slides</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/menu")}>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Menu className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Navigation Menu</CardTitle>
+                  <CardDescription>Manage menu items and links</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        </div>
+
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold">Packages</h2>
