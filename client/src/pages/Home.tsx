@@ -7,12 +7,13 @@ import ContactForm from '@/components/ContactForm';
 import { useLanguage } from '@/lib/i18n';
 import { packages } from '@/data/packages';
 import type { PackageCardProps } from '@/components/PackageCard';
+import type { ProductItem } from '@/data/packages';
 import standardNewyear from '@assets/generated_images/Standard_New_Year_package_413cce95.png';
 import corporateBox from '@assets/generated_images/Corporate_package_with_box_2c8d7f38.png';
 
 export default function Home() {
   const { language, t } = useLanguage();
-  const [selectedPackage, setSelectedPackage] = useState<PackageCardProps | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<(PackageCardProps & { products?: ProductItem[] }) | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [contactPackage, setContactPackage] = useState<string | undefined>();
 
@@ -25,6 +26,7 @@ export default function Home() {
       image: pkg.image,
       items: pkg.items[language],
       category: pkg.category,
+      products: pkg.products,
       onLearnMore: () => {}
     });
     setModalOpen(true);
