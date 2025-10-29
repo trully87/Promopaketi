@@ -2,7 +2,7 @@
 
 ## Overview
 
-Brain Box is a premium e-commerce web application specializing in luxury gift packages for the Serbian/Montenegrin market. The platform offers two main product categories: New Year's (Novogodišnji) packages and Corporate (Korporativni) packages, with full bilingual support (Serbian/Montenegrin and English). The application features a customer-facing storefront for browsing packages and submitting inquiries, alongside an admin panel for managing products and content.
+Brain Box is a premium e-commerce web application specializing in luxury gift packages for the Serbian/Montenegrin market. The platform offers two main product categories: New Year's (Novogodišnji) packages and Corporate (Korporativni) packages, with full bilingual support (Serbian/Montenegrin and English). The application features a customer-facing storefront for browsing packages and submitting inquiries, alongside a comprehensive admin panel for managing products, content, contact information, About page, and newsletter subscribers.
 
 ## User Preferences
 
@@ -68,8 +68,9 @@ Preferred communication style: Simple, everyday language.
 - Protected routes using `requireAuth` middleware for admin functions
 - File upload handling with Multer (5MB limit, image files only)
 - Separate admin and public endpoints for content:
-  - Public: `/api/hero-slides` and `/api/menu-items` (active items only)
-  - Admin: `/api/admin/hero-slides` and `/api/admin/menu-items` (all items including inactive)
+  - Public: `/api/hero-slides`, `/api/menu-items`, `/api/contact-info`, `/api/about-page` (active items or singleton data)
+  - Admin: `/api/admin/hero-slides`, `/api/admin/menu-items`, `/api/admin/contact-info`, `/api/admin/about-page`, `/api/admin/newsletter-subscribers` (all items including inactive, full CRUD access)
+- Newsletter subscription: `/api/newsletter/subscribe` (public endpoint for email collection)
 
 **Authentication & Sessions**
 - Passport.js for authentication strategy implementation
@@ -97,6 +98,9 @@ Preferred communication style: Simple, everyday language.
 - `inquiries` table: Customer contact form submissions
 - `hero_slides` table: Homepage carousel slides with bilingual titles/subtitles, image paths, sort order, and active status
 - `menu_items` table: Navigation menu items with bilingual labels, paths, sort order, and active status
+- `contact_info` table: Contact information with phone, email, WhatsApp, Viber, bilingual addresses, and map coordinates (singleton - single editable record)
+- `about_page` table: About Us page content with bilingual titles, content, mission, vision, and image (singleton - single editable record)
+- `newsletter_subscribers` table: Email subscribers with status tracking ('active' or 'unsubscribed')
 
 **Pricing**
 - All prices stored and displayed in Euros (EUR)
