@@ -39,7 +39,7 @@ export default function PackageCard({ name, price, minOrder, image, items, categ
           {name}
         </h3>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-primary">{price}€</span>
+          <span className="text-3xl font-bold text-primary" data-testid="text-package-card-price">{price} RSD</span>
           <span className="text-sm text-muted-foreground">{t('common.perUnit')}</span>
         </div>
         <p className="text-sm text-muted-foreground">

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Check, Package, Paintbrush, ListChecks, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import type { Package as PackageType, PackageProduct } from '@shared/schema';
 
@@ -37,6 +37,7 @@ function ProductImageGallery({ images }: { images: string[] }) {
           src={images[currentIndex]} 
           alt={`Product ${currentIndex + 1}`}
           className="w-full h-full object-cover"
+          data-testid={`img-product-${currentIndex}`}
         />
       </div>
       
@@ -47,6 +48,7 @@ function ProductImageGallery({ images }: { images: string[] }) {
             size="icon"
             className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={goToPrevious}
+            data-testid="button-gallery-prev"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -55,6 +57,7 @@ function ProductImageGallery({ images }: { images: string[] }) {
             size="icon"
             className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={goToNext}
+            data-testid="button-gallery-next"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -69,6 +72,7 @@ function ProductImageGallery({ images }: { images: string[] }) {
                     ? 'bg-primary w-6' 
                     : 'bg-white/50 hover:bg-white/75'
                 }`}
+                data-testid={`button-gallery-dot-${idx}`}
               />
             ))}
           </div>
@@ -80,6 +84,14 @@ function ProductImageGallery({ images }: { images: string[] }) {
 
 export default function PackageModal({ package: pkg, products, open, onClose, onInquire }: PackageModalProps) {
   const { t, language } = useLanguage();
+  const [activeTab, setActiveTab] = useState('overview');
+
+  // Reset activeTab to overview whenever modal opens or package changes
+  useEffect(() => {
+    if (open) {
+      setActiveTab('overview');
+    }
+  }, [open, pkg?.id]);
 
   if (!pkg) return null;
 
@@ -89,7 +101,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-serif text-3xl">{packageName}</DialogTitle>
+          <DialogTitle className="font-serif text-3xl" data-testid="text-package-name">{packageName}</DialogTitle>
         </DialogHeader>
 
         <div className="grid md:grid-cols-5 gap-8 mt-4">
@@ -99,6 +111,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                 src={pkg.image} 
                 alt={packageName}
                 className="w-full h-full object-cover"
+                data-testid="img-package-main"
               />
             </div>
             
@@ -107,12 +120,12 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <p className="text-sm text-muted-foreground">{t('common.price')}</p>
-                    <p className="text-3xl font-bold text-primary">{pkg.price}€</p>
+                    <p className="text-3xl font-bold text-primary" data-testid="text-package-price">{pkg.price} RSD</p>
                     <p className="text-sm text-muted-foreground">{t('common.perUnit')}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">{t('common.minOrder')}</p>
-                    <p className="text-2xl font-semibold">{pkg.minOrder}</p>
+                    <p className="text-2xl font-semibold" data-testid="text-min-order">{pkg.minOrder}</p>
                     <p className="text-sm text-muted-foreground">{t('common.pieces')}</p>
                   </div>
                 </div>
@@ -135,64 +148,192 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
           </div>
 
           <div className="md:col-span-3 space-y-6">
-            <Badge variant="secondary" className="mb-2">
+            <Badge variant="secondary" className="mb-2" data-testid="badge-category">
               {pkg.category === 'newyear' ? t('category.newyear') : t('category.corporate')}
             </Badge>
 
-            <Tabs defaultValue="products" className="w-full">
-              <TabsList className="grid w-full grid-cols-1">
-                <TabsTrigger value="products" data-testid="tab-products">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className={`grid w-full ${
+                products.length === 0 ? 'grid-cols-1' :
+                products.length === 1 ? 'grid-cols-2' :
+                products.length === 2 ? 'grid-cols-3' :
+                'grid-cols-4'
+              }`}>
+                <TabsTrigger value="overview" data-testid="tab-overview">
                   <Package className="w-4 h-4 mr-2" />
-                  {language === 'me' ? 'Pojedinačni proizvodi' : 'Individual Products'}
+                  {language === 'me' ? 'Kompletan Paket' : 'Complete Package'}
                 </TabsTrigger>
+                
+                {products.slice(0, 3).map((product, idx) => {
+                  const productName = language === 'me' ? product.nameME : product.nameEN;
+                  const shortName = productName.length > 15 ? productName.substring(0, 12) + '...' : productName;
+                  return (
+                    <TabsTrigger 
+                      key={product.id} 
+                      value={`product-${idx}`}
+                      data-testid={`tab-product-${idx}`}
+                    >
+                      {shortName}
+                    </TabsTrigger>
+                  );
+                })}
               </TabsList>
 
-              <TabsContent value="products" className="space-y-4 mt-6">
-                {products && products.length > 0 ? (
-                  <div className="space-y-4">
-                    {products.map((product, idx) => (
-                      <Card key={idx} className="overflow-hidden hover-elevate transition-all">
-                        <CardContent className="p-6">
-                          <div className="grid md:grid-cols-3 gap-6">
-                            {product.images && (product.images as string[]).length > 0 && (
-                              <div className="md:col-span-1">
-                                <ProductImageGallery images={product.images as string[]} />
-                              </div>
-                            )}
-                            <div className={`${product.images && (product.images as string[]).length > 0 ? 'md:col-span-2' : 'md:col-span-3'} space-y-3`}>
-                              <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                    <span className="text-primary font-bold text-sm">{idx + 1}</span>
-                                  </div>
+              {/* Overview Tab - Complete Package */}
+              <TabsContent value="overview" className="space-y-4 mt-6">
+                <div className="space-y-4">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <h3 className="text-xl font-semibold mb-3">
+                      {language === 'me' ? 'Šta paket sadrži:' : 'Package Contents:'}
+                    </h3>
+                  </div>
+                  
+                  <div className="grid gap-3">
+                    {products && products.length > 0 ? (
+                      products.map((product, idx) => (
+                        <Card key={product.id} className="hover-elevate transition-all cursor-pointer" onClick={() => setActiveTab(`product-${idx}`)}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-4">
+                              {product.images && (product.images as string[]).length > 0 && (
+                                <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-muted">
+                                  <img 
+                                    src={(product.images as string[])[0]} 
+                                    alt={language === 'me' ? product.nameME : product.nameEN}
+                                    className="w-full h-full object-cover"
+                                    data-testid={`img-product-thumb-${idx}`}
+                                  />
                                 </div>
-                                <div className="flex-1">
-                                  <h4 className="font-semibold text-lg mb-2">
-                                    {language === 'me' ? product.nameME : product.nameEN}
-                                  </h4>
-                                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                                    {language === 'me' ? product.descriptionME : product.descriptionEN}
-                                  </p>
-                                  {(language === 'me' ? product.specsME : product.specsEN) && (
-                                    <Badge variant="outline" className="font-normal">
-                                      {language === 'me' ? product.specsME : product.specsEN}
-                                    </Badge>
-                                  )}
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start gap-3">
+                                  <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                      <span className="text-primary font-bold text-sm">{idx + 1}</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-semibold text-base mb-1 truncate" data-testid={`text-product-name-${idx}`}>
+                                      {language === 'me' ? product.nameME : product.nameEN}
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                      {language === 'me' ? product.descriptionME : product.descriptionEN}
+                                    </p>
+                                  </div>
+                                  <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardContent>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>{language === 'me' ? 'Nema dostupnih detalja o proizvodima' : 'No product details available'}</p>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>{language === 'me' ? 'Nema dostupnih detalja o proizvodima' : 'No product details available'}</p>
-                  </div>
-                )}
+                </div>
               </TabsContent>
+
+              {/* Individual Product Tabs */}
+              {products.map((product, idx) => (
+                <TabsContent key={product.id} value={`product-${idx}`} className="space-y-6 mt-6">
+                  <Card className="overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {/* Product Image Gallery */}
+                        <div className="space-y-4">
+                          {product.images && (product.images as string[]).length > 0 ? (
+                            <ProductImageGallery images={product.images as string[]} />
+                          ) : (
+                            <div className="aspect-square rounded-lg bg-muted flex items-center justify-center">
+                              <Package className="w-16 h-16 text-muted-foreground/50" />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Product Details */}
+                        <div className="space-y-4">
+                          <div>
+                            <Badge variant="outline" className="mb-3">
+                              {language === 'me' ? 'Proizvod' : 'Product'} #{idx + 1}
+                            </Badge>
+                            <h3 className="text-2xl font-bold mb-3" data-testid={`text-product-detail-name-${idx}`}>
+                              {language === 'me' ? product.nameME : product.nameEN}
+                            </h3>
+                          </div>
+
+                          <Separator />
+
+                          <div>
+                            <h4 className="font-semibold mb-2 text-sm uppercase tracking-wide text-muted-foreground">
+                              {language === 'me' ? 'Opis' : 'Description'}
+                            </h4>
+                            <p className="text-base leading-relaxed" data-testid={`text-product-description-${idx}`}>
+                              {language === 'me' ? product.descriptionME : product.descriptionEN}
+                            </p>
+                          </div>
+
+                          {(language === 'me' ? product.specsME : product.specsEN) && (
+                            <>
+                              <Separator />
+                              <div>
+                                <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide text-muted-foreground">
+                                  {language === 'me' ? 'Specifikacije' : 'Specifications'}
+                                </h4>
+                                <div className="space-y-2">
+                                  {((language === 'me' ? product.specsME : product.specsEN) || '').split('|').map((spec, specIdx) => (
+                                    <div key={specIdx} className="flex items-start gap-2">
+                                      <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                      <span className="text-sm" data-testid={`text-product-spec-${idx}-${specIdx}`}>{spec.trim()}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Navigation to other products */}
+                  {products.length > 1 && (
+                    <div className="flex justify-between items-center">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const prevIdx = idx === 0 ? products.length - 1 : idx - 1;
+                          setActiveTab(`product-${prevIdx}`);
+                        }}
+                        data-testid="button-prev-product"
+                      >
+                        <ChevronLeft className="w-4 h-4 mr-2" />
+                        {language === 'me' ? 'Prethodni' : 'Previous'}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setActiveTab('overview')}
+                        data-testid="button-back-overview"
+                      >
+                        {language === 'me' ? 'Nazad na pregled' : 'Back to Overview'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const nextIdx = idx === products.length - 1 ? 0 : idx + 1;
+                          setActiveTab(`product-${nextIdx}`);
+                        }}
+                        data-testid="button-next-product"
+                      >
+                        {language === 'me' ? 'Sledeći' : 'Next'}
+                        <ChevronRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  )}
+                </TabsContent>
+              ))}
             </Tabs>
           </div>
         </div>

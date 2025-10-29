@@ -273,10 +273,11 @@ export default function PackageForm() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Price (€)</FormLabel>
+                        <FormLabel>Price (RSD)</FormLabel>
                         <FormControl>
-                          <Input {...field} type="number" placeholder="25" data-testid="input-price" />
+                          <Input {...field} type="number" placeholder="5000" data-testid="input-price" />
                         </FormControl>
+                        <FormDescription>Enter price in Serbian Dinars (RSD)</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

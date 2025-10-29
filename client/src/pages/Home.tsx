@@ -23,7 +23,7 @@ export default function Home() {
 
   const { data: selectedProducts = [] } = useQuery<PackageProduct[]>({
     queryKey: ["/api/packages", selectedPackageId, "products"],
-    enabled: !!selectedPackageId,
+    enabled: !!selectedPackageId && modalOpen,
   });
 
   const selectedPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId) : null;
