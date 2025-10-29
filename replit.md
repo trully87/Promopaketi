@@ -65,6 +65,7 @@ Preferred communication style: Simple, everyday language.
 - Express-session with PostgreSQL session store (connect-pg-simple)
 - User serialization/deserialization for session management
 - Admin-only access for package management operations
+- Admin credentials: username `admin`, password `admin123` (change after first login)
 
 **Request/Response Flow**
 - Request logging middleware captures method, path, status, duration, and JSON responses

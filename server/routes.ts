@@ -38,6 +38,36 @@ const upload = multer({
 
 export function registerRoutes(app: Express): http.Server {
   const server = http.createServer(app);
+  
+  // Serve attached assets (generated images)
+  const attachedAssetsDir = path.join(process.cwd(), "attached_assets");
+  app.use("/attached_assets", (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+  }, (req, res, next) => {
+    // Decode URI to handle spaces and special characters
+    const decodedPath = decodeURIComponent(req.path);
+    
+    // Sanitize path to prevent path traversal
+    const normalizedPath = path.normalize(decodedPath);
+    if (normalizedPath.includes('..')) {
+      return res.status(400).json({ error: "Invalid path" });
+    }
+    
+    const filePath = path.join(attachedAssetsDir, normalizedPath);
+    
+    // Ensure the resolved path is still within attachedAssetsDir
+    if (!filePath.startsWith(attachedAssetsDir)) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+    
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).json({ error: "File not found" });
+    }
+  });
+  
   // Serve uploaded files
   app.use("/uploads", (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
