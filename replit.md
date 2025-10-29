@@ -40,8 +40,8 @@ Preferred communication style: Simple, everyday language.
 
 **Package Modal System**
 - Tab-based interface with 2 main tabs:
-  - **"Kompletan Paket" (Complete Package)** - Non-clickable list of all products with thumbnails and descriptions
-  - **"Pojedinačni Proizvodi" (Individual Products)** - Clickable list of products with thumbnails, clicking opens detailed view
+  - **"Kompletan Paket" (Complete Package)** - Text-only numbered list of all products with names and descriptions (no images)
+  - **"Pojedinačni Proizvodi" (Individual Products)** - Clickable list of products with thumbnails and descriptions, clicking opens detailed view with image galleries
 - Product detail views show ProductImageGallery carousel component with full specifications
 - State management: activeTab resets to 'complete' on modal open/package change via useEffect
 - Navigation controls in detail view: Previous/Next buttons to cycle through products, Back to List button

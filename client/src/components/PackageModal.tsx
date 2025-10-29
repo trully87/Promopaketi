@@ -164,7 +164,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                 </TabsTrigger>
               </TabsList>
 
-              {/* Complete Package Tab - Non-clickable list */}
+              {/* Complete Package Tab - Text-only list */}
               <TabsContent value="complete" className="space-y-4 mt-6">
                 <div className="space-y-4">
                   <div className="prose dark:prose-invert max-w-none">
@@ -173,42 +173,24 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                     </h3>
                   </div>
                   
-                  <div className="grid gap-3">
+                  <div className="space-y-2">
                     {products && products.length > 0 ? (
                       products.map((product, idx) => (
-                        <Card key={product.id}>
-                          <CardContent className="p-4">
-                            <div className="flex items-center gap-4">
-                              {product.images && (product.images as string[]).length > 0 && (
-                                <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-muted">
-                                  <img 
-                                    src={(product.images as string[])[0]} 
-                                    alt={language === 'me' ? product.nameME : product.nameEN}
-                                    className="w-full h-full object-cover"
-                                    data-testid={`img-product-thumb-${idx}`}
-                                  />
-                                </div>
-                              )}
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start gap-3">
-                                  <div className="flex-shrink-0">
-                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                      <span className="text-primary font-bold text-sm">{idx + 1}</span>
-                                    </div>
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <h4 className="font-semibold text-base mb-1 truncate" data-testid={`text-product-name-${idx}`}>
-                                      {language === 'me' ? product.nameME : product.nameEN}
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground line-clamp-2">
-                                      {language === 'me' ? product.descriptionME : product.descriptionEN}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
+                        <div key={product.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                          <div className="flex-shrink-0">
+                            <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                              <span className="text-primary font-bold text-sm">{idx + 1}</span>
                             </div>
-                          </CardContent>
-                        </Card>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-base mb-1" data-testid={`text-product-name-${idx}`}>
+                              {language === 'me' ? product.nameME : product.nameEN}
+                            </h4>
+                            <p className="text-sm text-muted-foreground">
+                              {language === 'me' ? product.descriptionME : product.descriptionEN}
+                            </p>
+                          </div>
+                        </div>
                       ))
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
