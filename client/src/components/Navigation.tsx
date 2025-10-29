@@ -29,7 +29,7 @@ export default function Navigation() {
             <img 
               src={logo} 
               alt="Brain Box Logo" 
-              className="h-32 w-auto"
+              className="h-32 w-auto py-3"
             />
           </Link>
 
