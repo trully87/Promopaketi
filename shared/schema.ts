@@ -178,3 +178,22 @@ export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSub
 
 export type InsertNewsletterSubscriber = z.infer<typeof insertNewsletterSubscriberSchema>;
 export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+
+// Package categories for dynamic category management
+export const packageCategories = pgTable("package_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  labelME: text("label_me").notNull(),
+  labelEN: text("label_en").notNull(),
+  value: text("value").notNull().unique(), // unique identifier used in packages.category
+  sortOrder: integer("sort_order").notNull().default(0),
+  isActive: integer("is_active").notNull().default(1), // 1 = active, 0 = inactive
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPackageCategorySchema = createInsertSchema(packageCategories).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertPackageCategory = z.infer<typeof insertPackageCategorySchema>;
+export type PackageCategory = typeof packageCategories.$inferSelect;
