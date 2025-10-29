@@ -8,7 +8,8 @@ import {
   insertMenuItemSchema,
   insertContactInfoSchema,
   insertAboutPageSchema,
-  insertNewsletterSubscriberSchema
+  insertNewsletterSubscriberSchema,
+  insertPackageCategorySchema
 } from "@shared/schema";
 import { requireAuth } from "./auth";
 import multer from "multer";
@@ -455,6 +456,72 @@ export function registerRoutes(app: Express): http.Server {
       res.json(subscribers);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch newsletter subscribers" });
+    }
+  });
+
+  // Package category routes
+  app.get("/api/package-categories", async (req: Request, res: Response) => {
+    try {
+      const categories = await storage.getAllPackageCategories();
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch package categories" });
+    }
+  });
+
+  app.get("/api/admin/package-categories", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const categories = await storage.getAllPackageCategoriesForAdmin();
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch package categories" });
+    }
+  });
+
+  app.get("/api/admin/package-categories/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const category = await storage.getPackageCategory(req.params.id);
+      if (!category) {
+        return res.status(404).json({ error: "Package category not found" });
+      }
+      res.json(category);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch package category" });
+    }
+  });
+
+  app.post("/api/admin/package-categories", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertPackageCategorySchema.parse(req.body);
+      const category = await storage.createPackageCategory(validated);
+      res.status(201).json(category);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid package category data", details: error });
+    }
+  });
+
+  app.patch("/api/admin/package-categories/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertPackageCategorySchema.partial().parse(req.body);
+      const category = await storage.updatePackageCategory(req.params.id, validated);
+      if (!category) {
+        return res.status(404).json({ error: "Package category not found" });
+      }
+      res.json(category);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid package category data", details: error });
+    }
+  });
+
+  app.delete("/api/admin/package-categories/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const success = await storage.deletePackageCategory(req.params.id);
+      if (!success) {
+        return res.status(404).json({ error: "Package category not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete package category" });
     }
   });
 

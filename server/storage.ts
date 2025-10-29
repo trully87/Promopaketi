@@ -11,7 +11,8 @@ import type {
   MenuItem, InsertMenuItem,
   ContactInfo, InsertContactInfo,
   AboutPage, InsertAboutPage,
-  NewsletterSubscriber, InsertNewsletterSubscriber
+  NewsletterSubscriber, InsertNewsletterSubscriber,
+  PackageCategory, InsertPackageCategory
 } from '@shared/schema';
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -70,6 +71,14 @@ export interface IStorage {
   getAllNewsletterSubscribers(): Promise<NewsletterSubscriber[]>;
   createNewsletterSubscriber(subscriber: InsertNewsletterSubscriber): Promise<NewsletterSubscriber>;
   getNewsletterSubscriberByEmail(email: string): Promise<NewsletterSubscriber | undefined>;
+
+  // Package category methods
+  getAllPackageCategories(): Promise<PackageCategory[]>;
+  getAllPackageCategoriesForAdmin(): Promise<PackageCategory[]>;
+  getPackageCategory(id: string): Promise<PackageCategory | undefined>;
+  createPackageCategory(category: InsertPackageCategory): Promise<PackageCategory>;
+  updatePackageCategory(id: string, category: Partial<InsertPackageCategory>): Promise<PackageCategory | undefined>;
+  deletePackageCategory(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -292,6 +301,49 @@ export class DatabaseStorage implements IStorage {
       .from(schema.newsletterSubscribers)
       .where(eq(schema.newsletterSubscribers.email, email));
     return subscriber[0];
+  }
+
+  // Package category methods
+  async getAllPackageCategories(): Promise<PackageCategory[]> {
+    return await db
+      .select()
+      .from(schema.packageCategories)
+      .where(eq(schema.packageCategories.isActive, 1))
+      .orderBy(schema.packageCategories.sortOrder);
+  }
+
+  async getAllPackageCategoriesForAdmin(): Promise<PackageCategory[]> {
+    return await db
+      .select()
+      .from(schema.packageCategories)
+      .orderBy(schema.packageCategories.sortOrder);
+  }
+
+  async getPackageCategory(id: string): Promise<PackageCategory | undefined> {
+    const categories = await db
+      .select()
+      .from(schema.packageCategories)
+      .where(eq(schema.packageCategories.id, id));
+    return categories[0];
+  }
+
+  async createPackageCategory(category: InsertPackageCategory): Promise<PackageCategory> {
+    const created = await db.insert(schema.packageCategories).values(category).returning();
+    return created[0];
+  }
+
+  async updatePackageCategory(id: string, category: Partial<InsertPackageCategory>): Promise<PackageCategory | undefined> {
+    const updated = await db
+      .update(schema.packageCategories)
+      .set(category)
+      .where(eq(schema.packageCategories.id, id))
+      .returning();
+    return updated[0];
+  }
+
+  async deletePackageCategory(id: string): Promise<boolean> {
+    const result = await db.delete(schema.packageCategories).where(eq(schema.packageCategories.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
   }
 }
 
