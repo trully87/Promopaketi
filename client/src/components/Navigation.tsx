@@ -49,6 +49,17 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link href="/admin/login">
+              <Button
+                variant="outline"
+                size="sm"
+                className="hidden md:flex"
+                data-testid="button-admin"
+              >
+                Admin
+              </Button>
+            </Link>
+
             <Button
               variant="ghost"
               size="icon"

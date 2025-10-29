@@ -1,10 +1,30 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import heroImage from '@assets/generated_images/Hero_luxury_gift_packages_ecdca547.png';
+import heroImage1 from '@assets/generated_images/Hero_luxury_gift_packages_ecdca547.png';
+import heroImage2 from '@assets/generated_images/Luxury_gift_boxes_marble_7e7fe90d.png';
+import heroImage3 from '@assets/generated_images/Executive_corporate_hamper_desk_74479cd4.png';
+import heroImage4 from '@assets/generated_images/New_Year_luxury_collection_fdd3c4e8.png';
+import heroImage5 from '@assets/generated_images/Eco_corporate_products_wood_533f2d6b.png';
+
+const heroImages = [heroImage1, heroImage2, heroImage3, heroImage4, heroImage5];
 
 export default function Hero() {
   const { t } = useLanguage();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-advance slides every 5 seconds (unless paused)
+  useEffect(() => {
+    if (isPaused) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPaused, currentSlide]);
 
   const scrollToPackages = () => {
     document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' });
@@ -14,17 +34,74 @@ export default function Hero() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const goToPrevious = () => {
+    setIsPaused(true);
+    setCurrentSlide((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
+    setTimeout(() => setIsPaused(false), 5000); // Resume after 5 seconds
+  };
+
+  const goToNext = () => {
+    setIsPaused(true);
+    setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    setTimeout(() => setIsPaused(false), 5000); // Resume after 5 seconds
+  };
+
+  const goToSlide = (index: number) => {
+    setIsPaused(true);
+    setCurrentSlide(index);
+    setTimeout(() => setIsPaused(false), 5000); // Resume after 5 seconds
+  };
+
   return (
-    <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden group">
+      {/* Slider Images */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Luxury gift packages" 
-          className="w-full h-full object-cover"
-        />
+        <div className="absolute inset-0 transition-opacity duration-1000">
+          <img 
+            src={heroImages[currentSlide]} 
+            alt={`Luxury gift packages ${currentSlide + 1}`}
+            className="w-full h-full object-cover"
+            data-testid={`img-hero-slide-${currentSlide}`}
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
       </div>
 
+      {/* Navigation Arrows */}
+      <button
+        onClick={goToPrevious}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3"
+        data-testid="button-hero-prev"
+      >
+        <ChevronLeft className="w-6 h-6 text-white" />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3"
+        data-testid="button-hero-next"
+      >
+        <ChevronRight className="w-6 h-6 text-white" />
+      </button>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {heroImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === currentSlide ? 'true' : 'false'}
+            className={`transition-all ${
+              index === currentSlide 
+                ? 'w-8 h-2 bg-white' 
+                : 'w-2 h-2 bg-white/50 hover:bg-white/75'
+            } rounded-full`}
+            data-testid={`button-hero-dot-${index}`}
+          />
+        ))}
+      </div>
+
+      {/* Hero Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
           {t('hero.title')}
@@ -54,6 +131,7 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Scroll Indicator */}
       <button
         onClick={scrollToPackages}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce"
