@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Check, Package, Paintbrush, ListChecks } from 'lucide-react';
+import { Check, Package, Paintbrush, ListChecks, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import type { PackageCardProps } from './PackageCard';
 import type { ProductItem } from '@/data/packages';
@@ -14,6 +15,67 @@ interface PackageModalProps {
   open: boolean;
   onClose: () => void;
   onInquire: () => void;
+}
+
+function ProductImageGallery({ images }: { images: string[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (!images || images.length === 0) return null;
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="relative group">
+      <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+        <img 
+          src={images[currentIndex]} 
+          alt={`Product ${currentIndex + 1}`}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      {images.length > 1 && (
+        <>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={goToPrevious}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={goToNext}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+          
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  idx === currentIndex 
+                    ? 'bg-primary w-6' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default function PackageModal({ package: pkg, open, onClose, onInquire }: PackageModalProps) {
@@ -126,26 +188,33 @@ export default function PackageModal({ package: pkg, open, onClose, onInquire }:
                     {pkg.products.map((product, idx) => (
                       <Card key={idx} className="overflow-hidden hover-elevate transition-all">
                         <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="flex-shrink-0">
-                              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span className="text-primary font-bold">{idx + 1}</span>
+                          <div className="grid md:grid-cols-3 gap-6">
+                            {product.images && product.images.length > 0 && (
+                              <div className="md:col-span-1">
+                                <ProductImageGallery images={product.images} />
                               </div>
-                            </div>
-                            <div className="flex-1 space-y-2">
-                              <h4 className="font-semibold text-lg">
-                                {product.name[language]}
-                              </h4>
-                              <p className="text-sm text-muted-foreground leading-relaxed">
-                                {product.description[language]}
-                              </p>
-                              {product.specs && (
-                                <div className="flex items-center gap-2 pt-2">
-                                  <Badge variant="outline" className="font-normal">
-                                    {product.specs[language]}
-                                  </Badge>
+                            )}
+                            <div className={`${product.images && product.images.length > 0 ? 'md:col-span-2' : 'md:col-span-3'} space-y-3`}>
+                              <div className="flex items-start gap-3">
+                                <div className="flex-shrink-0">
+                                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                    <span className="text-primary font-bold text-sm">{idx + 1}</span>
+                                  </div>
                                 </div>
-                              )}
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-lg mb-2">
+                                    {product.name[language]}
+                                  </h4>
+                                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                                    {product.description[language]}
+                                  </p>
+                                  {product.specs && (
+                                    <Badge variant="outline" className="font-normal">
+                                      {product.specs[language]}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </CardContent>

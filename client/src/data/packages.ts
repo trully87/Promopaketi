@@ -8,10 +8,25 @@ import activeLife from '@assets/generated_images/Active_life_corporate_package_9
 import smartLiving from '@assets/generated_images/Smart_living_tech_package_65d3a7a1.png';
 import ecoFriendly from '@assets/generated_images/Eco_sustainable_corporate_package_6612baf2.png';
 
+// Product images
+import ceramicMug from '@assets/generated_images/Ceramic_mug_product_shot_17d03128.png';
+import thermoBottle from '@assets/generated_images/Thermos_bottle_product_54b5c10d.png';
+import honeyJar from '@assets/generated_images/Organic_honey_jar_2e2f94af.png';
+import teaBag from '@assets/generated_images/Linen_tea_bag_b8e1ff0e.png';
+import fleeceBlanket from '@assets/generated_images/Fleece_blanket_product_de9569d0.png';
+import notebook from '@assets/generated_images/A5_notebook_product_5158505c.png';
+import metalPen from '@assets/generated_images/Metal_pen_product_338ae787.png';
+import powerbank from '@assets/generated_images/Powerbank_5000mAh_94fdd631.png';
+import wirelessCharger from '@assets/generated_images/Wireless_charger_3-in-1_136478c9.png';
+import bambooThermos from '@assets/generated_images/Bamboo_thermos_eco_e0dd08e1.png';
+import oliveOil from '@assets/generated_images/Olive_oil_bottle_7f47628c.png';
+import bluetoothSpeaker from '@assets/generated_images/Bluetooth_speaker_3W_dade6bac.png';
+
 export interface ProductItem {
   name: { me: string; en: string };
   description: { me: string; en: string };
   specs?: { me: string; en: string };
+  images?: string[]; // Up to 3 images per product
 }
 
 export interface Package {
@@ -61,7 +76,8 @@ export const packages: Package[] = [
           me: 'Visokokvalitetna keramička šolja sa mogućnošću personalizacije putem štampe logotipa ili inicijala.',
           en: 'High-quality ceramic mug with customization option through logo or initial printing.'
         },
-        specs: { me: 'Zapremina: 300 ml | Dostupno u 5 boja', en: 'Capacity: 300 ml | Available in 5 colors' }
+        specs: { me: 'Zapremina: 300 ml | Dostupno u 5 boja', en: 'Capacity: 300 ml | Available in 5 colors' },
+        images: [ceramicMug]
       },
       {
         name: { me: 'Organsko Domaće Med', en: 'Organic Local Honey' },
@@ -69,7 +85,8 @@ export const packages: Package[] = [
           me: '100% organski med od domaćih crnogorskih proizvođača. Personalizacija putem štampe na naljepnici.',
           en: '100% organic honey from local Montenegrin producers. Customization through label printing.'
         },
-        specs: { me: 'Težina: 250 ml | Dimenzija naljepnice: 5.6 cm x 10.5 cm', en: 'Weight: 250 ml | Label size: 5.6 cm x 10.5 cm' }
+        specs: { me: 'Težina: 250 ml | Dimenzija naljepnice: 5.6 cm x 10.5 cm', en: 'Weight: 250 ml | Label size: 5.6 cm x 10.5 cm' },
+        images: [honeyJar]
       },
       {
         name: { me: 'Platnena Kesica Čaja', en: 'Linen Tea Bag' },
@@ -77,7 +94,8 @@ export const packages: Package[] = [
           me: 'Organski domaći čaj od crnogorskih proizvođača u platnenoj kesici sa mogućnošću personalizacije.',
           en: 'Organic local tea from Montenegrin producers in a linen bag with customization option.'
         },
-        specs: { me: 'Težina: 50 g | Dostupno u jednoj boji', en: 'Weight: 50 g | Available in one color' }
+        specs: { me: 'Težina: 50 g | Dostupno u jednoj boji', en: 'Weight: 50 g | Available in one color' },
+        images: [teaBag]
       },
       {
         name: { me: 'Drvena Kašičica', en: 'Wooden Spoon' },
@@ -142,7 +160,8 @@ export const packages: Package[] = [
           me: 'Mekano flis ćebe koje pruža savršenu dozu udobnosti i topline u hladnim danima.',
           en: 'Soft fleece blanket providing perfect comfort and warmth on cold days.'
         },
-        specs: { me: 'Dimenzije: 95 cm x 145 cm | 180 g/m² | Dostupno u 5 boja', en: 'Dimensions: 95 cm x 145 cm | 180 g/m² | Available in 5 colors' }
+        specs: { me: 'Dimenzije: 95 cm x 145 cm | 180 g/m² | Dostupno u 5 boja', en: 'Dimensions: 95 cm x 145 cm | 180 g/m² | Available in 5 colors' },
+        images: [fleeceBlanket]
       },
       {
         name: { me: 'Keramička Šolja', en: 'Ceramic Mug' },
@@ -150,7 +169,8 @@ export const packages: Package[] = [
           me: 'Visokokvalitetna keramička šolja sa mogućnošću personalizacije putem štampe logotipa.',
           en: 'High-quality ceramic mug with logo printing customization option.'
         },
-        specs: { me: 'Zapremina: 300 ml | Dostupno u 5 boja', en: 'Capacity: 300 ml | Available in 5 colors' }
+        specs: { me: 'Zapremina: 300 ml | Dostupno u 5 boja', en: 'Capacity: 300 ml | Available in 5 colors' },
+        images: [ceramicMug]
       },
       {
         name: { me: 'Platnena Kesica Čaja', en: 'Linen Tea Bag' },
@@ -158,7 +178,8 @@ export const packages: Package[] = [
           me: 'Organski domaći čaj sa personalizacijom i naglaskom na 100% crnogorsku proizvodnju.',
           en: 'Organic local tea with customization emphasizing 100% Montenegrin production.'
         },
-        specs: { me: 'Težina: 50 g | Dostupno u jednoj boji', en: 'Weight: 50 g | Available in one color' }
+        specs: { me: 'Težina: 50 g | Dostupno u jednoj boji', en: 'Weight: 50 g | Available in one color' },
+        images: [teaBag]
       },
       {
         name: { me: 'Čokolada Montenegrina', en: 'Montenegrina Chocolate' },
@@ -231,7 +252,8 @@ export const packages: Package[] = [
           me: 'Visokokvalitetni termos sa dvostrukom personalizacijom - na poklopcu i na boci.',
           en: 'High-quality thermos with double customization - on lid and bottle.'
         },
-        specs: { me: 'Zapremina: 570 ml | Dostupno u 5 boja', en: 'Capacity: 570 ml | Available in 5 colors' }
+        specs: { me: 'Zapremina: 570 ml | Dostupno u 5 boja', en: 'Capacity: 570 ml | Available in 5 colors' },
+        images: [thermoBottle]
       },
       {
         name: { me: 'Pljoska', en: 'Hip Flask' },
@@ -247,7 +269,8 @@ export const packages: Package[] = [
           me: '100% organski med od domaćih crnogorskih proizvođača.',
           en: '100% organic honey from local Montenegrin producers.'
         },
-        specs: { me: 'Težina: 250 ml | Dimenzija naljepnice: 5.6 cm x 10.5 cm', en: 'Weight: 250 ml | Label size: 5.6 cm x 10.5 cm' }
+        specs: { me: 'Težina: 250 ml | Dimenzija naljepnice: 5.6 cm x 10.5 cm', en: 'Weight: 250 ml | Label size: 5.6 cm x 10.5 cm' },
+        images: [honeyJar]
       },
       {
         name: { me: 'Platnena Kesica Čaja', en: 'Linen Tea Bag' },
@@ -255,7 +278,8 @@ export const packages: Package[] = [
           me: 'Organski čaj sa personalizacijom i naglaskom na crnogorsku proizvodnju.',
           en: 'Organic tea with customization emphasizing Montenegrin production.'
         },
-        specs: { me: 'Težina: 50 g', en: 'Weight: 50 g' }
+        specs: { me: 'Težina: 50 g', en: 'Weight: 50 g' },
+        images: [teaBag]
       },
       {
         name: { me: 'Drvena Kašičica', en: 'Wooden Spoon' },
@@ -318,7 +342,8 @@ export const packages: Package[] = [
           me: 'Ekstra devičansko crnogorsko maslinovo ulje #1 sa personalizovanom etiketom.',
           en: 'Extra virgin Montenegrin olive oil #1 with personalized label.'
         },
-        specs: { me: 'Zapremina: 250 ml | Ekstra devičansko', en: 'Volume: 250 ml | Extra virgin' }
+        specs: { me: 'Zapremina: 250 ml | Ekstra devičansko', en: 'Volume: 250 ml | Extra virgin' },
+        images: [oliveOil]
       },
       {
         name: { me: 'Privjezak', en: 'Keychain' },
@@ -395,7 +420,8 @@ export const packages: Package[] = [
           me: 'Kvalitetni notes sa držačem za olovku i unutrašnjim džepom. Štampa logotipa.',
           en: 'Quality notebook with pen holder and inner pocket. Logo printing.'
         },
-        specs: { me: 'Format: A5 | Dostupno u 7 boja', en: 'Format: A5 | Available in 7 colors' }
+        specs: { me: 'Format: A5 | Dostupno u 7 boja', en: 'Format: A5 | Available in 7 colors' },
+        images: [notebook]
       },
       {
         name: { me: 'Metalna Hemijska Olovka', en: 'Metal Pen' },
@@ -403,7 +429,8 @@ export const packages: Package[] = [
           me: 'Elegantna metalna olovka sa gumiranom površinom i personalizacijom.',
           en: 'Elegant metal pen with rubberized surface and customization.'
         },
-        specs: { me: 'Dostupno u 16 boja', en: 'Available in 16 colors' }
+        specs: { me: 'Dostupno u 16 boja', en: 'Available in 16 colors' },
+        images: [metalPen]
       },
       {
         name: { me: 'Boca za Vodu', en: 'Water Bottle' },
@@ -464,7 +491,8 @@ export const packages: Package[] = [
           me: 'Notes sa fleksibilnom koricom, zaobljenim ivicama i elastičnom gumicom.',
           en: 'Notebook with flexible cover, rounded edges and elastic band.'
         },
-        specs: { me: 'Format: A5 | Dostupno u 5 boja', en: 'Format: A5 | Available in 5 colors' }
+        specs: { me: 'Format: A5 | Dostupno u 5 boja', en: 'Format: A5 | Available in 5 colors' },
+        images: [notebook]
       },
       {
         name: { me: 'Metalna Hemijska Olovka', en: 'Metal Pen' },
@@ -472,7 +500,8 @@ export const packages: Package[] = [
           me: 'Premium metalna olovka sa gumiranom površinom.',
           en: 'Premium metal pen with rubberized surface.'
         },
-        specs: { me: 'Dostupno u 9 boja', en: 'Available in 9 colors' }
+        specs: { me: 'Dostupno u 9 boja', en: 'Available in 9 colors' },
+        images: [metalPen]
       },
       {
         name: { me: 'Termos', en: 'Thermos' },
@@ -480,7 +509,8 @@ export const packages: Package[] = [
           me: 'Visokokvalitetni termos sa štampom logotipa.',
           en: 'High-quality thermos with logo printing.'
         },
-        specs: { me: 'Zapremina: 500 ml | Dostupno u 5 boja', en: 'Capacity: 500 ml | Available in 5 colors' }
+        specs: { me: 'Zapremina: 500 ml | Dostupno u 5 boja', en: 'Capacity: 500 ml | Available in 5 colors' },
+        images: [thermoBottle]
       },
       {
         name: { me: 'Metalni Privezak', en: 'Metal Keychain' },
@@ -533,7 +563,8 @@ export const packages: Package[] = [
           me: 'Kompaktni powerbank sa štampom logotipa za punjenje uređaja u pokretu.',
           en: 'Compact powerbank with logo printing for charging devices on the go.'
         },
-        specs: { me: 'Kapacitet: 5000mAh | Dostupno u 3 boje', en: 'Capacity: 5000mAh | Available in 3 colors' }
+        specs: { me: 'Kapacitet: 5000mAh | Dostupno u 3 boje', en: 'Capacity: 5000mAh | Available in 3 colors' },
+        images: [powerbank]
       },
       {
         name: { me: 'A5 Notes', en: 'A5 Notebook' },
@@ -541,7 +572,8 @@ export const packages: Package[] = [
           me: 'Notes sa fleksibilnom koricom i elastičnom gumicom.',
           en: 'Notebook with flexible cover and elastic band.'
         },
-        specs: { me: 'Format: A5 | Dostupno u 5 boja', en: 'Format: A5 | Available in 5 colors' }
+        specs: { me: 'Format: A5 | Dostupno u 5 boja', en: 'Format: A5 | Available in 5 colors' },
+        images: [notebook]
       },
       {
         name: { me: 'Termos', en: 'Thermos' },
@@ -549,7 +581,8 @@ export const packages: Package[] = [
           me: 'Termos sa personalizacijom za aktivan životni stil.',
           en: 'Thermos with customization for active lifestyle.'
         },
-        specs: { me: 'Zapremina: 500 ml | Dostupno u 3 boje', en: 'Capacity: 500 ml | Available in 3 colors' }
+        specs: { me: 'Zapremina: 500 ml | Dostupno u 3 boje', en: 'Capacity: 500 ml | Available in 3 colors' },
+        images: [thermoBottle]
       },
       {
         name: { me: 'Metalni Privezak', en: 'Metal Keychain' },
@@ -602,7 +635,8 @@ export const packages: Package[] = [
           me: 'Prenosni bežični punjač za istovremeno punjenje 3 uređaja (telefon, slušalice, sat).',
           en: 'Portable wireless charger for simultaneous charging of 3 devices (phone, earbuds, watch).'
         },
-        specs: { me: 'Dostupno u 2 boje | Štampa logotipa', en: 'Available in 2 colors | Logo printing' }
+        specs: { me: 'Dostupno u 2 boje | Štampa logotipa', en: 'Available in 2 colors | Logo printing' },
+        images: [wirelessCharger]
       },
       {
         name: { me: 'Prenosivi 3W Zvučnik', en: 'Portable 3W Speaker' },
@@ -610,7 +644,8 @@ export const packages: Package[] = [
           me: 'Zvučnik od recikliranog ABS materijala sa LED trakom. BT 5.0, autonomija do 4 sata.',
           en: 'Speaker made from recycled ABS material with LED strip. BT 5.0, up to 4 hours autonomy.'
         },
-        specs: { me: 'Snaga: 3W | Dostupno u 2 boje', en: 'Power: 3W | Available in 2 colors' }
+        specs: { me: 'Snaga: 3W | Dostupno u 2 boje', en: 'Power: 3W | Available in 2 colors' },
+        images: [bluetoothSpeaker]
       },
       {
         name: { me: 'Termos', en: 'Thermos' },
@@ -618,7 +653,8 @@ export const packages: Package[] = [
           me: 'Premium termos sa personalizacijom.',
           en: 'Premium thermos with customization.'
         },
-        specs: { me: 'Zapremina: 500 ml | Dostupno u 5 boja', en: 'Capacity: 500 ml | Available in 5 colors' }
+        specs: { me: 'Zapremina: 500 ml | Dostupno u 5 boja', en: 'Capacity: 500 ml | Available in 5 colors' },
+        images: [thermoBottle]
       },
       {
         name: { me: 'Čestitka', en: 'Greeting Card' },
@@ -673,7 +709,8 @@ export const packages: Package[] = [
           me: 'Eko notes izrađen od papira šećerne trske sa zaobljenim ivicama.',
           en: 'Eco notebook made from sugarcane paper with rounded edges.'
         },
-        specs: { me: 'Format: A5 | Prirodan materijal', en: 'Format: A5 | Natural material' }
+        specs: { me: 'Format: A5 | Prirodan materijal', en: 'Format: A5 | Natural material' },
+        images: [notebook]
       },
       {
         name: { me: 'Olovka od Pluta', en: 'Cork Pen' },
@@ -681,7 +718,8 @@ export const packages: Package[] = [
           me: 'Eko olovka od pluta i vlakna pšenične slame sa personalizacijom.',
           en: 'Eco pen made from cork and wheat straw fiber with customization.'
         },
-        specs: { me: 'Prirodni materijali', en: 'Natural materials' }
+        specs: { me: 'Prirodni materijali', en: 'Natural materials' },
+        images: [metalPen]
       },
       {
         name: { me: 'Termos od Bambusa', en: 'Bamboo Thermos' },
@@ -689,7 +727,8 @@ export const packages: Package[] = [
           me: 'Održivi termos od bambusa sa štampom logotipa.',
           en: 'Sustainable bamboo thermos with logo printing.'
         },
-        specs: { me: 'Zapremina: 440 ml | Bambus', en: 'Capacity: 440 ml | Bamboo' }
+        specs: { me: 'Zapremina: 440 ml | Bambus', en: 'Capacity: 440 ml | Bamboo' },
+        images: [bambooThermos]
       },
       {
         name: { me: 'Drveni Privezak', en: 'Wooden Keychain' },
