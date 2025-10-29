@@ -90,11 +90,13 @@ export default function Footer() {
                     variant="outline"
                     size="sm"
                     className="gap-2"
-                    onClick={() => window.open(`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`, '_blank')}
+                    asChild
                     data-testid="button-whatsapp"
                   >
-                    <SiWhatsapp className="w-4 h-4" />
-                    WhatsApp
+                    <a href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+                      <SiWhatsapp className="w-4 h-4" />
+                      <span>WhatsApp</span>
+                    </a>
                   </Button>
                 )}
                 {viberNumber && (
@@ -102,11 +104,13 @@ export default function Footer() {
                     variant="outline"
                     size="sm"
                     className="gap-2"
-                    onClick={() => window.open(`viber://chat?number=${viberNumber.replace(/[^0-9]/g, '')}`, '_blank')}
+                    asChild
                     data-testid="button-viber"
                   >
-                    <SiViber className="w-4 h-4" />
-                    Viber
+                    <a href={`viber://chat?number=${viberNumber.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+                      <SiViber className="w-4 h-4" />
+                      <span>Viber</span>
+                    </a>
                   </Button>
                 )}
               </div>
