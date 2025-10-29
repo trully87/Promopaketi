@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                           {pkg.category === 'newyear' ? 'New Year' : 'Corporate'}
                         </Badge>
                       </TableCell>
-                      <TableCell>{pkg.price} RSD</TableCell>
+                      <TableCell>€{pkg.price}</TableCell>
                       <TableCell>{pkg.minOrder} pcs</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">

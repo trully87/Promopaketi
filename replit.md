@@ -39,11 +39,12 @@ Preferred communication style: Simple, everyday language.
 - Type-safe data contracts shared between frontend and backend via `@shared` module
 
 **Package Modal System**
-- Tab-based interface with "Complete Package" overview tab plus individual product tabs (max 3 shown)
-- Overview tab displays all products with thumbnails in responsive grid layout
-- Product tabs show detailed information with ProductImageGallery carousel component
-- State management: activeTab resets to 'overview' on modal open/package change via useEffect
-- Navigation controls: Previous/Next buttons to cycle through products
+- Tab-based interface with 2 main tabs:
+  - **"Kompletan Paket" (Complete Package)** - Non-clickable list of all products with thumbnails and descriptions
+  - **"Pojedinačni Proizvodi" (Individual Products)** - Clickable list of products with thumbnails, clicking opens detailed view
+- Product detail views show ProductImageGallery carousel component with full specifications
+- State management: activeTab resets to 'complete' on modal open/package change via useEffect
+- Navigation controls in detail view: Previous/Next buttons to cycle through products, Back to List button
 - Image carousel: Multiple images per product with prev/next buttons and navigation dots
 
 ### Backend Architecture
@@ -79,13 +80,13 @@ Preferred communication style: Simple, everyday language.
 
 **Schema Design**
 - `users` table: Admin authentication with username/password
-- `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing in RSD, category, images
+- `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing in EUR, category, images
 - `package_products` table: Individual items within packages with descriptions and specifications in both languages, images stored as jsonb array
 - `inquiries` table: Customer contact form submissions
 
 **Pricing**
-- All prices stored and displayed in Serbian Dinars (RSD)
-- Display format: "{amount} RSD" (e.g., "4680 RSD")
+- All prices stored and displayed in Euros (EUR)
+- Display format: "€{amount}" (e.g., "€40")
 
 **Storage Pattern**
 - Repository pattern via `IStorage` interface with `DatabaseStorage` implementation

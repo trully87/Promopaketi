@@ -84,12 +84,12 @@ function ProductImageGallery({ images }: { images: string[] }) {
 
 export default function PackageModal({ package: pkg, products, open, onClose, onInquire }: PackageModalProps) {
   const { t, language } = useLanguage();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('complete');
 
-  // Reset activeTab to overview whenever modal opens or package changes
+  // Reset activeTab to complete whenever modal opens or package changes
   useEffect(() => {
     if (open) {
-      setActiveTab('overview');
+      setActiveTab('complete');
     }
   }, [open, pkg?.id]);
 
@@ -120,7 +120,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <p className="text-sm text-muted-foreground">{t('common.price')}</p>
-                    <p className="text-3xl font-bold text-primary" data-testid="text-package-price">{pkg.price} RSD</p>
+                    <p className="text-3xl font-bold text-primary" data-testid="text-package-price">€{pkg.price}</p>
                     <p className="text-sm text-muted-foreground">{t('common.perUnit')}</p>
                   </div>
                   <div className="text-right">
@@ -153,34 +153,19 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
             </Badge>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className={`grid w-full ${
-                products.length === 0 ? 'grid-cols-1' :
-                products.length === 1 ? 'grid-cols-2' :
-                products.length === 2 ? 'grid-cols-3' :
-                'grid-cols-4'
-              }`}>
-                <TabsTrigger value="overview" data-testid="tab-overview">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="complete" data-testid="tab-complete">
                   <Package className="w-4 h-4 mr-2" />
                   {language === 'me' ? 'Kompletan Paket' : 'Complete Package'}
                 </TabsTrigger>
                 
-                {products.slice(0, 3).map((product, idx) => {
-                  const productName = language === 'me' ? product.nameME : product.nameEN;
-                  const shortName = productName.length > 15 ? productName.substring(0, 12) + '...' : productName;
-                  return (
-                    <TabsTrigger 
-                      key={product.id} 
-                      value={`product-${idx}`}
-                      data-testid={`tab-product-${idx}`}
-                    >
-                      {shortName}
-                    </TabsTrigger>
-                  );
-                })}
+                <TabsTrigger value="products" data-testid="tab-products">
+                  {language === 'me' ? 'Pojedinačni Proizvodi' : 'Individual Products'}
+                </TabsTrigger>
               </TabsList>
 
-              {/* Overview Tab - Complete Package */}
-              <TabsContent value="overview" className="space-y-4 mt-6">
+              {/* Complete Package Tab - Non-clickable list */}
+              <TabsContent value="complete" className="space-y-4 mt-6">
                 <div className="space-y-4">
                   <div className="prose dark:prose-invert max-w-none">
                     <h3 className="text-xl font-semibold mb-3">
@@ -191,7 +176,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                   <div className="grid gap-3">
                     {products && products.length > 0 ? (
                       products.map((product, idx) => (
-                        <Card key={product.id} className="hover-elevate transition-all cursor-pointer" onClick={() => setActiveTab(`product-${idx}`)}>
+                        <Card key={product.id}>
                           <CardContent className="p-4">
                             <div className="flex items-center gap-4">
                               {product.images && (product.images as string[]).length > 0 && (
@@ -219,6 +204,62 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                                       {language === 'me' ? product.descriptionME : product.descriptionEN}
                                     </p>
                                   </div>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>{language === 'me' ? 'Nema dostupnih detalja o proizvodima' : 'No product details available'}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Individual Products Tab - Clickable list with links */}
+              <TabsContent value="products" className="space-y-4 mt-6">
+                <div className="space-y-4">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <h3 className="text-xl font-semibold mb-3">
+                      {language === 'me' ? 'Izaberite proizvod za detaljne informacije:' : 'Select a product for details:'}
+                    </h3>
+                  </div>
+                  
+                  <div className="grid gap-3">
+                    {products && products.length > 0 ? (
+                      products.map((product, idx) => (
+                        <Card key={product.id} className="hover-elevate transition-all cursor-pointer" onClick={() => setActiveTab(`product-${idx}`)}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-4">
+                              {product.images && (product.images as string[]).length > 0 && (
+                                <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-muted">
+                                  <img 
+                                    src={(product.images as string[])[0]} 
+                                    alt={language === 'me' ? product.nameME : product.nameEN}
+                                    className="w-full h-full object-cover"
+                                    data-testid={`img-product-clickable-thumb-${idx}`}
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start gap-3">
+                                  <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                      <span className="text-primary font-bold text-sm">{idx + 1}</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-semibold text-base mb-1 truncate" data-testid={`text-product-clickable-name-${idx}`}>
+                                      {language === 'me' ? product.nameME : product.nameEN}
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                      {language === 'me' ? product.descriptionME : product.descriptionEN}
+                                    </p>
+                                  </div>
                                   <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                                 </div>
                               </div>
@@ -236,7 +277,7 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                 </div>
               </TabsContent>
 
-              {/* Individual Product Tabs */}
+              {/* Individual Product Detail Views */}
               {products.map((product, idx) => (
                 <TabsContent key={product.id} value={`product-${idx}`} className="space-y-6 mt-6">
                   <Card className="overflow-hidden">
@@ -314,10 +355,10 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                       </Button>
                       <Button
                         variant="ghost"
-                        onClick={() => setActiveTab('overview')}
-                        data-testid="button-back-overview"
+                        onClick={() => setActiveTab('products')}
+                        data-testid="button-back-products"
                       >
-                        {language === 'me' ? 'Nazad na pregled' : 'Back to Overview'}
+                        {language === 'me' ? 'Nazad na listu' : 'Back to List'}
                       </Button>
                       <Button
                         variant="outline"
