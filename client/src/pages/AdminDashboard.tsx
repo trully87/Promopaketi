@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail, Tags } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { Package } from "@shared/schema";
 
@@ -171,6 +171,20 @@ export default function AdminDashboard() {
                 <div>
                   <CardTitle>Newsletter</CardTitle>
                   <CardDescription>View email subscribers</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/package-categories")}>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Tags className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Package Categories</CardTitle>
+                  <CardDescription>Manage package categories</CardDescription>
                 </div>
               </div>
             </CardHeader>

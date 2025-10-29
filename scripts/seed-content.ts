@@ -156,6 +156,59 @@ async function seedContent() {
       console.log(`About page already exists`);
     }
 
+    // Check if package categories already exist
+    const existingCategories = await db.select().from(schema.packageCategories);
+    
+    if (existingCategories.length === 0) {
+      console.log('Adding package categories...');
+      
+      const categories = [
+        {
+          labelME: 'Novogodišnji Paketi',
+          labelEN: 'New Year Packages',
+          value: 'newyear',
+          sortOrder: 0,
+          isActive: 1
+        },
+        {
+          labelME: 'Korporativni Paketi',
+          labelEN: 'Corporate Packages',
+          value: 'corporate',
+          sortOrder: 1,
+          isActive: 1
+        },
+        {
+          labelME: 'Eko Paketi',
+          labelEN: 'Eco Packages',
+          value: 'eko',
+          sortOrder: 2,
+          isActive: 1
+        },
+        {
+          labelME: 'Lokalni Proizvođači',
+          labelEN: 'Local Producers',
+          value: 'lokalni',
+          sortOrder: 3,
+          isActive: 1
+        },
+        {
+          labelME: 'Premium VIP',
+          labelEN: 'Premium VIP',
+          value: 'premium-vip',
+          sortOrder: 4,
+          isActive: 1
+        }
+      ];
+
+      for (const category of categories) {
+        await db.insert(schema.packageCategories).values(category);
+      }
+      
+      console.log(`✓ Added ${categories.length} package categories`);
+    } else {
+      console.log(`Package categories already exist (${existingCategories.length} categories)`);
+    }
+
     console.log('\n✓ Seeding completed successfully!');
     process.exit(0);
   } catch (error) {

@@ -16,6 +16,7 @@ import MenuManagement from "@/pages/MenuManagement";
 import ContactInfoManagement from "@/pages/ContactInfoManagement";
 import AboutPageManagement from "@/pages/AboutPageManagement";
 import NewsletterSubscribers from "@/pages/NewsletterSubscribers";
+import PackageCategoryManagement from "@/pages/PackageCategoryManagement";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/admin/contact-info" component={ContactInfoManagement} />
       <Route path="/admin/about" component={AboutPageManagement} />
       <Route path="/admin/newsletter-subscribers" component={NewsletterSubscribers} />
+      <Route path="/admin/package-categories" component={PackageCategoryManagement} />
       <Route path="/admin/packages/new" component={PackageForm} />
       <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />
