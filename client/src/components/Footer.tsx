@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/lib/i18n';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
+import logo from '@assets/promo brain box2_1761751687022.png';
 
 export default function Footer() {
   const { t, language } = useLanguage();
@@ -11,11 +12,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary text-primary-foreground font-serif font-bold text-xl">
-                BB
-              </div>
-              <span className="font-serif font-bold text-xl">Brain Box</span>
+            <div className="mb-4">
+              <img 
+                src={logo} 
+                alt="Brain Box Logo" 
+                className="h-16 w-auto mb-3"
+              />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               {t('footer.tagline')}

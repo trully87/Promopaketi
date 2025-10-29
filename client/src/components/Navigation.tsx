@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Globe, Menu, X } from 'lucide-react';
 import { useLanguage, type Language } from '@/lib/i18n';
 import { useState } from 'react';
+import logo from '@assets/promo brain box2_1761751687022.png';
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -25,10 +26,11 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3" data-testid="link-home">
-            <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary text-primary-foreground font-serif font-bold text-xl">
-              BB
-            </div>
-            <span className="font-serif font-bold text-xl">Brain Box</span>
+            <img 
+              src={logo} 
+              alt="Brain Box Logo" 
+              className="h-12 w-auto"
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
