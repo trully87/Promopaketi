@@ -38,6 +38,14 @@ Preferred communication style: Simple, everyday language.
 - Custom hooks for reusable logic (useToast, useIsMobile, useLanguage)
 - Type-safe data contracts shared between frontend and backend via `@shared` module
 
+**Package Modal System**
+- Tab-based interface with "Complete Package" overview tab plus individual product tabs (max 3 shown)
+- Overview tab displays all products with thumbnails in responsive grid layout
+- Product tabs show detailed information with ProductImageGallery carousel component
+- State management: activeTab resets to 'overview' on modal open/package change via useEffect
+- Navigation controls: Previous/Next buttons to cycle through products
+- Image carousel: Multiple images per product with prev/next buttons and navigation dots
+
 ### Backend Architecture
 
 **Server Framework**
@@ -71,9 +79,13 @@ Preferred communication style: Simple, everyday language.
 
 **Schema Design**
 - `users` table: Admin authentication with username/password
-- `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing, category, images
-- `package_products` table: Individual items within packages with descriptions and specifications in both languages
+- `packages` table: Gift package catalog with bilingual fields (nameME/nameEN), pricing in RSD, category, images
+- `package_products` table: Individual items within packages with descriptions and specifications in both languages, images stored as jsonb array
 - `inquiries` table: Customer contact form submissions
+
+**Pricing**
+- All prices stored and displayed in Serbian Dinars (RSD)
+- Display format: "{amount} RSD" (e.g., "4680 RSD")
 
 **Storage Pattern**
 - Repository pattern via `IStorage` interface with `DatabaseStorage` implementation
