@@ -1,34 +1,35 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Hero from '@/components/Hero';
 import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
 import CategorySection from '@/components/CategorySection';
 import ContactForm from '@/components/ContactForm';
 import { useLanguage } from '@/lib/i18n';
-import { packages } from '@/data/packages';
 import type { PackageCardProps } from '@/components/PackageCard';
-import type { ProductItem } from '@/data/packages';
+import type { Package, PackageProduct } from '@shared/schema';
 import standardNewyear from '@assets/generated_images/Standard_New_Year_package_413cce95.png';
 import corporateBox from '@assets/generated_images/Corporate_package_with_box_2c8d7f38.png';
 
 export default function Home() {
   const { language, t } = useLanguage();
-  const [selectedPackage, setSelectedPackage] = useState<(PackageCardProps & { products?: ProductItem[] }) | null>(null);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [contactPackage, setContactPackage] = useState<string | undefined>();
 
-  const handleLearnMore = (pkg: typeof packages[0]) => {
-    setSelectedPackage({
-      id: pkg.id,
-      name: pkg.name[language],
-      price: pkg.price,
-      minOrder: pkg.minOrder,
-      image: pkg.image,
-      items: pkg.items[language],
-      category: pkg.category,
-      products: pkg.products,
-      onLearnMore: () => {}
-    });
+  const { data: packages = [], isLoading } = useQuery<Package[]>({
+    queryKey: ["/api/packages"],
+  });
+
+  const { data: selectedProducts = [] } = useQuery<PackageProduct[]>({
+    queryKey: ["/api/packages", selectedPackageId, "products"],
+    enabled: !!selectedPackageId,
+  });
+
+  const selectedPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId) : null;
+
+  const handleLearnMore = (pkg: Package) => {
+    setSelectedPackageId(pkg.id);
     setModalOpen(true);
   };
 
@@ -38,6 +39,17 @@ export default function Home() {
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading packages...</p>
+        </div>
+      </div>
+    );
+  }
 
   const newyearPackages = packages.filter(p => p.category === 'newyear');
   const corporatePackages = packages.filter(p => p.category === 'corporate');
@@ -61,12 +73,12 @@ export default function Home() {
               <PackageCard
                 key={pkg.id}
                 id={pkg.id}
-                name={pkg.name[language]}
+                name={language === 'me' ? pkg.nameME : pkg.nameEN}
                 price={pkg.price}
                 minOrder={pkg.minOrder}
                 image={pkg.image}
-                items={pkg.items[language]}
-                category={pkg.category}
+                items={[]}
+                category={pkg.category as "newyear" | "corporate"}
                 onLearnMore={() => handleLearnMore(pkg)}
               />
             ))}
@@ -85,12 +97,12 @@ export default function Home() {
               <PackageCard
                 key={pkg.id}
                 id={pkg.id}
-                name={pkg.name[language]}
+                name={language === 'me' ? pkg.nameME : pkg.nameEN}
                 price={pkg.price}
                 minOrder={pkg.minOrder}
                 image={pkg.image}
-                items={pkg.items[language]}
-                category={pkg.category}
+                items={[]}
+                category={pkg.category as "newyear" | "corporate"}
                 onLearnMore={() => handleLearnMore(pkg)}
               />
             ))}
@@ -101,10 +113,11 @@ export default function Home() {
       <ContactForm selectedPackage={contactPackage} />
 
       <PackageModal
-        package={selectedPackage}
+        package={selectedPackage || null}
+        products={selectedProducts}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onInquire={() => handleInquire(selectedPackage?.name)}
+        onInquire={() => handleInquire(selectedPackage ? (language === 'me' ? selectedPackage.nameME : selectedPackage.nameEN) : undefined)}
       />
     </div>
   );

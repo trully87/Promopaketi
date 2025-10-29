@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -30,7 +31,6 @@ interface ContactFormProps {
 export default function ContactForm({ selectedPackage }: ContactFormProps) {
   const { t, language } = useLanguage();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -45,20 +45,28 @@ export default function ContactForm({ selectedPackage }: ContactFormProps) {
     },
   });
 
+  const submitMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      await apiRequest("POST", "/api/inquiries", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: t('form.success'),
+        description: t('form.subtitle'),
+      });
+      form.reset();
+    },
+    onError: () => {
+      toast({
+        title: language === 'me' ? 'Greška' : 'Error',
+        description: language === 'me' ? 'Nešto je pošlo po zlu. Pokušajte ponovo.' : 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
+    },
+  });
+
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
-    console.log('Form submitted:', data);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: t('form.success'),
-      description: t('form.subtitle'),
-    });
-    
-    form.reset();
-    setIsSubmitting(false);
+    submitMutation.mutate(data);
   };
 
   const packages = [
@@ -237,10 +245,10 @@ export default function ContactForm({ selectedPackage }: ContactFormProps) {
               type="submit" 
               size="lg" 
               className="w-full"
-              disabled={isSubmitting}
+              disabled={submitMutation.isPending}
               data-testid="button-submit-contact"
             >
-              {isSubmitting ? (language === 'me' ? 'Slanje...' : 'Sending...') : t('form.submit')}
+              {submitMutation.isPending ? (language === 'me' ? 'Slanje...' : 'Sending...') : t('form.submit')}
             </Button>
           </form>
         </Form>

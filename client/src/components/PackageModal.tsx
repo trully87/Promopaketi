@@ -7,11 +7,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Check, Package, Paintbrush, ListChecks, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import type { PackageCardProps } from './PackageCard';
-import type { ProductItem } from '@/data/packages';
+import type { Package as PackageType, PackageProduct } from '@shared/schema';
 
 interface PackageModalProps {
-  package: PackageCardProps & { products?: ProductItem[] } | null;
+  package: PackageType | null;
+  products: PackageProduct[];
   open: boolean;
   onClose: () => void;
   onInquire: () => void;
@@ -78,16 +78,18 @@ function ProductImageGallery({ images }: { images: string[] }) {
   );
 }
 
-export default function PackageModal({ package: pkg, open, onClose, onInquire }: PackageModalProps) {
+export default function PackageModal({ package: pkg, products, open, onClose, onInquire }: PackageModalProps) {
   const { t, language } = useLanguage();
 
   if (!pkg) return null;
+
+  const packageName = language === 'me' ? pkg.nameME : pkg.nameEN;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-serif text-3xl">{pkg.name}</DialogTitle>
+          <DialogTitle className="font-serif text-3xl">{packageName}</DialogTitle>
         </DialogHeader>
 
         <div className="grid md:grid-cols-5 gap-8 mt-4">
@@ -95,7 +97,7 @@ export default function PackageModal({ package: pkg, open, onClose, onInquire }:
             <div className="aspect-[3/4] overflow-hidden rounded-lg bg-muted sticky top-0">
               <img 
                 src={pkg.image} 
-                alt={pkg.name}
+                alt={packageName}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -137,64 +139,27 @@ export default function PackageModal({ package: pkg, open, onClose, onInquire }:
               {pkg.category === 'newyear' ? t('category.newyear') : t('category.corporate')}
             </Badge>
 
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="overview" data-testid="tab-overview">
-                  <ListChecks className="w-4 h-4 mr-2" />
-                  {language === 'me' ? 'Pregled' : 'Overview'}
-                </TabsTrigger>
+            <Tabs defaultValue="products" className="w-full">
+              <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="products" data-testid="tab-products">
                   <Package className="w-4 h-4 mr-2" />
                   {language === 'me' ? 'Pojedinačni proizvodi' : 'Individual Products'}
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-6 mt-6">
-                <div className="flex items-start gap-3">
-                  <Package className="w-5 h-5 text-primary shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-3">{t('common.includes')}:</h3>
-                    <ul className="space-y-2">
-                      {pkg.items.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <Check className="w-4 h-4 text-primary shrink-0 mt-1" />
-                          <span className="text-sm">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <Card className="bg-muted/50">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-3">
-                      <Paintbrush className="w-5 h-5 text-primary shrink-0 mt-1" />
-                      <div>
-                        <h3 className="font-semibold mb-2">{t('common.customization')}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {language === 'me' 
-                            ? 'Personalizacija putem štampe logotipa ili inicijala pruža jedinstven poslovni pečat. Svi proizvodi u paketu mogu biti prilagođeni potrebama Vaše firme sa custom made pakovanjem i brendiranjem.'
-                            : 'Customization through logo or initial printing provides a unique business touch. All products in the package can be customized to your company needs with custom made packaging and branding.'}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
               <TabsContent value="products" className="space-y-4 mt-6">
-                {pkg.products && pkg.products.length > 0 ? (
+                {products && products.length > 0 ? (
                   <div className="space-y-4">
-                    {pkg.products.map((product, idx) => (
+                    {products.map((product, idx) => (
                       <Card key={idx} className="overflow-hidden hover-elevate transition-all">
                         <CardContent className="p-6">
                           <div className="grid md:grid-cols-3 gap-6">
-                            {product.images && product.images.length > 0 && (
+                            {product.images && (product.images as string[]).length > 0 && (
                               <div className="md:col-span-1">
-                                <ProductImageGallery images={product.images} />
+                                <ProductImageGallery images={product.images as string[]} />
                               </div>
                             )}
-                            <div className={`${product.images && product.images.length > 0 ? 'md:col-span-2' : 'md:col-span-3'} space-y-3`}>
+                            <div className={`${product.images && (product.images as string[]).length > 0 ? 'md:col-span-2' : 'md:col-span-3'} space-y-3`}>
                               <div className="flex items-start gap-3">
                                 <div className="flex-shrink-0">
                                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -203,14 +168,14 @@ export default function PackageModal({ package: pkg, open, onClose, onInquire }:
                                 </div>
                                 <div className="flex-1">
                                   <h4 className="font-semibold text-lg mb-2">
-                                    {product.name[language]}
+                                    {language === 'me' ? product.nameME : product.nameEN}
                                   </h4>
                                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                                    {product.description[language]}
+                                    {language === 'me' ? product.descriptionME : product.descriptionEN}
                                   </p>
-                                  {product.specs && (
+                                  {(language === 'me' ? product.specsME : product.specsEN) && (
                                     <Badge variant="outline" className="font-normal">
-                                      {product.specs[language]}
+                                      {language === 'me' ? product.specsME : product.specsEN}
                                     </Badge>
                                   )}
                                 </div>

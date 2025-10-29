@@ -7,6 +7,9 @@ import { LanguageProvider } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
+import AdminLogin from "@/pages/AdminLogin";
+import AdminDashboard from "@/pages/AdminDashboard";
+import PackageForm from "@/pages/PackageForm";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +19,10 @@ function Router() {
       <Route path="/novogodisnji" component={Home} />
       <Route path="/korporativni" component={Home} />
       <Route path="/kontakt" component={Home} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/packages/new" component={PackageForm} />
+      <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />
     </Switch>
   );
