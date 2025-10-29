@@ -6,6 +6,19 @@ Brain Box is a premium e-commerce web application specializing in luxury gift pa
 
 ## Recent Changes (October 29, 2025)
 
+**FAZA 1: Scalability - Category Landing Pages & Pagination (COMPLETED)**
+- Created dedicated category landing pages at `/packages/:category` routes (newyear, corporate, eko)
+- Implemented CategoryPage component with breadcrumbs navigation, package grid, and pagination info
+- Backend pagination API endpoint: `GET /api/packages?category=X&page=Y&pageSize=Z&sortBy=price|createdAt&sortOrder=asc|desc`
+  - Backward compatible: without parameters returns all packages
+  - SQL-based COUNT for total, ORDER BY for sorting, OFFSET/LIMIT for pagination
+  - Scalable architecture supporting thousands of packages
+- Frontend uses `useInfiniteQuery` for accumulating "Load More" functionality
+- Homepage refactored to display only 4 featured packages per category with "Vidi Sve" buttons linking to category pages
+- SPA navigation throughout - all routes use wouter's `setLocation()` instead of `window.location.href`
+- Comprehensive data-testid attributes on all interactive elements for automated testing
+- E2E tested: category navigation, breadcrumbs, package modals, inquiry flow
+
 **Premium Design Transformation**
 - Implemented comprehensive premium design system with warm cream backgrounds (#FAF8F5), deep charcoal (#1A1A1A), and multi-tier color system (gold, silver, emerald) for package differentiation
 - Created sticky navigation with scroll-based shadow transitions, backdrop blur effects, and animated nav link underlines
