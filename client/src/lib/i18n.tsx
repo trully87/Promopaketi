@@ -28,6 +28,8 @@ const translations = {
     'category.newyear.desc': 'Ekskluzivni novogodišnji pokloni sa custom made kutijama',
     'category.corporate': 'Korporativni Paketi',
     'category.corporate.desc': 'Profesionalni poslovni pokloni za Vašu firmu',
+    'category.eko': 'Eko Paketi',
+    'category.eko.desc': 'Održivi i ekološki pokloni sa lokalnim proizvodima',
     
     // Packages
     'package.basic.newyear': 'Osnovni Novogodišnji Paket',
@@ -92,6 +94,8 @@ const translations = {
     'category.newyear.desc': 'Exclusive New Year gifts with custom made boxes',
     'category.corporate': 'Corporate Packages',
     'category.corporate.desc': 'Professional business gifts for your company',
+    'category.eko': 'Eco Packages',
+    'category.eko.desc': 'Sustainable and eco-friendly gifts with local products',
     
     // Packages
     'package.basic.newyear': "Basic New Year's Package",

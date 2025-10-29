@@ -10,6 +10,7 @@ import type { PackageCardProps } from '@/components/PackageCard';
 import type { Package, PackageProduct } from '@shared/schema';
 import standardNewyear from '@assets/generated_images/Standard_New_Year_package_413cce95.png';
 import corporateBox from '@assets/generated_images/Corporate_package_with_box_2c8d7f38.png';
+import ecoImage from '@assets/stock_images/eco_friendly_natural_de0eebf0.jpg';
 
 export default function Home() {
   const { language, t } = useLanguage();
@@ -53,6 +54,7 @@ export default function Home() {
 
   const newyearPackages = packages.filter(p => p.category === 'newyear');
   const corporatePackages = packages.filter(p => p.category === 'corporate');
+  const ekoPackages = packages.filter(p => p.category === 'eko');
 
   return (
     <div className="min-h-screen">
@@ -103,6 +105,30 @@ export default function Home() {
                 image={pkg.image}
                 items={[]}
                 category={pkg.category as "newyear" | "corporate"}
+                onLearnMore={() => handleLearnMore(pkg)}
+              />
+            ))}
+          </div>
+
+          <CategorySection
+            title={t('category.eko')}
+            description={t('category.eko.desc')}
+            image={ecoImage}
+            onViewAll={() => document.getElementById('eko-packages')?.scrollIntoView({ behavior: 'smooth' })}
+            align="left"
+          />
+
+          <div id="eko-packages" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ekoPackages.map((pkg) => (
+              <PackageCard
+                key={pkg.id}
+                id={pkg.id}
+                name={language === 'me' ? pkg.nameME : pkg.nameEN}
+                price={pkg.price}
+                minOrder={pkg.minOrder}
+                image={pkg.image}
+                items={[]}
+                category={pkg.category}
                 onLearnMore={() => handleLearnMore(pkg)}
               />
             ))}

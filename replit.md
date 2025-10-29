@@ -15,6 +15,14 @@ Brain Box is a premium e-commerce web application specializing in luxury gift pa
 - Premium PackageModal redesign with luxury pricing card (gradient background, serif fonts, centered layout) and elegant product list with dividers
 - Added micro-interaction utilities (soft-glow-primary, soft-glow-gold, image-zoom, card-lift, animate-bounce-slow) for enhanced user experience
 
+**Navigation & Package Categories Update**
+- Refactored navigation to use smooth scroll instead of routing for better UX
+- Navigation now displays 3 main package categories + Contact: Novogodišnji Paketi, Korporativni Paketi, Eko Paketi, Kontakt
+- Added Eko (Eco) category section to homepage with dedicated CategorySection and package grid
+- Implemented scrollToSection function with smooth scroll behavior to section IDs
+- Updated translations with Eko category labels (ME: "Eko Paketi", EN: "Eco Packages")
+- Fixed package categorization: moved "Eko Održivi Paket" from corporate to eko category
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
