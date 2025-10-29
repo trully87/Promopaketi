@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LIGHT MODE */
+/* LIGHT MODE - PREMIUM PALETTE */
 :root {
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
@@ -14,17 +14,18 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 0 0% 98%;
+  /* Premium Color System */
+  --background: 36 44% 97%; /* Warm Cream #FAF8F5 */
 
-  --foreground: 240 6% 10%;
+  --foreground: 0 0% 10%; /* Deep Charcoal #1A1A1A */
 
-  --border: 240 4% 88%;
+  --border: 30 15% 88%;
 
-  --card: 0 0% 96%;
+  --card: 40 30% 98%; /* Slightly warmer white */
 
-  --card-foreground: 240 6% 10%;
+  --card-foreground: 0 0% 10%;
 
-  --card-border: 240 3% 90%;
+  --card-border: 35 20% 92%;
 
   --sidebar: 240 3% 94%;
 
@@ -76,18 +77,43 @@
   --chart-4: 351 37% 59%;
   --chart-5: 30 45% 82%;
 
+  /* Premium Tier Colors */
+  --gold: 43 74% 49%; /* Metallic Gold #D4AF37 for Premium VIP */
+  --gold-foreground: 0 0% 10%;
+  
+  --silver: 0 0% 75%; /* Metallic Silver #C0C0C0 for Corporate */
+  --silver-foreground: 0 0% 10%;
+  
+  --emerald: 151 50% 53%; /* Emerald Green #50C878 for Eko */
+  --emerald-foreground: 0 0% 100%;
+
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
   --radius: .5rem; /* 8px */
-  --shadow-2xs: 0px 1px 2px 0px hsl(240 6% 10% / 0.05);
-  --shadow-xs: 0px 1px 3px 0px hsl(240 6% 10% / 0.08);
-  --shadow-sm: 0px 2px 4px -1px hsl(240 6% 10% / 0.06), 0px 1px 2px -1px hsl(240 6% 10% / 0.04);
-  --shadow: 0px 4px 6px -1px hsl(240 6% 10% / 0.08), 0px 2px 4px -2px hsl(240 6% 10% / 0.05);
-  --shadow-md: 0px 6px 12px -2px hsl(240 6% 10% / 0.10), 0px 3px 6px -3px hsl(240 6% 10% / 0.06);
-  --shadow-lg: 0px 10px 20px -4px hsl(240 6% 10% / 0.12), 0px 4px 8px -4px hsl(240 6% 10% / 0.08);
-  --shadow-xl: 0px 20px 30px -6px hsl(240 6% 10% / 0.15), 0px 8px 12px -6px hsl(240 6% 10% / 0.10);
-  --shadow-2xl: 0px 30px 50px -12px hsl(240 6% 10% / 0.20);
+  
+  /* Premium Multi-Layer Shadows */
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 10% / 0.05);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 10% / 0.08);
+  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 10% / 0.06), 0px 1px 2px -1px hsl(0 0% 10% / 0.04);
+  --shadow: 0px 4px 6px -1px hsl(0 0% 10% / 0.08), 0px 2px 4px -2px hsl(0 0% 10% / 0.05);
+  --shadow-md: 0px 6px 12px -2px hsl(0 0% 10% / 0.10), 0px 3px 6px -3px hsl(0 0% 10% / 0.06);
+  --shadow-lg: 0px 10px 20px -4px hsl(0 0% 10% / 0.12), 0px 4px 8px -4px hsl(0 0% 10% / 0.08);
+  --shadow-xl: 0px 20px 30px -6px hsl(0 0% 10% / 0.15), 0px 8px 12px -6px hsl(0 0% 10% / 0.10);
+  --shadow-2xl: 0px 30px 50px -12px hsl(0 0% 10% / 0.20);
+  
+  /* Premium Card Shadow - Multi-layer for depth */
+  --shadow-premium: 
+    0px 2px 4px hsl(0 0% 10% / 0.04),
+    0px 8px 16px hsl(0 0% 10% / 0.06),
+    0px 16px 32px hsl(0 0% 10% / 0.04);
+  
+  /* Lifted Card Shadow - On hover */
+  --shadow-lifted: 
+    0px 4px 8px hsl(0 0% 10% / 0.06),
+    0px 12px 24px hsl(0 0% 10% / 0.08),
+    0px 24px 48px hsl(0 0% 10% / 0.06);
+  
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
@@ -132,13 +158,14 @@
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
 
-  --background: 240 6% 8%;
+  /* Premium Dark Mode */
+  --background: 0 0% 7%; /* Deep Charcoal */
 
   --foreground: 0 0% 95%;
 
   --border: 240 4% 18%;
 
-  --card: 240 5% 10%;
+  --card: 0 0% 9%; /* Slightly warmer dark */
 
   --card-foreground: 0 0% 95%;
 
@@ -193,6 +220,16 @@
   --chart-3: 240 8% 75%;
   --chart-4: 351 50% 75%;
   --chart-5: 30 60% 70%;
+
+  /* Premium Tier Colors - Dark Mode */
+  --gold: 43 74% 55%; /* Slightly brighter for dark mode */
+  --gold-foreground: 0 0% 10%;
+  
+  --silver: 0 0% 80%; /* Brighter silver for dark mode */
+  --silver-foreground: 0 0% 10%;
+  
+  --emerald: 151 50% 58%; /* Slightly brighter for dark mode */
+  --emerald-foreground: 0 0% 10%;
 
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.30);
   --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.40);
@@ -349,5 +386,79 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* PREMIUM MICRO-INTERACTIONS */
+  
+  /* Soft Glow on Hover - Subtle outer glow effect */
+  .soft-glow-primary {
+    transition: box-shadow 300ms ease-in-out;
+  }
+  
+  .soft-glow-primary:hover {
+    box-shadow: 0 0 20px hsla(var(--primary), 0.3);
+  }
+  
+  .soft-glow-gold {
+    transition: box-shadow 300ms ease-in-out;
+  }
+  
+  .soft-glow-gold:hover {
+    box-shadow: 0 0 20px hsla(var(--gold), 0.4);
+  }
+  
+  /* Image Zoom on Hover */
+  .image-zoom {
+    overflow: hidden;
+  }
+  
+  .image-zoom img {
+    transition: transform 500ms ease-out;
+    will-change: transform;
+  }
+  
+  .image-zoom:hover img {
+    transform: scale(1.05);
+  }
+  
+  /* Card Lift Effect - translateY + shadow enhancement */
+  .card-lift {
+    transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+    box-shadow: var(--shadow-premium);
+  }
+  
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lifted);
+  }
+  
+  /* Smooth Fade In Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 600ms ease-out forwards;
+  }
+  
+  /* Scroll Bounce Animation for Chevron */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(8px);
+    }
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 2s ease-in-out infinite;
   }
 }

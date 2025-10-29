@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -102,6 +102,9 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-serif text-3xl" data-testid="text-package-name">{packageName}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {language === 'me' ? 'Detalji paketa' : 'Package details'}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid md:grid-cols-5 gap-8 mt-4">
@@ -115,26 +118,26 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
               />
             </div>
             
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
+            <Card className="border-2 border-primary/20 shadow-premium">
+              <CardContent className="p-6 bg-gradient-to-br from-background via-card to-background">
+                <div className="text-center space-y-4 mb-6">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">{t('common.price')}</p>
                   <div>
-                    <p className="text-sm text-muted-foreground">{t('common.price')}</p>
-                    <p className="text-3xl font-bold text-primary" data-testid="text-package-price">€{pkg.price}</p>
-                    <p className="text-sm text-muted-foreground">{t('common.perUnit')}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">{t('common.minOrder')}</p>
-                    <p className="text-2xl font-semibold" data-testid="text-min-order">{pkg.minOrder}</p>
-                    <p className="text-sm text-muted-foreground">{t('common.pieces')}</p>
+                    <p className="font-serif text-5xl font-bold text-primary" data-testid="text-package-price">€{pkg.price}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t('common.perUnit')}</p>
                   </div>
                 </div>
                 
-                <Separator className="my-4" />
+                <Separator className="my-5 bg-primary/20" />
+                
+                <div className="text-center mb-5">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-2">{t('common.minOrder')}</p>
+                  <p className="text-3xl font-bold" data-testid="text-min-order">{pkg.minOrder} <span className="text-base font-normal text-muted-foreground">{t('common.pieces')}</span></p>
+                </div>
                 
                 <Button 
                   size="lg" 
-                  className="w-full"
+                  className="w-full soft-glow-primary shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => {
                     onInquire();
                     onClose();
@@ -173,10 +176,10 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
                     </h3>
                   </div>
                   
-                  <div className="space-y-0">
+                  <div className="space-y-0 divide-y divide-border/40">
                     {products && products.length > 0 ? (
                       products.map((product, idx) => (
-                        <div key={product.id} className="flex items-start gap-2.5 py-1.5">
+                        <div key={product.id} className="flex items-start gap-2.5 py-3 first:pt-0">
                           <div className="flex-shrink-0 pt-0.5">
                             <span className="text-foreground font-medium text-xs">{idx + 1}.</span>
                           </div>

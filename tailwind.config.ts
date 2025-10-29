@@ -51,6 +51,19 @@ export default {
           foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
           border: "var(--destructive-border)",
         },
+        // Premium Tier Colors
+        gold: {
+          DEFAULT: "hsl(var(--gold) / <alpha-value>)",
+          foreground: "hsl(var(--gold-foreground) / <alpha-value>)",
+        },
+        silver: {
+          DEFAULT: "hsl(var(--silver) / <alpha-value>)",
+          foreground: "hsl(var(--silver-foreground) / <alpha-value>)",
+        },
+        emerald: {
+          DEFAULT: "hsl(var(--emerald) / <alpha-value>)",
+          foreground: "hsl(var(--emerald-foreground) / <alpha-value>)",
+        },
         ring: "hsl(var(--ring) / <alpha-value>)",
         chart: {
           "1": "hsl(var(--chart-1) / <alpha-value>)",
@@ -86,6 +99,10 @@ export default {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
+      },
+      boxShadow: {
+        'premium': 'var(--shadow-premium)',
+        'lifted': 'var(--shadow-lifted)',
       },
       keyframes: {
         "accordion-down": {

@@ -122,17 +122,17 @@ export default function Hero() {
 
       {/* Hero Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-        <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
+        <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
           {hasSlides ? (language === 'me' ? slides[currentSlide].titleME : slides[currentSlide].titleEN) : t('hero.title')}
         </h1>
-        <p className="text-xl sm:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
+        <p className="font-serif italic text-xl sm:text-2xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
           {hasSlides ? (language === 'me' ? slides[currentSlide].subtitleME : slides[currentSlide].subtitleEN) : t('hero.subtitle')}
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
           <Button 
             size="lg" 
-            className="min-w-[200px]"
+            className="min-w-[200px] border-2 border-primary shadow-lg soft-glow-primary"
             onClick={scrollToPackages}
             data-testid="button-view-packages"
           >
@@ -141,7 +141,7 @@ export default function Hero() {
           <Button 
             size="lg" 
             variant="outline" 
-            className="min-w-[200px] bg-background/10 backdrop-blur-sm border-white/30 text-white hover:bg-background/20"
+            className="min-w-[200px] bg-white/10 backdrop-blur-md border-2 border-white/50 text-white shadow-lg"
             onClick={scrollToContact}
             data-testid="button-contact-hero"
           >
@@ -150,13 +150,16 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Premium Animated */}
       <button
         onClick={scrollToPackages}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce-slow hover:scale-110 transition-transform"
         data-testid="button-scroll-indicator"
       >
-        <ChevronDown className="w-8 h-8 text-white/80" />
+        <div className="flex flex-col items-center gap-1">
+          <ChevronDown className="w-8 h-8 text-white drop-shadow-lg" />
+          <span className="text-xs text-white/70 font-medium tracking-wider">SCROLL</span>
+        </div>
       </button>
     </section>
   );
