@@ -117,3 +117,64 @@ export const insertMenuItemSchema = createInsertSchema(menuItems).omit({
 
 export type InsertMenuItem = z.infer<typeof insertMenuItemSchema>;
 export type MenuItem = typeof menuItems.$inferSelect;
+
+// Contact information (singleton - only one row)
+export const contactInfo = pgTable("contact_info", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  phone: text("phone").notNull(),
+  email: text("email").notNull(),
+  whatsapp: text("whatsapp"),
+  viber: text("viber"),
+  addressME: text("address_me"),
+  addressEN: text("address_en"),
+  mapLatitude: text("map_latitude"),
+  mapLongitude: text("map_longitude"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertContactInfoSchema = createInsertSchema(contactInfo).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertContactInfo = z.infer<typeof insertContactInfoSchema>;
+export type ContactInfo = typeof contactInfo.$inferSelect;
+
+// About page content (singleton - only one row)
+export const aboutPage = pgTable("about_page", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  titleME: text("title_me").notNull(),
+  titleEN: text("title_en").notNull(),
+  contentME: text("content_me").notNull(),
+  contentEN: text("content_en").notNull(),
+  missionME: text("mission_me"),
+  missionEN: text("mission_en"),
+  visionME: text("vision_me"),
+  visionEN: text("vision_en"),
+  image: text("image"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAboutPageSchema = createInsertSchema(aboutPage).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertAboutPage = z.infer<typeof insertAboutPageSchema>;
+export type AboutPage = typeof aboutPage.$inferSelect;
+
+// Newsletter subscribers
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  status: text("status").notNull().default('active'), // 'active' or 'unsubscribed'
+  subscribedAt: timestamp("subscribed_at").defaultNow().notNull(),
+});
+
+export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSubscribers).omit({
+  id: true,
+  subscribedAt: true,
+});
+
+export type InsertNewsletterSubscriber = z.infer<typeof insertNewsletterSubscriberSchema>;
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
