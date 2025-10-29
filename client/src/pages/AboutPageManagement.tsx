@@ -281,6 +281,9 @@ export default function AboutPageManagement() {
                       </Button>
                     )}
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Preporučene dimenzije: 1200x800px | Max: 5MB | Format: JPG, PNG
+                  </p>
                   {formData.image && (
                     <div className="mt-2">
                       <img

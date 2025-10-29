@@ -357,7 +357,9 @@ export default function PackageForm() {
                           )}
                         </div>
                       </FormControl>
-                      <FormDescription>Upload main package image</FormDescription>
+                      <FormDescription>
+                        Preporučene dimenzije: 1200x1200px (kvadratna) | Max: 5MB | Format: JPG, PNG
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -548,7 +550,9 @@ export default function PackageForm() {
                                   )}
                                 </div>
                               </FormControl>
-                              <FormDescription>Upload up to 3 images for this product</FormDescription>
+                              <FormDescription>
+                                Preporučene dimenzije: 800x800px | Max: 5MB po slici | Format: JPG, PNG | Do 3 slike
+                              </FormDescription>
                               <FormMessage />
                             </FormItem>
                           )}

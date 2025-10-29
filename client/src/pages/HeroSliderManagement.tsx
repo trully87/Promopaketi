@@ -316,7 +316,7 @@ export default function HeroSliderManagement() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="border-2 border-dashed rounded-md p-4">
+                      <div className="border-2 border-dashed rounded-md p-4 space-y-2">
                         <Input
                           id="image"
                           type="file"
@@ -325,6 +325,9 @@ export default function HeroSliderManagement() {
                           disabled={uploadingImage}
                           data-testid="input-image"
                         />
+                        <p className="text-xs text-muted-foreground">
+                          Preporučene dimenzije: 1920x800px (široka) | Max: 5MB | Format: JPG, PNG
+                        </p>
                         {uploadingImage && <p className="text-sm text-muted-foreground mt-2">Uploading...</p>}
                       </div>
                     )}
