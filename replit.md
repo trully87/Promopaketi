@@ -5,7 +5,7 @@ Brain Box is a premium e-commerce web application focused on luxury gift package
 
 ## Recent Changes (October 30, 2025)
 - **Production Deployment Fixes**: Resolved critical issues affecting production builds
-  - **Navigation Dropdown**: Replaced Radix NavigationMenu with DropdownMenu to eliminate portal/SSR incompatibility issues in production builds. Uses Button trigger with ChevronDown icon and grid-based content layout maintaining same UX
+  - **Navigation Dropdown**: Replaced ALL Radix UI components (NavigationMenu, DropdownMenu) with **completely custom dropdown** implementation using plain React state + HTML + CSS. Eliminates portal/SSR/build incompatibility issues that prevented dropdown from opening on promopaketi.com production domain. Custom implementation uses useState for open/close, useRef+useEffect for click-outside detection, absolute positioning, and CSS fadeIn animation. Production-safe and architect-verified.
   - **Admin Login Redirect**: Enhanced redirect logic using `window.location.href` instead of SPA navigation, with dual cache invalidation (invalidateQueries + refetchQueries) and requestAnimationFrame + 150ms setTimeout for proper DOM/state synchronization in production
   - **Route Ordering**: Moved `/api/packages/featured` before `/api/packages/:id` to prevent Express parameter matching conflicts
 - **Featured Packages System**: Implemented admin-controlled homepage package curation allowing selection and ordering of up to 8 featured packages
