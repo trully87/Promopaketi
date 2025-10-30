@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -12,6 +13,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, ArrowLeft, Package as PackageIcon } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -20,6 +22,7 @@ import type { Package, PackageCategory } from "@shared/schema";
 export default function PackageManagement() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const { data: packages = [], isLoading: packagesLoading, refetch } = useQuery<Package[]>({
     queryKey: ["/api/packages"],
@@ -28,6 +31,18 @@ export default function PackageManagement() {
   const { data: categories = [] } = useQuery<PackageCategory[]>({
     queryKey: ["/api/package-categories"],
   });
+
+  const activeCategories = categories.filter(cat => cat.isActive === 1).sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // Filter packages by selected category
+  const filteredPackages = selectedCategory === "all" 
+    ? packages 
+    : packages.filter(pkg => pkg.category === selectedCategory);
+
+  // Count packages per category
+  const getCategoryCount = (categoryValue: string) => {
+    return packages.filter(pkg => pkg.category === categoryValue).length;
+  };
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -95,7 +110,10 @@ export default function PackageManagement() {
           <div>
             <h2 className="text-3xl font-bold">All Packages</h2>
             <p className="text-muted-foreground mt-1">
-              Total: {packages.length} packages
+              {selectedCategory === "all" 
+                ? `Total: ${packages.length} packages`
+                : `${filteredPackages.length} of ${packages.length} packages`
+              }
             </p>
           </div>
           <Button
@@ -107,20 +125,51 @@ export default function PackageManagement() {
           </Button>
         </div>
 
+        {/* Category Filter Tabs */}
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-6">
+          <TabsList className="w-full justify-start flex-wrap h-auto">
+            <TabsTrigger value="all" data-testid="tab-all">
+              All Categories ({packages.length})
+            </TabsTrigger>
+            {activeCategories.map((category) => (
+              <TabsTrigger 
+                key={category.id} 
+                value={category.value}
+                data-testid={`tab-${category.value}`}
+              >
+                {category.labelEN} ({getCategoryCount(category.value)})
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+
         <Card>
           <CardHeader>
-            <CardTitle>Packages</CardTitle>
+            <CardTitle>
+              {selectedCategory === "all" 
+                ? "All Packages" 
+                : `${activeCategories.find(c => c.value === selectedCategory)?.labelEN} Packages`
+              }
+            </CardTitle>
             <CardDescription>
               View, edit, and delete promotional gift packages
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {packages.length === 0 ? (
+            {filteredPackages.length === 0 ? (
               <div className="text-center py-12">
                 <PackageIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No packages yet</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  {selectedCategory === "all" 
+                    ? "No packages yet" 
+                    : `No packages in this category`
+                  }
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  Get started by creating your first package
+                  {selectedCategory === "all"
+                    ? "Get started by creating your first package"
+                    : "Create a package in this category to see it here"
+                  }
                 </p>
                 <Button onClick={() => setLocation("/admin/packages/new")}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -141,7 +190,7 @@ export default function PackageManagement() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {packages.map((pkg) => (
+                  {filteredPackages.map((pkg) => (
                     <TableRow key={pkg.id} data-testid={`row-package-${pkg.id}`}>
                       <TableCell>
                         <img
