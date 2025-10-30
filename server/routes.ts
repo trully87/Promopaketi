@@ -213,6 +213,33 @@ export function registerRoutes(app: Express): http.Server {
     }
   });
 
+  // Featured packages routes
+  app.get("/api/packages/featured", async (req: Request, res: Response) => {
+    try {
+      const packages = await storage.getFeaturedPackages();
+      res.json(packages);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch featured packages" });
+    }
+  });
+
+  app.patch("/api/packages/:id/featured", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const { isFeatured, featuredOrder } = req.body;
+      const pkg = await storage.updatePackageFeaturedStatus(
+        req.params.id, 
+        isFeatured ? 1 : 0, 
+        featuredOrder
+      );
+      if (!pkg) {
+        return res.status(404).json({ error: "Package not found" });
+      }
+      res.json(pkg);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update featured status" });
+    }
+  });
+
   // Package products routes
   app.get("/api/packages/:packageId/products", async (req: Request, res: Response) => {
     try {

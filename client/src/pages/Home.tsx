@@ -28,6 +28,10 @@ export default function Home() {
     queryKey: ["/api/packages"],
   });
 
+  const { data: featuredPackages = [] } = useQuery<Package[]>({
+    queryKey: ["/api/packages/featured"],
+  });
+
   const { data: selectedProducts = [] } = useQuery<PackageProduct[]>({
     queryKey: ["/api/packages", selectedPackageId, "products"],
     enabled: !!selectedPackageId && modalOpen,
@@ -71,6 +75,39 @@ export default function Home() {
 
       <section id="packages" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32">
+          {/* Featured Packages */}
+          {featuredPackages.length > 0 && (
+            <div id="featured-packages">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl font-bold mb-4">
+                  {language === 'me' ? 'Izdvojeni Paketi' : 'Featured Packages'}
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  {language === 'me' 
+                    ? 'Naša posebna selekcija luksuznih poklonpaketa'
+                    : 'Our special selection of luxury gift packages'}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {featuredPackages.slice(0, 8).map((pkg) => (
+                  <PackageCard
+                    key={pkg.id}
+                    id={pkg.id}
+                    name={language === 'me' ? pkg.nameME : pkg.nameEN}
+                    price={pkg.price}
+                    minOrder={pkg.minOrder}
+                    image={pkg.image}
+                    items={[]}
+                    category={pkg.category}
+                    packageData={pkg}
+                    onLearnMore={() => handleLearnMore(pkg)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* New Year Packages */}
           <div id="newyear-packages">
             <CategorySection

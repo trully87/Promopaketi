@@ -27,6 +27,7 @@ import PackageCategoryManagement from "@/pages/PackageCategoryManagement";
 import CustomPackageSectionManagement from "@/pages/CustomPackageSectionManagement";
 import ChangePassword from "@/pages/ChangePassword";
 import InquiryManagement from "@/pages/InquiryManagement";
+import FeaturedPackages from "@/pages/FeaturedPackages";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/admin/packages" component={PackageManagement} />
       <Route path="/admin/packages/new" component={PackageForm} />
       <Route path="/admin/packages/:id/edit" component={PackageForm} />
+      <Route path="/admin/featured-packages" component={FeaturedPackages} />
       <Route path="/admin/package-categories" component={PackageCategoryManagement} />
       <Route path="/admin/hero-slider" component={HeroSliderManagement} />
       <Route path="/admin/menu-items" component={MenuManagement} />

@@ -105,6 +105,20 @@ export default function AdminDashboard() {
             </CardHeader>
           </Card>
 
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/featured-packages")} data-testid="card-featured-packages">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Featured Packages</CardTitle>
+                  <CardDescription>Homepage selection</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
           <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/hero-slider")} data-testid="card-hero">
             <CardHeader>
               <div className="flex items-center gap-3">
