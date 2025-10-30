@@ -4,10 +4,10 @@
 Brain Box is a premium e-commerce web application focused on luxury gift packages for the Serbian/Montenegrin market. It offers diverse product categories like New Year's, Corporate, Eco, Local Producers, Technology, Sport & Recreation, and Premium VIP packages, with full bilingual support. The platform includes a customer-facing storefront for browsing and inquiries, a custom package CTA section, and an admin panel for comprehensive management of products, categories, content, and subscribers. The project aims to provide a scalable, feature-rich platform with a premium user experience.
 
 ## Recent Changes (October 30, 2025)
-- **Production Database Auto-Seeding**: Added automatic data seeding to production database migrations
-  - **Auto-Migrate Script** (scripts/auto-migrate-production.ts): Now automatically seeds admin user and package categories when production database is empty. Includes security warnings about temporary admin password that MUST be changed on first login. Script runs automatically on production server startup.
-  - **Security Fix**: Removed scripts containing hardcoded production database credentials (direct-neon-sync.ts, seed-production-via-api.ts) per security audit. Temporary admin password (admin/admin123) is clearly marked and logged with warnings to change immediately.
-  - **Migration Strategy**: Production database seeding happens through server startup scripts instead of direct database connection, avoiding authentication issues and IP restrictions while maintaining security.
+- **Production Database Auto-Seeding**: Added automatic category seeding to production database migrations
+  - **Auto-Migrate Script** (scripts/auto-migrate-production.ts): Automatically seeds 7 package categories when production database is empty. Script runs automatically on production server startup. Categories include: New Year, Corporate, Eco, Local Producers, Premium VIP, Technology, and Sport & Recreation.
+  - **Security Fix**: Removed scripts containing hardcoded production database credentials (direct-neon-sync.ts, seed-production-via-api.ts, CREATE-ADMIN-USER.sql) per security audit. Admin user is NOT auto-seeded to avoid hardcoded password risks.
+  - **Migration Strategy**: Production database seeding happens through server startup scripts for categories only. Admin user must be created manually through Database UI with secure password. See PRODUCTION-SETUP.md for detailed instructions.
 
 ## Recent Changes (Earlier - October 30, 2025)
 - **Production Session & Image Fixes**: Resolved production-specific session persistence and missing asset issues
