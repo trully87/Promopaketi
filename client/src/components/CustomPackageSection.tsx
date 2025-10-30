@@ -3,16 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { useState, useEffect } from "react";
 import type { CustomPackageSection as CustomPackageSectionType } from "@shared/schema";
 
 export default function CustomPackageSection() {
   const { language } = useLanguage();
+  const [imageError, setImageError] = useState(false);
   
   const { data: section } = useQuery<CustomPackageSectionType>({
     queryKey: ["/api/custom-package-section"],
     retry: false,
     throwOnError: false,
   });
+
+  // Reset imageError when section.image changes (new upload)
+  useEffect(() => {
+    setImageError(false);
+  }, [section?.image]);
 
   if (!section) return null;
 
@@ -31,16 +38,19 @@ export default function CustomPackageSection() {
     <section className="py-16 px-4 bg-gradient-to-br from-background via-background to-accent/5">
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-0">
-            {/* Image Side */}
-            <div className="relative h-[400px] md:h-auto">
-              <img
-                src={section.image}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
-            </div>
+          <div className={`grid ${!imageError && section.image ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-0`}>
+            {/* Image Side - Only show if image exists and hasn't errored */}
+            {!imageError && section.image && (
+              <div className="relative h-[400px] md:h-auto">
+                <img
+                  src={section.image}
+                  alt={title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
+              </div>
+            )}
 
             {/* Content Side */}
             <div className="p-8 md:p-12 flex flex-col justify-center">

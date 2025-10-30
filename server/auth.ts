@@ -56,7 +56,7 @@ export function setupAuth(app: Express) {
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        sameSite: "lax", // Always use lax to allow session persistence on redirects
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       },
     })

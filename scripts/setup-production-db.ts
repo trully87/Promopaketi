@@ -208,7 +208,7 @@ async function setupProductionDatabase() {
         'Have specific requirements? Our team will create a personalized package tailored to your needs and budget.',
         'Kontaktirajte Nas',
         'Contact Us',
-        '/uploads/custom-packages-hero.jpg'
+        '/uploads/Custom_package_consultation_scene_ba549a84.png'
       WHERE NOT EXISTS (SELECT 1 FROM custom_package_section LIMIT 1);
     `;
 
