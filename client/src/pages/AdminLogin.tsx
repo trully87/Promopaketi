@@ -41,14 +41,21 @@ export default function AdminLogin() {
       return res.json();
     },
     onSuccess: async () => {
+      // Force cache invalidation and wait for it
       await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      await queryClient.refetchQueries({ queryKey: ["/api/auth/me"] });
+      
       toast({
         title: "Login successful",
         description: "Welcome to the admin panel!",
       });
-      setTimeout(() => {
-        setLocation("/admin");
-      }, 100);
+      
+      // Use requestAnimationFrame to ensure DOM is ready, then navigate
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          window.location.href = "/admin";
+        }, 150);
+      });
     },
     onError: (error: any) => {
       toast({

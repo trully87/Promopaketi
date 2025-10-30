@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift, Cpu, Trophy } from 'lucide-react';
+import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift, Cpu, Trophy, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -107,67 +107,69 @@ export default function Navigation() {
             />
           </Link>
 
-          {/* Desktop Navigation with Mega Menu */}
+          {/* Desktop Navigation with Dropdown Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Packages Mega Menu */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger 
-                    className="text-sm font-medium transition-all duration-200 hover:text-primary bg-transparent"
-                    data-testid="button-packages-menu"
-                  >
-                    <PackageIcon className="w-4 h-4 mr-2" />
-                    {language === 'me' ? 'Paketi' : 'Packages'}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="bg-card/95 backdrop-blur-sm shadow-premium rounded-lg border">
-                      <ul className="grid w-[420px] gap-2 p-5 md:w-[520px] md:grid-cols-2 lg:w-[640px]">
-                        {categoriesLoading ? (
-                          // Loading skeleton
-                          Array.from({ length: 4 }).map((_, i) => (
-                            <li key={i}>
-                              <div className="block space-y-2 rounded-md p-3">
-                                <Skeleton className="h-4 w-32" />
-                                <Skeleton className="h-3 w-full" />
-                              </div>
-                            </li>
-                          ))
-                        ) : (
-                          activeCategories.map((category) => {
-                            const IconComponent = getCategoryIcon(category.value);
-                            return (
-                              <li key={category.id}>
-                                <NavigationMenuLink asChild>
-                                  <Link 
-                                    href={`/packages/${category.value}`}
-                                    className="group block select-none space-y-1.5 rounded-md p-3.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent/50 hover:shadow-md focus:bg-accent focus:text-accent-foreground border border-transparent hover:border-border/50"
-                                    data-testid={`link-category-${category.value}`}
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <IconComponent className="w-4 h-4 text-primary transition-transform group-hover:scale-110" />
-                                      <div className="text-sm font-semibold leading-none">
-                                        {language === 'me' ? category.labelME : category.labelEN}
-                                      </div>
-                                    </div>
-                                    <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1.5">
-                                      {language === 'me' 
-                                        ? `Pregledajte ${category.labelME.toLowerCase()}`
-                                        : `Browse ${category.labelEN.toLowerCase()}`
-                                      }
-                                    </p>
-                                  </Link>
-                                </NavigationMenuLink>
-                              </li>
-                            );
-                          })
-                        )}
-                      </ul>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            {/* Packages Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost"
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary"
+                  data-testid="button-packages-menu"
+                >
+                  <PackageIcon className="w-4 h-4 mr-2" />
+                  {language === 'me' ? 'Paketi' : 'Packages'}
+                  <ChevronDown className="w-3 h-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="start" 
+                className="w-[520px] p-4 bg-card/95 backdrop-blur-sm"
+                sideOffset={8}
+              >
+                <div className="grid grid-cols-2 gap-2">
+                  {categoriesLoading ? (
+                    // Loading skeleton
+                    Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="space-y-2 rounded-md p-3">
+                        <Skeleton className="h-4 w-32" />
+                        <Skeleton className="h-3 w-full" />
+                      </div>
+                    ))
+                  ) : (
+                    activeCategories.map((category) => {
+                      const IconComponent = getCategoryIcon(category.value);
+                      return (
+                        <DropdownMenuItem 
+                          key={category.id}
+                          asChild
+                          className="cursor-pointer"
+                        >
+                          <Link 
+                            href={`/packages/${category.value}`}
+                            className="group flex flex-col gap-1.5 p-3.5 rounded-md hover:bg-accent/50 transition-all duration-200"
+                            data-testid={`link-category-${category.value}`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <IconComponent className="w-4 h-4 text-primary transition-transform group-hover:scale-110" />
+                              <span className="text-sm font-semibold">
+                                {language === 'me' ? category.labelME : category.labelEN}
+                              </span>
+                            </div>
+                            <p className="text-xs text-muted-foreground line-clamp-2">
+                              {language === 'me' 
+                                ? `Pregledajte ${category.labelME.toLowerCase()}`
+                                : `Browse ${category.labelEN.toLowerCase()}`
+                              }
+                            </p>
+                          </Link>
+                        </DropdownMenuItem>
+                      );
+                    })
+                  )}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Global Search */}
             <GlobalSearch />
