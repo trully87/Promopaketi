@@ -166,6 +166,16 @@ export function registerRoutes(app: Express): http.Server {
     }
   });
 
+  // Featured packages routes (MUST be before /api/packages/:id to avoid route collision)
+  app.get("/api/packages/featured", async (req: Request, res: Response) => {
+    try {
+      const packages = await storage.getFeaturedPackages();
+      res.json(packages);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch featured packages" });
+    }
+  });
+
   app.get("/api/packages/:id", async (req: Request, res: Response) => {
     try {
       const pkg = await storage.getPackage(req.params.id);
@@ -210,16 +220,6 @@ export function registerRoutes(app: Express): http.Server {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete package" });
-    }
-  });
-
-  // Featured packages routes
-  app.get("/api/packages/featured", async (req: Request, res: Response) => {
-    try {
-      const packages = await storage.getFeaturedPackages();
-      res.json(packages);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch featured packages" });
     }
   });
 

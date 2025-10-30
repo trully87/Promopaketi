@@ -26,6 +26,9 @@ PostgreSQL is the primary database, utilizing Neon for serverless capabilities a
 #### Custom Package Section
 Singleton content table for managing the homepage custom package CTA section. Includes bilingual fields (ME/EN) for title, description, CTA button text, and image URL. Admins can create or edit this section through the admin panel, and it displays on the homepage between package categories and contact form. If no section exists, the homepage gracefully hides it without errors.
 
+#### Featured Packages System
+Admin-controlled homepage package curation system using `isFeatured` boolean and `featuredOrder` integer fields in packages table. Admins can select up to 8 packages to feature on the homepage via `/admin/featured-packages` interface. Featured packages appear in a dedicated section at the top of the homepage packages area, before category sections. Admin UI provides visual package grid with one-click toggle for featured status, automatic order assignment, and limit enforcement. Public API endpoint `/api/packages/featured` returns only featured packages sorted by featuredOrder. If no packages are featured, the homepage section is hidden gracefully.
+
 ## External Dependencies
 
 ### Third-Party UI Libraries
