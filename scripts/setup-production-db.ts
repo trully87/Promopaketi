@@ -134,12 +134,14 @@ async function setupProductionDatabase() {
     await sql`
       CREATE TABLE IF NOT EXISTS contact_info (
         id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
-        email VARCHAR(255) NOT NULL,
-        phone VARCHAR(50),
+        phone TEXT,
+        email TEXT,
+        whatsapp TEXT,
+        viber TEXT,
         address_me TEXT,
         address_en TEXT,
-        working_hours_me TEXT,
-        working_hours_en TEXT,
+        map_latitude TEXT,
+        map_longitude TEXT,
         updated_at TIMESTAMP NOT NULL DEFAULT NOW()
       );
     `;
@@ -213,14 +215,14 @@ async function setupProductionDatabase() {
     // Insert default contact info
     console.log('  → Inserting default contact info...');
     await sql`
-      INSERT INTO contact_info (email, phone, address_me, address_en, working_hours_me, working_hours_en)
+      INSERT INTO contact_info (email, phone, whatsapp, viber, address_me, address_en)
       SELECT 
         'info@brainbox.me',
         '+382 XX XXX XXX',
+        '+382 XX XXX XXX',
+        '+382 XX XXX XXX',
         'Adresa, Grad, Crna Gora',
-        'Address, City, Montenegro',
-        'Pon-Pet: 9:00-17:00',
-        'Mon-Fri: 9:00-17:00'
+        'Address, City, Montenegro'
       WHERE NOT EXISTS (SELECT 1 FROM contact_info LIMIT 1);
     `;
 
