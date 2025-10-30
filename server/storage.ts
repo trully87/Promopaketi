@@ -54,6 +54,8 @@ export interface IStorage {
   createPackage(pkg: InsertPackage): Promise<Package>;
   updatePackage(id: string, pkg: Partial<InsertPackage>): Promise<Package | undefined>;
   deletePackage(id: string): Promise<boolean>;
+  getFeaturedPackages(): Promise<Package[]>;
+  updatePackageFeaturedStatus(id: string, isFeatured: number, featuredOrder?: number | null): Promise<Package | undefined>;
 
   // Package product methods
   getPackageProducts(packageId: string): Promise<PackageProduct[]>;
@@ -243,6 +245,29 @@ export class DatabaseStorage implements IStorage {
   async deletePackage(id: string): Promise<boolean> {
     const result = await db.delete(schema.packages).where(eq(schema.packages.id, id));
     return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  async getFeaturedPackages(): Promise<Package[]> {
+    return await db
+      .select()
+      .from(schema.packages)
+      .where(eq(schema.packages.isFeatured, 1))
+      .orderBy(asc(schema.packages.featuredOrder));
+  }
+
+  async updatePackageFeaturedStatus(id: string, isFeatured: number, featuredOrder?: number | null): Promise<Package | undefined> {
+    const updateData: any = { isFeatured };
+    if (featuredOrder !== undefined) {
+      updateData.featuredOrder = featuredOrder;
+    }
+    
+    const result = await db
+      .update(schema.packages)
+      .set(updateData)
+      .where(eq(schema.packages.id, id))
+      .returning();
+    
+    return result[0];
   }
 
   // Package product methods

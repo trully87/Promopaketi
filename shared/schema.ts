@@ -27,12 +27,16 @@ export const packages = pgTable("packages", {
   minOrder: integer("min_order").notNull().default(30),
   category: text("category").notNull(), // 'newyear' or 'corporate'
   image: text("image").notNull(),
+  isFeatured: integer("is_featured").notNull().default(0), // 1 = featured on homepage, 0 = not featured
+  featuredOrder: integer("featured_order"), // order for featured packages (lower = higher priority)
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const insertPackageSchema = createInsertSchema(packages).omit({
   id: true,
+  isFeatured: true,
+  featuredOrder: true,
   createdAt: true,
   updatedAt: true,
 });
