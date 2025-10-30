@@ -16,6 +16,7 @@ import SearchPage from "@/pages/SearchPage";
 import CategoryPage from "@/pages/CategoryPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
+import PackageManagement from "@/pages/PackageManagement";
 import PackageForm from "@/pages/PackageForm";
 import HeroSliderManagement from "@/pages/HeroSliderManagement";
 import MenuManagement from "@/pages/MenuManagement";
@@ -34,14 +35,15 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/packages" component={PackageManagement} />
+      <Route path="/admin/packages/new" component={PackageForm} />
+      <Route path="/admin/packages/:id/edit" component={PackageForm} />
+      <Route path="/admin/package-categories" component={PackageCategoryManagement} />
       <Route path="/admin/hero-slider" component={HeroSliderManagement} />
       <Route path="/admin/menu-items" component={MenuManagement} />
       <Route path="/admin/contact-info" component={ContactInfoManagement} />
       <Route path="/admin/about" component={AboutPageManagement} />
       <Route path="/admin/newsletter-subscribers" component={NewsletterSubscribers} />
-      <Route path="/admin/package-categories" component={PackageCategoryManagement} />
-      <Route path="/admin/packages/new" component={PackageForm} />
-      <Route path="/admin/packages/:id/edit" component={PackageForm} />
       <Route component={NotFound} />
     </Switch>
   );

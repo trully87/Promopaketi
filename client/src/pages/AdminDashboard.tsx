@@ -2,20 +2,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail, Tags } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import type { Package } from "@shared/schema";
+import { LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail, Tags } from "lucide-react";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -23,10 +12,6 @@ export default function AdminDashboard() {
 
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["/api/auth/me"],
-  });
-
-  const { data: packages = [], isLoading: packagesLoading, refetch } = useQuery<Package[]>({
-    queryKey: ["/api/packages"],
   });
 
   const logoutMutation = useMutation({
@@ -43,28 +28,7 @@ export default function AdminDashboard() {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await apiRequest("DELETE", `/api/packages/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/packages"] });
-      toast({
-        title: "Package deleted",
-        description: "Package has been deleted successfully",
-      });
-      refetch();
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to delete package",
-        variant: "destructive",
-      });
-    },
-  });
-
-  if (userLoading || packagesLoading) {
+  if (userLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -104,79 +68,30 @@ export default function AdminDashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Content Management Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/hero-slider")}>
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold mb-2">Admin Dashboard</h2>
+          <p className="text-muted-foreground">
+            Manage website content and packages
+          </p>
+        </div>
+
+        {/* Content Management Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/packages")} data-testid="card-packages">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-md">
-                  <ImageIcon className="h-6 w-6 text-primary" />
+                  <PackageIcon className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <CardTitle>Hero Slider</CardTitle>
-                  <CardDescription>Manage homepage carousel slides</CardDescription>
+                  <CardTitle>Packages</CardTitle>
+                  <CardDescription>Manage gift packages</CardDescription>
                 </div>
               </div>
             </CardHeader>
           </Card>
 
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/menu-items")}>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-md">
-                  <Menu className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle>Navigation Menu</CardTitle>
-                  <CardDescription>Manage menu items and links</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/contact-info")}>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-md">
-                  <Phone className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle>Contact Info</CardTitle>
-                  <CardDescription>Manage contact details & social</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/about")}>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-md">
-                  <Info className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle>About Page</CardTitle>
-                  <CardDescription>Manage About Us content</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/newsletter-subscribers")}>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-md">
-                  <Mail className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle>Newsletter</CardTitle>
-                  <CardDescription>View email subscribers</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/package-categories")}>
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/package-categories")} data-testid="card-categories">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-md">
@@ -184,129 +99,82 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <CardTitle>Package Categories</CardTitle>
-                  <CardDescription>Manage package categories</CardDescription>
+                  <CardDescription>Manage categories</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/hero-slider")} data-testid="card-hero">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <ImageIcon className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Hero Slider</CardTitle>
+                  <CardDescription>Homepage carousel</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/menu-items")} data-testid="card-menu">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Menu className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Navigation Menu</CardTitle>
+                  <CardDescription>Menu items & links</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/contact-info")} data-testid="card-contact">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Phone className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Contact Info</CardTitle>
+                  <CardDescription>Contact & social links</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/about")} data-testid="card-about">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Info className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>About Page</CardTitle>
+                  <CardDescription>About Us content</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/newsletter-subscribers")} data-testid="card-newsletter">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Mail className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Newsletter</CardTitle>
+                  <CardDescription>Email subscribers</CardDescription>
                 </div>
               </div>
             </CardHeader>
           </Card>
         </div>
-
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold">Packages</h2>
-            <p className="text-muted-foreground mt-1">
-              Manage your promotional gift packages
-            </p>
-          </div>
-          <Button
-            onClick={() => setLocation("/admin/packages/new")}
-            data-testid="button-create-package"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Create Package
-          </Button>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>All Packages</CardTitle>
-            <CardDescription>
-              Total: {packages.length} packages
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {packages.length === 0 ? (
-              <div className="text-center py-12">
-                <PackageIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No packages yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  Get started by creating your first package
-                </p>
-                <Button onClick={() => setLocation("/admin/packages/new")}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Package
-                </Button>
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Image</TableHead>
-                    <TableHead>Name (ME)</TableHead>
-                    <TableHead>Name (EN)</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Min Order</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {packages.map((pkg) => (
-                    <TableRow key={pkg.id} data-testid={`row-package-${pkg.id}`}>
-                      <TableCell>
-                        <img
-                          src={pkg.image}
-                          alt={pkg.nameME}
-                          className="h-12 w-12 object-cover rounded"
-                        />
-                      </TableCell>
-                      <TableCell className="font-medium">{pkg.nameME}</TableCell>
-                      <TableCell>{pkg.nameEN}</TableCell>
-                      <TableCell>
-                        <Badge variant={pkg.category === 'newyear' ? 'default' : 'secondary'}>
-                          {pkg.category === 'newyear' ? 'New Year' : 'Corporate'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>€{pkg.price}</TableCell>
-                      <TableCell>{pkg.minOrder} pcs</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setLocation(`/admin/packages/${pkg.id}/edit`)}
-                            data-testid={`button-edit-${pkg.id}`}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                data-testid={`button-delete-${pkg.id}`}
-                              >
-                                <Trash2 className="h-4 w-4 text-destructive" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Package</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete "{pkg.nameME}"? This action cannot be undone and will also delete all associated products.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => deleteMutation.mutate(pkg.id)}
-                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                  data-testid="button-confirm-delete"
-                                >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
       </main>
     </div>
   );
