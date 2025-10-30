@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift } from 'lucide-react';
+import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift, Cpu, Trophy } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -42,7 +42,11 @@ export default function Navigation() {
       'corporate': Briefcase,
       'eko': Leaf,
       'local': Gift,
+      'lokalni': Gift,
       'premium': Sparkles,
+      'premium-vip': Sparkles,
+      'tehnologija': Cpu,
+      'sport': Trophy,
     };
     return icons[categoryValue] || PackageIcon;
   };
