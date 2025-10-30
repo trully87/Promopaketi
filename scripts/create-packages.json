@@ -1,0 +1,36 @@
+{
+  "packages": [
+    {
+      "nameME": "Zlatna Novogodišnja Elegancija",
+      "nameEN": "Golden New Year Elegance",
+      "price": 85,
+      "minOrder": 30,
+      "category": "newyear",
+      "image": "/uploads/luxury_new_year_corp_81b9e67d.jpg"
+    },
+    {
+      "nameME": "Prestižni Novogodišnji Set",
+      "nameEN": "Prestige New Year Set",
+      "price": 120,
+      "minOrder": 30,
+      "category": "newyear",
+      "image": "/uploads/luxury_new_year_corp_b1d71d10.jpg"
+    },
+    {
+      "nameME": "Novogodišnji Luksuz",
+      "nameEN": "New Year Luxury",
+      "price": 95,
+      "minOrder": 30,
+      "category": "newyear",
+      "image": "/uploads/luxury_new_year_corp_f62f38df.jpg"
+    },
+    {
+      "nameME": "Tradicionalni Novogodišnji Paket",
+      "nameEN": "Traditional New Year Package",
+      "price": 75,
+      "minOrder": 30,
+      "category": "newyear",
+      "image": "/uploads/luxury_new_year_corp_38c180c2.jpg"
+    }
+  ]
+}
