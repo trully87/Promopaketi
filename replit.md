@@ -5,7 +5,7 @@ Brain Box is a premium e-commerce web application focused on luxury gift package
 
 ## Recent Changes (October 30, 2025)
 - **Production Database Auto-Seeding & Session Persistence**: Complete production deployment solution
-  - **Auto-Migrate Script** (scripts/auto-migrate-production.ts): Automatically seeds 7 package categories when production database is empty. Script runs automatically on production server startup. Categories include: New Year, Corporate, Eco, Local Producers, Premium VIP, Technology, and Sport & Recreation.
+  - **Auto-Migrate Script** (scripts/auto-migrate-production.ts): Automatically seeds 7 package categories AND all 37 packages with 136 products when production database is empty. Script runs automatically on production server startup. Package data is stored in scripts/packages-seed-data.ts (auto-generated from development database).
   - **PostgreSQL Session Store** (server/auth.ts, server/storage.ts): Implemented PostgreSQL-based session persistence using `connect-pg-simple`. Sessions now survive server restarts and work correctly in production. Uses separate `pg.Pool` instance for session store compatibility. Session cookies configured with `secure: false` and `sameSite: "lax"` for reliable cross-domain authentication.
   - **Security Fix**: Removed scripts containing hardcoded production database credentials (direct-neon-sync.ts, seed-production-via-api.ts, CREATE-ADMIN-USER.sql) per security audit. Admin user is NOT auto-seeded to avoid hardcoded password risks.
   - **Admin Setup**: Production admin user must be created manually through Database UI with secure bcrypt-hashed password. See PRODUCTION-SETUP.md for detailed instructions.

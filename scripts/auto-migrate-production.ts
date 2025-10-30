@@ -110,6 +110,67 @@ export async function migrateProductionDatabase() {
       console.log(`     ✓ Categories already exist (${categoryCount} found)`);
     }
 
+    // ======================================
+    // SYNC PACKAGES AND PRODUCTS FROM DEV
+    // ======================================
+    console.log('  → Syncing packages from development...');
+    const packagesResult = await sql`SELECT COUNT(*) as count FROM packages`;
+    const packageCount = parseInt(packagesResult[0].count);
+    
+    if (packageCount === 0) {
+      console.log('     📦 No packages found. Importing from seed data...');
+      
+      // Import seed data
+      const { PACKAGES_SEED_DATA, PRODUCTS_SEED_DATA } = await import('./packages-seed-data.js');
+      
+      let imported = 0;
+      for (const pkg of PACKAGES_SEED_DATA) {
+        try {
+          await sql`
+            INSERT INTO packages (
+              id, name_me, name_en, price, min_order, category, image,
+              is_featured, featured_order, created_at, updated_at
+            ) VALUES (
+              ${pkg.id}, ${pkg.name_me}, ${pkg.name_en}, ${pkg.price},
+              ${pkg.min_order}, ${pkg.category}, ${pkg.image},
+              ${pkg.is_featured || 0}, ${pkg.featured_order || null},
+              ${pkg.created_at}, ${pkg.updated_at}
+            )
+            ON CONFLICT (id) DO NOTHING
+          `;
+          imported++;
+        } catch (err) {
+          console.log(`     ⚠️ Error importing package ${pkg.name_me}:`, err);
+        }
+      }
+      console.log(`     ✓ Imported ${imported} packages!`);
+      
+      // Import products
+      let importedProducts = 0;
+      for (const product of PRODUCTS_SEED_DATA) {
+        try {
+          await sql`
+            INSERT INTO package_products (
+              id, package_id, name_me, name_en, description_me, description_en,
+              specs_me, specs_en, images, sort_order
+            ) VALUES (
+              ${product.id}, ${product.package_id}, ${product.name_me}, ${product.name_en},
+              ${product.description_me}, ${product.description_en},
+              ${product.specs_me || null}, ${product.specs_en || null},
+              ${JSON.stringify(product.images || [])}, ${product.sort_order}
+            )
+            ON CONFLICT (id) DO NOTHING
+          `;
+          importedProducts++;
+        } catch (err) {
+          console.log(`     ⚠️ Error importing product:`, err);
+        }
+      }
+      console.log(`     ✓ Imported ${importedProducts} products!`);
+    } else {
+      console.log(`     ✓ Packages already exist (${packageCount} found). Skipping sync.`);
+    }
+
     console.log('✅ Production database migrations completed successfully!');
   } catch (error) {
     console.error('❌ Migration error:', error);
