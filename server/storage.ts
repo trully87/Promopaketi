@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { eq, sql as dsql, desc, asc } from 'drizzle-orm';
+import { eq, sql as dsql, desc, asc, and, gte, lte, or, ilike } from 'drizzle-orm';
 import * as schema from '@shared/schema';
 import type { 
   User, InsertUser, 
@@ -24,6 +24,9 @@ export interface PaginationOptions {
   pageSize: number;
   sortBy?: string;
   sortOrder?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
 }
 
 export interface PaginatedResult<T> {
@@ -123,33 +126,74 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPackages(options: PaginationOptions): Promise<PaginatedResult<Package>> {
-    const { category, page, pageSize, sortBy = 'createdAt', sortOrder = 'desc' } = options;
+    const { category, page, pageSize, sortBy = 'createdAt', sortOrder = 'desc', minPrice, maxPrice, search } = options;
     
-    // Build WHERE clause
-    const whereClause = category ? eq(schema.packages.category, category) : undefined;
+    // Build WHERE clauses array
+    const whereClauses: any[] = [];
+    
+    // Category filter
+    if (category) {
+      whereClauses.push(eq(schema.packages.category, category));
+    }
+    
+    // Price range filters
+    if (minPrice !== undefined && minPrice !== null) {
+      whereClauses.push(gte(schema.packages.price, minPrice));
+    }
+    if (maxPrice !== undefined && maxPrice !== null) {
+      whereClauses.push(lte(schema.packages.price, maxPrice));
+    }
+    
+    // Search filter (searches in both ME and EN names)
+    if (search && search.trim()) {
+      const searchTerm = `%${search.trim()}%`;
+      whereClauses.push(
+        or(
+          ilike(schema.packages.nameME, searchTerm),
+          ilike(schema.packages.nameEN, searchTerm)
+        )
+      );
+    }
+    
+    // Combine WHERE clauses using and()
+    const whereClause = whereClauses.length > 0 ? and(...whereClauses) : undefined;
     
     // Get total count for pagination using SQL COUNT
-    const countResult = await db
+    const countQuery = db
       .select({ count: dsql<number>`count(*)::int` })
-      .from(schema.packages)
-      .where(whereClause);
+      .from(schema.packages);
+    
+    const countResult = whereClause 
+      ? await countQuery.where(whereClause)
+      : await countQuery;
     
     const total = Number(countResult[0]?.count ?? 0);
     const totalPages = Math.ceil(total / pageSize);
     
     // Build data query with sorting
-    const sortColumn = sortBy === 'price' ? schema.packages.price : schema.packages.createdAt;
+    let sortColumn;
+    if (sortBy === 'price') {
+      sortColumn = schema.packages.price;
+    } else if (sortBy === 'name') {
+      sortColumn = schema.packages.nameME; // Sort by ME name (can be changed to EN if needed)
+    } else {
+      sortColumn = schema.packages.createdAt;
+    }
+    
     const orderByClause = sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn);
     
     // Apply pagination using SQL offset and limit
     const offset = (page - 1) * pageSize;
-    const data = await db
+    const dataQuery = db
       .select()
       .from(schema.packages)
-      .where(whereClause)
       .orderBy(orderByClause)
       .limit(pageSize)
       .offset(offset);
+    
+    const data = whereClause 
+      ? await dataQuery.where(whereClause)
+      : await dataQuery;
     
     return {
       data,

@@ -3,11 +3,13 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
 import PackageCard from "@/components/PackageCard";
 import PackageModal from "@/components/PackageModal";
+import FilterControls from "@/components/FilterControls";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ChevronLeft, Loader2, SlidersHorizontal } from "lucide-react";
 import { Link } from "wouter";
 import type { Package, PackageProduct } from "@shared/schema";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface PaginatedResponse {
   data: Package[];
@@ -47,6 +49,69 @@ export default function CategoryPage() {
   const pageSize = 12;
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  // Filter and sort state with URL sync
+  const [filters, setFilters] = useState({
+    minPrice: undefined as number | undefined,
+    maxPrice: undefined as number | undefined,
+    search: '',
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+  });
+
+  // Sync filters with URL query params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const minPrice = params.get('minPrice');
+    const maxPrice = params.get('maxPrice');
+    const search = params.get('search');
+    const sortBy = params.get('sortBy');
+    const sortOrder = params.get('sortOrder');
+
+    setFilters({
+      minPrice: minPrice ? parseFloat(minPrice) : undefined,
+      maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+      search: search || '',
+      sortBy: sortBy || 'createdAt',
+      sortOrder: sortOrder || 'desc',
+    });
+  }, [category]);
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.minPrice !== undefined) params.set('minPrice', filters.minPrice.toString());
+    if (filters.maxPrice !== undefined) params.set('maxPrice', filters.maxPrice.toString());
+    if (filters.search) params.set('search', filters.search);
+    if (filters.sortBy !== 'createdAt') params.set('sortBy', filters.sortBy);
+    if (filters.sortOrder !== 'desc') params.set('sortOrder', filters.sortOrder);
+
+    const queryString = params.toString();
+    const newUrl = queryString ? `?${queryString}` : '';
+    
+    // Only update URL if it changed (prevent infinite loop)
+    if (window.location.search !== newUrl) {
+      window.history.replaceState({}, '', `/packages/${category}${newUrl}`);
+    }
+  }, [filters, category]);
+
+  const hasActiveFilters = 
+    filters.minPrice !== undefined || 
+    filters.maxPrice !== undefined || 
+    filters.search !== '' ||
+    filters.sortBy !== 'createdAt' ||
+    filters.sortOrder !== 'desc';
+
+  const clearFilters = () => {
+    setFilters({
+      minPrice: undefined,
+      maxPrice: undefined,
+      search: '',
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    });
+  };
 
   // Use infinite query for proper Load More functionality
   const {
@@ -57,9 +122,22 @@ export default function CategoryPage() {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<PaginatedResponse>({
-    queryKey: [`/api/packages`, category, pageSize],
-    queryFn: async ({ pageParam = 1 }) => {
-      const res = await fetch(`/api/packages?category=${category}&page=${pageParam}&pageSize=${pageSize}`);
+    queryKey: [`/api/packages`, category, pageSize, filters],
+    queryFn: async ({ pageParam }) => {
+      const page = typeof pageParam === 'number' ? pageParam : 1;
+      const params = new URLSearchParams({
+        category: category!,
+        page: page.toString(),
+        pageSize: pageSize.toString(),
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder,
+      });
+
+      if (filters.minPrice !== undefined) params.set('minPrice', filters.minPrice.toString());
+      if (filters.maxPrice !== undefined) params.set('maxPrice', filters.maxPrice.toString());
+      if (filters.search) params.set('search', filters.search);
+
+      const res = await fetch(`/api/packages?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to fetch packages');
       return res.json();
     },
@@ -173,16 +251,78 @@ export default function CategoryPage() {
         </div>
       </section>
 
-      {/* Packages Grid */}
+      {/* Packages Grid with Filters */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-          ) : allPackages.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="grid-packages">
+          {/* Mobile Filter Button */}
+          <div className="lg:hidden mb-6">
+            <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="w-full" data-testid="button-mobile-filters">
+                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                  {language === 'me' ? 'Filteri i Sortiranje' : 'Filters & Sorting'}
+                  {hasActiveFilters && (
+                    <span className="ml-2 bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
+                      {language === 'me' ? 'Aktivni' : 'Active'}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px] overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>
+                    {language === 'me' ? 'Filteri i Sortiranje' : 'Filters & Sorting'}
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="mt-6">
+                  <FilterControls
+                    minPrice={filters.minPrice}
+                    maxPrice={filters.maxPrice}
+                    search={filters.search}
+                    sortBy={filters.sortBy}
+                    sortOrder={filters.sortOrder}
+                    onMinPriceChange={(value) => setFilters(prev => ({ ...prev, minPrice: value }))}
+                    onMaxPriceChange={(value) => setFilters(prev => ({ ...prev, maxPrice: value }))}
+                    onSearchChange={(value) => setFilters(prev => ({ ...prev, search: value }))}
+                    onSortChange={(sortBy, sortOrder) => setFilters(prev => ({ ...prev, sortBy, sortOrder }))}
+                    onClearFilters={clearFilters}
+                    hasActiveFilters={hasActiveFilters}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Desktop Layout: Sidebar + Content */}
+          <div className="flex gap-8">
+            {/* Desktop Filter Sidebar */}
+            <aside className="hidden lg:block w-80 flex-shrink-0">
+              <div className="sticky top-24">
+                <FilterControls
+                  minPrice={filters.minPrice}
+                  maxPrice={filters.maxPrice}
+                  search={filters.search}
+                  sortBy={filters.sortBy}
+                  sortOrder={filters.sortOrder}
+                  onMinPriceChange={(value) => setFilters(prev => ({ ...prev, minPrice: value }))}
+                  onMaxPriceChange={(value) => setFilters(prev => ({ ...prev, maxPrice: value }))}
+                  onSearchChange={(value) => setFilters(prev => ({ ...prev, search: value }))}
+                  onSortChange={(sortBy, sortOrder) => setFilters(prev => ({ ...prev, sortBy, sortOrder }))}
+                  onClearFilters={clearFilters}
+                  hasActiveFilters={hasActiveFilters}
+                />
+              </div>
+            </aside>
+
+            {/* Packages Grid */}
+            <div className="flex-1">
+              {isLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+              ) : allPackages.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8" data-testid="grid-packages">
                 {allPackages.map((pkg) => (
                   <PackageCard
                     key={pkg.id}
@@ -232,6 +372,8 @@ export default function CategoryPage() {
               </p>
             </div>
           )}
+            </div>
+          </div>
         </div>
       </section>
 

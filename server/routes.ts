@@ -129,13 +129,32 @@ export function registerRoutes(app: Express): http.Server {
       const pageSize = parseInt(req.query.pageSize as string) || 12;
       const sortBy = req.query.sortBy as string || 'createdAt';
       const sortOrder = req.query.sortOrder as string || 'desc';
+      
+      // Parse filter parameters with NaN protection
+      let minPrice: number | undefined;
+      let maxPrice: number | undefined;
+      
+      if (req.query.minPrice) {
+        const parsed = parseFloat(req.query.minPrice as string);
+        minPrice = isFinite(parsed) ? parsed : undefined;
+      }
+      
+      if (req.query.maxPrice) {
+        const parsed = parseFloat(req.query.maxPrice as string);
+        maxPrice = isFinite(parsed) ? parsed : undefined;
+      }
+      
+      const search = req.query.search as string | undefined;
 
       const result = await storage.getPackages({
         category,
         page,
         pageSize,
         sortBy,
-        sortOrder
+        sortOrder,
+        minPrice,
+        maxPrice,
+        search
       });
 
       res.json(result);
