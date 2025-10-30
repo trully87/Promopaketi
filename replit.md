@@ -3,6 +3,13 @@
 ## Overview
 Brain Box is a premium e-commerce web application focused on luxury gift packages for the Serbian/Montenegrin market. It offers diverse product categories like New Year's, Corporate, Eco, Local Producers, Technology, Sport & Recreation, and Premium VIP packages, with full bilingual support. The platform includes a customer-facing storefront for browsing and inquiries, a custom package CTA section, and an admin panel for comprehensive management of products, categories, content, and subscribers. The project aims to provide a scalable, feature-rich platform with a premium user experience.
 
+## Recent Changes (October 30, 2025)
+- **Production Deployment Fixes**: Resolved critical issues affecting production builds
+  - Route ordering fix: Moved `/api/packages/featured` before `/api/packages/:id` to prevent Express parameter matching conflicts
+  - NavigationMenu production fix: Added `forceMount` prop and `z-[100]` to NavigationMenuViewport for reliable dropdown rendering in production builds
+  - Admin login redirect fix: Added async/await and 100ms setTimeout to ensure proper cache invalidation and navigation after successful authentication
+- **Featured Packages System**: Implemented admin-controlled homepage package curation allowing selection and ordering of up to 8 featured packages
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 

@@ -34,15 +34,21 @@ export default function AdminLogin() {
   const loginMutation = useMutation({
     mutationFn: async (data: LoginFormData) => {
       const res = await apiRequest("POST", "/api/auth/login", data);
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Login failed");
+      }
       return res.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       toast({
         title: "Login successful",
         description: "Welcome to the admin panel!",
       });
-      setLocation("/admin");
+      setTimeout(() => {
+        setLocation("/admin");
+      }, 100);
     },
     onError: (error: any) => {
       toast({
