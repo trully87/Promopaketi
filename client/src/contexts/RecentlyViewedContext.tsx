@@ -8,7 +8,7 @@ interface RecentlyViewedContextType {
 
 const RecentlyViewedContext = createContext<RecentlyViewedContextType | undefined>(undefined);
 
-const RECENTLY_VIEWED_STORAGE_KEY = 'brainbox_recently_viewed';
+const RECENTLY_VIEWED_STORAGE_KEY = 'brain-box-recently-viewed';
 const MAX_RECENTLY_VIEWED = 8;
 
 export function RecentlyViewedProvider({ children }: { children: ReactNode }) {

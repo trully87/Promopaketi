@@ -10,7 +10,7 @@ interface FavoritesContextType {
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-const FAVORITES_STORAGE_KEY = 'brainbox_favorites';
+const FAVORITES_STORAGE_KEY = 'brain-box-favorites';
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favorites, setFavorites] = useState<string[]>([]);
