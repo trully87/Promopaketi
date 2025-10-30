@@ -75,7 +75,7 @@ export default function Footer() {
               <img 
                 src={logo} 
                 alt="Brain Box Logo" 
-                className="h-16 w-auto mb-3"
+                className="h-16 w-auto mb-3 -ml-2"
               />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
