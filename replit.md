@@ -4,7 +4,19 @@
 
 Brain Box is a premium e-commerce web application specializing in luxury gift packages for the Serbian/Montenegrin market. The platform offers multiple product categories including New Year's (Novogodišnji), Corporate (Korporativni), Eco (Eko), Local Producers (Lokalni Proizvođači), and Premium VIP packages, with full bilingual support (Serbian/Montenegrin and English). The application features a customer-facing storefront for browsing packages and submitting inquiries, alongside a comprehensive admin panel for managing products, categories, content, contact information, About page, and newsletter subscribers.
 
-## Recent Changes (October 29, 2025)
+## Recent Changes (October 30, 2025)
+
+**FAZA 2: Advanced Navigation - Mega Menu & Mobile Drawer (COMPLETED)**
+- Implemented desktop mega menu dropdown using Shadcn NavigationMenu component with "Paketi" trigger button
+- Dynamic category loading from `/api/package-categories` endpoint with bilingual support (labelME/labelEN)
+- 2-column grid layout in mega menu showing category names and descriptions
+- Mobile Sheet drawer navigation (side="right") with hamburger menu trigger
+- Auto-close drawer after navigation selection
+- Contact link uses retry logic for reliable scrolling: checks location, waits for DOM mount, retries every 100ms up to 10 attempts
+- NavigationMenuLink uses `asChild` prop to prevent nested anchor warnings
+- Data-testid deduplicated: logo uses `link-logo`, breadcrumb uses `link-home`
+- All navigation maintains SPA routing through wouter (no full page reloads)
+- E2E tested: mega menu hover/navigation, mobile drawer, contact scroll from multiple pages (category pages to homepage)
 
 **FAZA 1: Scalability - Category Landing Pages & Pagination (COMPLETED)**
 - Created dedicated category landing pages at `/packages/:category` routes (newyear, corporate, eko)
