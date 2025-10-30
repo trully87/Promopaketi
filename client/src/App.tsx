@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/lib/i18n";
 import { ComparisonProvider } from "@/contexts/ComparisonContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
+import { RecentlyViewedProvider } from "@/contexts/RecentlyViewedContext";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ComparisonBar from "@/components/ComparisonBar";
@@ -50,18 +52,22 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
-          <ComparisonProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navigation />
-              <main className="flex-1">
-                <Router />
-              </main>
-              <Footer />
-            </div>
-            <ComparisonBar />
-            <Toaster />
-          </ComparisonProvider>
+          <RecentlyViewedProvider>
+            <FavoritesProvider>
+              <ComparisonProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Navigation />
+                  <main className="flex-1">
+                    <Router />
+                  </main>
+                  <Footer />
+                </div>
+                <ComparisonBar />
+              </ComparisonProvider>
+            </FavoritesProvider>
+          </RecentlyViewedProvider>
         </LanguageProvider>
+        <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -1,9 +1,10 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, GitCompareArrows } from 'lucide-react';
+import { Check, GitCompareArrows, Heart } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { useComparison } from '@/contexts/ComparisonContext';
+import { useFavorites } from '@/contexts/FavoritesContext';
 import LazyImage from '@/components/LazyImage';
 import type { Package } from '@shared/schema';
 
@@ -59,16 +60,23 @@ const getTierStyle = (category: string) => {
 export default function PackageCard({ id, name, price, minOrder, image, items, category, description, packageData, onLearnMore }: PackageCardProps) {
   const { t, language } = useLanguage();
   const { addToComparison, isInComparison, comparisonList, maxComparisons } = useComparison();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const tierStyle = getTierStyle(category);
   
   const inComparison = isInComparison(id);
   const canAddMore = comparisonList.length < maxComparisons;
+  const favorite = isFavorite(id);
 
   const handleAddToComparison = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!inComparison && canAddMore && packageData) {
       addToComparison(packageData);
     }
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(id);
   };
 
   return (
@@ -90,22 +98,37 @@ export default function PackageCard({ id, name, price, minOrder, image, items, c
           <Badge className={`w-fit ${tierStyle.badgeColor} border-0`}>
             {category === 'newyear' ? t('category.newyear') : t('category.corporate')}
           </Badge>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleAddToComparison}
-            disabled={inComparison || !canAddMore}
-            className={`h-8 w-8 flex-shrink-0 ${inComparison ? 'text-primary' : ''}`}
-            data-testid={`button-add-compare-${id}`}
-            title={inComparison 
-              ? (language === 'me' ? 'U poređenju' : 'In comparison') 
-              : !canAddMore 
-              ? (language === 'me' ? 'Maksimum dostignut' : 'Maximum reached')
-              : (language === 'me' ? 'Dodaj u poređenje' : 'Add to comparison')
-            }
-          >
-            <GitCompareArrows className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleToggleFavorite}
+              className={`h-8 w-8 flex-shrink-0 ${favorite ? 'text-destructive' : ''}`}
+              data-testid={`button-favorite-${id}`}
+              title={favorite 
+                ? (language === 'me' ? 'Ukloni iz favorita' : 'Remove from favorites') 
+                : (language === 'me' ? 'Dodaj u favorite' : 'Add to favorites')
+              }
+            >
+              <Heart className={`w-4 h-4 ${favorite ? 'fill-current' : ''}`} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleAddToComparison}
+              disabled={inComparison || !canAddMore}
+              className={`h-8 w-8 flex-shrink-0 ${inComparison ? 'text-primary' : ''}`}
+              data-testid={`button-add-compare-${id}`}
+              title={inComparison 
+                ? (language === 'me' ? 'U poređenju' : 'In comparison') 
+                : !canAddMore 
+                ? (language === 'me' ? 'Maksimum dostignut' : 'Maximum reached')
+                : (language === 'me' ? 'Dodaj u poređenje' : 'Add to comparison')
+              }
+            >
+              <GitCompareArrows className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         <h3 className="font-serif text-2xl font-semibold leading-tight">
           {name}

@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Check, Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
+import { useRecentlyViewed } from '@/contexts/RecentlyViewedContext';
 import StructuredData from '@/components/StructuredData';
 import { getProductSchema } from '@/lib/seo';
 import type { Package as PackageType, PackageProduct } from '@shared/schema';
@@ -86,14 +87,16 @@ function ProductImageGallery({ images }: { images: string[] }) {
 
 export default function PackageModal({ package: pkg, products, open, onClose, onInquire }: PackageModalProps) {
   const { t, language } = useLanguage();
+  const { addRecentlyViewed } = useRecentlyViewed();
   const [activeTab, setActiveTab] = useState('complete');
 
   // Reset activeTab to complete whenever modal opens or package changes
   useEffect(() => {
-    if (open) {
+    if (open && pkg) {
       setActiveTab('complete');
+      addRecentlyViewed(pkg.id);
     }
-  }, [open, pkg?.id]);
+  }, [open, pkg?.id, addRecentlyViewed]);
 
   if (!pkg) return null;
 
