@@ -80,6 +80,36 @@ export async function migrateProductionDatabase() {
       WHERE NOT EXISTS (SELECT 1 FROM custom_package_section LIMIT 1);
     `;
 
+    // ======================================
+    // SEED DATA (only if tables are empty)
+    // ======================================
+    
+    // NOTE: Admin user is NOT auto-seeded for security reasons.
+    // Admin must be created manually through Database UI or setup process.
+
+    // Seed package categories
+    console.log('  → Seeding package categories...');
+    const categoriesResult = await sql`SELECT COUNT(*) as count FROM package_categories`;
+    const categoryCount = parseInt(categoriesResult[0].count);
+    
+    if (categoryCount === 0) {
+      console.log('     Adding 7 default categories...');
+      await sql`
+        INSERT INTO package_categories (id, value, label_me, label_en, is_active, sort_order) VALUES
+        ('7f713c93-16d6-4c77-8f03-9eee76c813b6', 'newyear', 'Novogodišnji Paketi', 'New Year Packages', 1, 0),
+        ('bb01ee1b-f8ab-4013-a7ff-869d4941a05d', 'corporate', 'Korporativni Paketi', 'Corporate Packages', 1, 1),
+        ('e26297c5-20e6-4037-878b-abfee99af438', 'eko', 'Eko Paketi', 'Eco Packages', 1, 2),
+        ('407390e7-67e4-4418-9d4b-da44955d8cb6', 'lokalni', 'Lokalni Proizvođači', 'Local Producers', 1, 3),
+        ('0ef844c9-04fa-45f5-8a4d-ec7cba6da350', 'premium-vip', 'Premium VIP', 'Premium VIP', 1, 4),
+        ('Allae0IqJgCmv3KvfHKs4', 'tehnologija', 'Tehnologija', 'Technology', 1, 5),
+        ('jlxpH0jIM_xP9SBN31KyP', 'sport', 'Sport i Rekreacija', 'Sport & Recreation', 1, 6)
+        ON CONFLICT (id) DO NOTHING;
+      `;
+      console.log('     ✓ Categories seeded!');
+    } else {
+      console.log(`     ✓ Categories already exist (${categoryCount} found)`);
+    }
+
     console.log('✅ Production database migrations completed successfully!');
   } catch (error) {
     console.error('❌ Migration error:', error);
