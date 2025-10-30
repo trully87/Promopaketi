@@ -4,7 +4,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail, Tags, Sparkles } from "lucide-react";
+import { LogOut, Package as PackageIcon, ImageIcon, Menu, Phone, Info, Mail, Tags, Sparkles, Lock } from "lucide-react";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -184,6 +184,20 @@ export default function AdminDashboard() {
                 <div>
                   <CardTitle>Custom Package Section</CardTitle>
                   <CardDescription>Homepage CTA section</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="hover-elevate cursor-pointer" onClick={() => setLocation("/admin/change-password")} data-testid="card-change-password">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-md">
+                  <Lock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle>Change Password</CardTitle>
+                  <CardDescription>Update admin password</CardDescription>
                 </div>
               </div>
             </CardHeader>
