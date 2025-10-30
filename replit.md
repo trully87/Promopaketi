@@ -5,9 +5,9 @@ Brain Box is a premium e-commerce web application focused on luxury gift package
 
 ## Recent Changes (October 30, 2025)
 - **Production Deployment Fixes**: Resolved critical issues affecting production builds
-  - Route ordering fix: Moved `/api/packages/featured` before `/api/packages/:id` to prevent Express parameter matching conflicts
-  - NavigationMenu production fix: Added `forceMount` prop and `z-[100]` to NavigationMenuViewport for reliable dropdown rendering in production builds
-  - Admin login redirect fix: Added async/await and 100ms setTimeout to ensure proper cache invalidation and navigation after successful authentication
+  - **Navigation Dropdown**: Replaced Radix NavigationMenu with DropdownMenu to eliminate portal/SSR incompatibility issues in production builds. Uses Button trigger with ChevronDown icon and grid-based content layout maintaining same UX
+  - **Admin Login Redirect**: Enhanced redirect logic using `window.location.href` instead of SPA navigation, with dual cache invalidation (invalidateQueries + refetchQueries) and requestAnimationFrame + 150ms setTimeout for proper DOM/state synchronization in production
+  - **Route Ordering**: Moved `/api/packages/featured` before `/api/packages/:id` to prevent Express parameter matching conflicts
 - **Featured Packages System**: Implemented admin-controlled homepage package curation allowing selection and ordering of up to 8 featured packages
 
 ## User Preferences
