@@ -2,7 +2,8 @@ import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
-import { Globe, Menu, ChevronDown, Package as PackageIcon } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -27,11 +28,23 @@ export default function Navigation() {
   }, []);
 
   // Load package categories dynamically
-  const { data: categories = [] } = useQuery<PackageCategory[]>({
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<PackageCategory[]>({
     queryKey: ['/api/package-categories'],
   });
 
   const activeCategories = categories.filter(cat => cat.isActive === 1).sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // Icon mapping for categories
+  const getCategoryIcon = (categoryValue: string) => {
+    const icons: Record<string, typeof Sparkles> = {
+      'newyear': Sparkles,
+      'corporate': Briefcase,
+      'eko': Leaf,
+      'local': Gift,
+      'premium': Sparkles,
+    };
+    return icons[categoryValue] || PackageIcon;
+  };
 
   // Handle scroll to contact after navigation completes
   useEffect(() => {
@@ -85,12 +98,12 @@ export default function Navigation() {
             <img 
               src={logo} 
               alt="Brain Box Logo" 
-              className="h-32 w-auto py-3"
+              className="h-12 w-auto"
             />
           </Link>
 
           {/* Desktop Navigation with Mega Menu */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-8">
             {/* Packages Mega Menu */}
             <NavigationMenu>
               <NavigationMenuList>
@@ -103,29 +116,49 @@ export default function Navigation() {
                     {language === 'me' ? 'Paketi' : 'Packages'}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {activeCategories.map((category) => (
-                        <li key={category.id}>
-                          <NavigationMenuLink asChild>
-                            <Link 
-                              href={`/packages/${category.value}`}
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                              data-testid={`link-category-${category.value}`}
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {language === 'me' ? category.labelME : category.labelEN}
+                    <div className="bg-card/95 backdrop-blur-sm shadow-premium rounded-lg border">
+                      <ul className="grid w-[420px] gap-2 p-5 md:w-[520px] md:grid-cols-2 lg:w-[640px]">
+                        {categoriesLoading ? (
+                          // Loading skeleton
+                          Array.from({ length: 4 }).map((_, i) => (
+                            <li key={i}>
+                              <div className="block space-y-2 rounded-md p-3">
+                                <Skeleton className="h-4 w-32" />
+                                <Skeleton className="h-3 w-full" />
                               </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
-                                {language === 'me' 
-                                  ? `Pregledajte ${category.labelME.toLowerCase()}`
-                                  : `Browse ${category.labelEN.toLowerCase()}`
-                                }
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
+                            </li>
+                          ))
+                        ) : (
+                          activeCategories.map((category) => {
+                            const IconComponent = getCategoryIcon(category.value);
+                            return (
+                              <li key={category.id}>
+                                <NavigationMenuLink asChild>
+                                  <Link 
+                                    href={`/packages/${category.value}`}
+                                    className="group block select-none space-y-1.5 rounded-md p-3.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent/50 hover:shadow-md focus:bg-accent focus:text-accent-foreground border border-transparent hover:border-border/50"
+                                    data-testid={`link-category-${category.value}`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <IconComponent className="w-4 h-4 text-primary transition-transform group-hover:scale-110" />
+                                      <div className="text-sm font-semibold leading-none">
+                                        {language === 'me' ? category.labelME : category.labelEN}
+                                      </div>
+                                    </div>
+                                    <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1.5">
+                                      {language === 'me' 
+                                        ? `Pregledajte ${category.labelME.toLowerCase()}`
+                                        : `Browse ${category.labelEN.toLowerCase()}`
+                                      }
+                                    </p>
+                                  </Link>
+                                </NavigationMenuLink>
+                              </li>
+                            );
+                          })
+                        )}
+                      </ul>
+                    </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -145,16 +178,15 @@ export default function Navigation() {
           {/* Right Side Actions */}
           <div className="flex items-center gap-3">
             {/* Admin Button - Desktop Only */}
-            <Link href="/admin/login">
-              <Button
-                variant="outline"
-                size="sm"
-                className="hidden md:flex soft-glow-primary"
-                data-testid="button-admin"
-              >
-                Admin
-              </Button>
-            </Link>
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="hidden md:flex soft-glow-primary"
+              data-testid="button-admin"
+            >
+              <Link href="/admin/login">Admin</Link>
+            </Button>
 
             {/* Language Toggle */}
             <Button
@@ -183,55 +215,79 @@ export default function Navigation() {
                 <SheetHeader>
                   <SheetTitle>{language === 'me' ? 'Navigacija' : 'Navigation'}</SheetTitle>
                 </SheetHeader>
-                <div className="mt-8 space-y-4">
+                <div className="mt-8 space-y-6">
                   {/* Package Categories */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-muted-foreground px-3">
+                  <div className="space-y-1">
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground px-3 mb-3">
                       {language === 'me' ? 'Paketi' : 'Packages'}
                     </h3>
-                    {activeCategories.map((category) => (
-                      <Link 
-                        key={category.id} 
-                        href={`/packages/${category.value}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start"
-                          data-testid={`link-mobile-category-${category.value}`}
-                        >
-                          {language === 'me' ? category.labelME : category.labelEN}
-                        </Button>
-                      </Link>
-                    ))}
+                    {categoriesLoading ? (
+                      // Loading skeleton for mobile
+                      Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className="px-3 py-2">
+                          <Skeleton className="h-9 w-full" />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="space-y-1">
+                        {activeCategories.map((category) => {
+                          const IconComponent = getCategoryIcon(category.value);
+                          return (
+                            <Button
+                              key={category.id}
+                              asChild
+                              variant="ghost"
+                              className="w-full justify-start gap-3 h-11"
+                              data-testid={`link-mobile-category-${category.value}`}
+                            >
+                              <Link 
+                                href={`/packages/${category.value}`}
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <IconComponent className="w-4 h-4 text-primary" />
+                                <span>{language === 'me' ? category.labelME : category.labelEN}</span>
+                              </Link>
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
 
                   {/* Divider */}
-                  <div className="border-t" />
+                  <div className="border-t mx-3" />
 
-                  {/* Contact Link */}
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handleContactClick();
-                      setMobileMenuOpen(false);
-                    }}
-                    data-testid="link-mobile-contact"
-                  >
-                    {language === 'me' ? 'Kontakt' : 'Contact'}
-                  </Button>
-
-                  {/* Admin Link */}
-                  <Link href="/admin/login" onClick={() => setMobileMenuOpen(false)}>
+                  {/* Other Links */}
+                  <div className="space-y-1">
+                    {/* Contact Link */}
                     <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-3 h-11"
+                      onClick={() => {
+                        handleContactClick();
+                        setMobileMenuOpen(false);
+                      }}
+                      data-testid="link-mobile-contact"
+                    >
+                      <Globe className="w-4 h-4 text-primary" />
+                      <span>{language === 'me' ? 'Kontakt' : 'Contact'}</span>
+                    </Button>
+
+                    {/* Admin Link */}
+                    <Button
+                      asChild
                       variant="outline"
-                      className="w-full"
+                      className="w-full justify-start gap-3 h-11"
                       data-testid="button-admin-mobile"
                     >
-                      Admin
+                      <Link href="/admin/login" onClick={() => setMobileMenuOpen(false)}>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        <span>Admin</span>
+                      </Link>
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
