@@ -50,12 +50,19 @@ app.use((req, res, next) => {
 
 (async () => {
   // Run production database migrations if in production
+  console.log(`🌍 Environment: NODE_ENV=${process.env.NODE_ENV}`);
+  
   if (process.env.NODE_ENV === 'production') {
+    console.log('🔧 Production mode detected, running migrations...');
     try {
       await migrateProductionDatabase();
+      console.log('✅ Migration completed successfully');
     } catch (error) {
-      console.error('Migration failed, but continuing:', error);
+      console.error('❌ Migration failed:', error);
+      console.error('Stack:', error instanceof Error ? error.stack : 'No stack trace');
     }
+  } else {
+    console.log('📝 Development mode, skipping production migrations');
   }
   
   setupAuth(app);
