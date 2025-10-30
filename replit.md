@@ -6,17 +6,25 @@ Brain Box is a premium e-commerce web application specializing in luxury gift pa
 
 ## Recent Changes (October 30, 2025)
 
-**FAZA 2: Advanced Navigation - Mega Menu & Mobile Drawer (COMPLETED)**
+**FAZA 2: Advanced Navigation - Mega Menu & Mobile Drawer (COMPLETED + UX/UI AUDIT)**
 - Implemented desktop mega menu dropdown using Shadcn NavigationMenu component with "Paketi" trigger button
 - Dynamic category loading from `/api/package-categories` endpoint with bilingual support (labelME/labelEN)
-- 2-column grid layout in mega menu showing category names and descriptions
-- Mobile Sheet drawer navigation (side="right") with hamburger menu trigger
+- 2-column grid layout in mega menu showing category names and descriptions with category-specific icons (Sparkles, Briefcase, Leaf, Gift)
+- Mobile Sheet drawer navigation (side="right") with hamburger menu trigger, icons for all items, improved spacing
 - Auto-close drawer after navigation selection
 - Contact link uses retry logic for reliable scrolling: checks location, waits for DOM mount, retries every 100ms up to 10 attempts
-- NavigationMenuLink uses `asChild` prop to prevent nested anchor warnings
+- NavigationMenuLink and Button components use `asChild` prop for proper HTML semantics (no nested interactive elements)
 - Data-testid deduplicated: logo uses `link-logo`, breadcrumb uses `link-home`
 - All navigation maintains SPA routing through wouter (no full page reloads)
-- E2E tested: mega menu hover/navigation, mobile drawer, contact scroll from multiple pages (category pages to homepage)
+- **UX/UI Improvements Applied:**
+  - Logo height fixed: h-32 → h-12 for proper nav bar alignment
+  - Category icons with hover animations (scale-110 effect)
+  - Mega menu premium styling: backdrop-blur, shadow-premium, border, hover effects
+  - Loading skeleton states for categories (desktop + mobile)
+  - Mobile drawer: uppercase heading with tracking-wider, consistent h-11 button heights, gap-3 spacing
+  - Desktop nav spacing increased: gap-8 between elements
+  - Enhanced typography and micro-interactions throughout
+- E2E tested: mega menu hover/navigation, mobile drawer, contact scroll from multiple pages, visual improvements verified
 
 **FAZA 1: Scalability - Category Landing Pages & Pagination (COMPLETED)**
 - Created dedicated category landing pages at `/packages/:category` routes (newyear, corporate, eko)
