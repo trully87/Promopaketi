@@ -71,11 +71,13 @@ export const inquiries = pgTable("inquiries", {
   packageType: text("package_type"),
   quantity: text("quantity"),
   message: text("message").notNull(),
+  status: text("status").notNull().default("new"), // new, read, resolved
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const insertInquirySchema = createInsertSchema(inquiries).omit({
   id: true,
+  status: true,
   createdAt: true,
 });
 

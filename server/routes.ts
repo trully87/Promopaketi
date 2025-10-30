@@ -1,6 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import type { User } from "@shared/schema";
+import { sendInquiryNotification } from "./email";
 import { 
   insertPackageSchema, 
   insertPackageProductSchema, 
@@ -265,6 +266,18 @@ export function registerRoutes(app: Express): http.Server {
     try {
       const validated = insertInquirySchema.parse(req.body);
       const inquiry = await storage.createInquiry(validated);
+      
+      // Send email notification asynchronously (don't wait for it)
+      sendInquiryNotification({
+        name: inquiry.name,
+        email: inquiry.email,
+        phone: inquiry.phone,
+        company: inquiry.company,
+        packageType: inquiry.packageType,
+        quantity: inquiry.quantity,
+        message: inquiry.message,
+      }).catch(err => console.error('Email notification failed:', err));
+      
       res.status(201).json(inquiry);
     } catch (error) {
       res.status(400).json({ error: "Invalid inquiry data", details: error });
@@ -277,6 +290,22 @@ export function registerRoutes(app: Express): http.Server {
       res.json(inquiries);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch inquiries" });
+    }
+  });
+
+  app.patch("/api/inquiries/:id/status", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      if (!status || !["new", "read", "resolved"].includes(status)) {
+        return res.status(400).json({ error: "Invalid status. Must be 'new', 'read', or 'resolved'" });
+      }
+
+      await storage.updateInquiryStatus(id, status);
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update inquiry status" });
     }
   });
 

@@ -64,6 +64,7 @@ export interface IStorage {
   // Inquiry methods
   createInquiry(inquiry: InsertInquiry): Promise<Inquiry>;
   getAllInquiries(): Promise<Inquiry[]>;
+  updateInquiryStatus(id: string, status: string): Promise<void>;
 
   // Hero slide methods
   getAllHeroSlides(): Promise<HeroSlide[]>;
@@ -279,7 +280,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllInquiries(): Promise<Inquiry[]> {
-    return await db.select().from(schema.inquiries);
+    return await db.select().from(schema.inquiries).orderBy(desc(schema.inquiries.createdAt));
+  }
+
+  async updateInquiryStatus(id: string, status: string): Promise<void> {
+    await db
+      .update(schema.inquiries)
+      .set({ status })
+      .where(eq(schema.inquiries.id, id));
   }
 
   // Hero slide methods
