@@ -1,12 +1,14 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { storage } from "./storage";
+import { storage, sessionPool } from "./storage";
 import type { Express, Request, Response, NextFunction } from "express";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import bcrypt from "bcrypt";
 import type { User } from "@shared/schema";
 
 const SALT_ROUNDS = 10;
+const PgSession = connectPgSimple(session);
 
 async function comparePassword(password: string, hash: string): Promise<boolean> {
   return await bcrypt.compare(password, hash);
@@ -48,13 +50,20 @@ passport.deserializeUser(async (id: string, done) => {
 });
 
 export function setupAuth(app: Express) {
+  const sessionStore = new PgSession({
+    pool: sessionPool,
+    tableName: 'session',
+    createTableIfMissing: true,
+  });
+
   app.use(
     session({
+      store: sessionStore,
       secret: process.env.SESSION_SECRET || "brain-box-secret-key-change-in-production",
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env.NODE_ENV === "production",
+        secure: false, // Allow session cookies over HTTP and HTTPS
         httpOnly: true,
         sameSite: "lax", // Always use lax to allow session persistence on redirects
         maxAge: 24 * 60 * 60 * 1000, // 24 hours

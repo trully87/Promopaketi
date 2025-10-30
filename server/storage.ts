@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
+import { Pool } from 'pg';
 import { eq, sql as dsql, desc, asc, and, gte, lte, or, ilike } from 'drizzle-orm';
 import * as schema from '@shared/schema';
 import type { 
@@ -19,6 +20,11 @@ import type {
 // Create a single database connection (Neon handles connection pooling automatically)
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle(sql, { schema });
+
+// Create a separate Pool for session store (connect-pg-simple requires standard pg Pool)
+export const sessionPool = new Pool({
+  connectionString: process.env.DATABASE_URL!,
+});
 
 export interface PaginationOptions {
   category?: string;
