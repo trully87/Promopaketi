@@ -7,7 +7,7 @@ import { useLanguage } from '@/lib/i18n';
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { PackageCategory } from '@shared/schema';
-import logo from '@assets/promo brain box2_1761751687022.png';
+import logo from '@assets/brain-box-logo.png';
 import GlobalSearch from '@/components/GlobalSearch';
 
 export default function Navigation() {
