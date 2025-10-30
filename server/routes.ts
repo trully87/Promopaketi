@@ -267,16 +267,18 @@ export function registerRoutes(app: Express): http.Server {
       const validated = insertInquirySchema.parse(req.body);
       const inquiry = await storage.createInquiry(validated);
       
-      // Send email notification asynchronously (don't wait for it)
-      sendInquiryNotification({
-        name: inquiry.name,
-        email: inquiry.email,
-        phone: inquiry.phone,
-        company: inquiry.company,
-        packageType: inquiry.packageType,
-        quantity: inquiry.quantity,
-        message: inquiry.message,
-      }).catch(err => console.error('Email notification failed:', err));
+      // Send email notification in background (fire-and-forget)
+      setImmediate(() => {
+        sendInquiryNotification({
+          name: inquiry.name,
+          email: inquiry.email,
+          phone: inquiry.phone,
+          company: inquiry.company,
+          packageType: inquiry.packageType,
+          quantity: inquiry.quantity,
+          message: inquiry.message,
+        }).catch(err => console.error('Email notification failed:', err));
+      });
       
       res.status(201).json(inquiry);
     } catch (error) {

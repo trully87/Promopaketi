@@ -26,6 +26,7 @@ import NewsletterSubscribers from "@/pages/NewsletterSubscribers";
 import PackageCategoryManagement from "@/pages/PackageCategoryManagement";
 import CustomPackageSectionManagement from "@/pages/CustomPackageSectionManagement";
 import ChangePassword from "@/pages/ChangePassword";
+import InquiryManagement from "@/pages/InquiryManagement";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -48,6 +49,7 @@ function Router() {
       <Route path="/admin/newsletter-subscribers" component={NewsletterSubscribers} />
       <Route path="/admin/custom-package-section" component={CustomPackageSectionManagement} />
       <Route path="/admin/change-password" component={ChangePassword} />
+      <Route path="/admin/inquiries" component={InquiryManagement} />
       <Route component={NotFound} />
     </Switch>
   );
