@@ -567,5 +567,66 @@ export function registerRoutes(app: Express): http.Server {
     }
   });
 
+  // Sitemap.xml endpoint
+  app.get("/api/sitemap.xml", async (req: Request, res: Response) => {
+    try {
+      const packages = await storage.getAllPackages();
+      const categories = await storage.getAllPackageCategories();
+      
+      const baseUrl = process.env.REPLIT_DEV_DOMAIN 
+        ? `https://${process.env.REPLIT_DEV_DOMAIN}` 
+        : `http://localhost:${process.env.PORT || 5000}`;
+      
+      const now = new Date().toISOString();
+      
+      let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+      xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+      
+      // Homepage
+      xml += '  <url>\n';
+      xml += `    <loc>${baseUrl}/</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += '    <changefreq>daily</changefreq>\n';
+      xml += '    <priority>1.0</priority>\n';
+      xml += '  </url>\n';
+      
+      // Search page
+      xml += '  <url>\n';
+      xml += `    <loc>${baseUrl}/search</loc>\n`;
+      xml += `    <lastmod>${now}</lastmod>\n`;
+      xml += '    <changefreq>weekly</changefreq>\n';
+      xml += '    <priority>0.8</priority>\n';
+      xml += '  </url>\n';
+      
+      // Category pages
+      for (const category of categories.filter(c => c.isActive === 1)) {
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}/packages/${category.value}</loc>\n`;
+        xml += `    <lastmod>${category.createdAt?.toISOString() || now}</lastmod>\n`;
+        xml += '    <changefreq>weekly</changefreq>\n';
+        xml += '    <priority>0.9</priority>\n';
+        xml += '  </url>\n';
+      }
+      
+      // Individual packages
+      for (const pkg of packages) {
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}/package/${pkg.id}</loc>\n`;
+        xml += `    <lastmod>${pkg.updatedAt?.toISOString() || now}</lastmod>\n`;
+        xml += '    <changefreq>monthly</changefreq>\n';
+        xml += '    <priority>0.7</priority>\n';
+        xml += '  </url>\n';
+      }
+      
+      xml += '</urlset>';
+      
+      res.header('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error('Sitemap generation error:', error);
+      res.status(500).send('Error generating sitemap');
+    }
+  });
+
   return server;
 }

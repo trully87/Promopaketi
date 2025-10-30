@@ -6,6 +6,7 @@ import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import MetaTags from '@/components/MetaTags';
 import { useLanguage } from '@/lib/i18n';
 import { useDebounce } from '@/hooks/useDebounce';
 import type { Package } from '@shared/schema';
@@ -117,8 +118,22 @@ export default function SearchPage() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const searchSEO = {
+    title: searchQuery 
+      ? (language === 'me' ? `Pretraga: ${searchQuery}` : `Search: ${searchQuery}`)
+      : (language === 'me' ? 'Pretraga Paketa' : 'Search Packages'),
+    description: searchQuery
+      ? (language === 'me' ? `Rezultati pretrage za "${searchQuery}". Premium poklon paketi sa personalizacijom.` : `Search results for "${searchQuery}". Premium gift packages with personalization.`)
+      : (language === 'me' ? 'Pretražite naše premium poklon pakete' : 'Search our premium gift packages'),
+    keywords: language === 'me'
+      ? ['pretraga', 'paketi', 'poklon paketi', searchQuery].filter(Boolean)
+      : ['search', 'packages', 'gift packages', searchQuery].filter(Boolean),
+    type: 'website' as const
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <MetaTags config={searchSEO} />
       {/* Search Header */}
       <section className="bg-gradient-to-b from-primary/5 to-background py-12 border-b">
         <div className="max-w-7xl mx-auto px-4">

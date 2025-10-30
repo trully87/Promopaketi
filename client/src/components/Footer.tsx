@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, MessageCircle } from 'lucide-react';
 import { SiWhatsapp, SiViber } from 'react-icons/si';
-import logo from '@assets/promo brain box2_1761751687022.png';
+import logo from '@assets/generated_images/Premium_Brain_Box_Logo_22abf400.png';
 import type { ContactInfo } from '@shared/schema';
 
 export default function Footer() {

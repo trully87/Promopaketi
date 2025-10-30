@@ -6,7 +6,10 @@ import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
 import CategorySection from '@/components/CategorySection';
 import ContactForm from '@/components/ContactForm';
+import MetaTags from '@/components/MetaTags';
+import StructuredData from '@/components/StructuredData';
 import { useLanguage } from '@/lib/i18n';
+import { defaultSEO, getOrganizationSchema } from '@/lib/seo';
 import type { PackageCardProps } from '@/components/PackageCard';
 import type { Package, PackageProduct } from '@shared/schema';
 import standardNewyear from '@assets/generated_images/Standard_New_Year_package_413cce95.png';
@@ -61,6 +64,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <MetaTags config={defaultSEO[language]} />
+      <StructuredData data={getOrganizationSchema(language)} />
       <Hero />
 
       <section id="packages" className="py-20">

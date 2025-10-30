@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Check, Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
+import StructuredData from '@/components/StructuredData';
+import { getProductSchema } from '@/lib/seo';
 import type { Package as PackageType, PackageProduct } from '@shared/schema';
 
 interface PackageModalProps {
@@ -96,10 +98,22 @@ export default function PackageModal({ package: pkg, products, open, onClose, on
   if (!pkg) return null;
 
   const packageName = language === 'me' ? pkg.nameME : pkg.nameEN;
+  const description = language === 'me' 
+    ? `${packageName} - Premium poklon paket sa personalizacijom. Minimalna narudžba ${pkg.minOrder} komada.`
+    : `${packageName} - Premium gift package with personalization. Minimum order ${pkg.minOrder} units.`;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <StructuredData data={getProductSchema(
+          pkg.id,
+          packageName,
+          description,
+          pkg.price,
+          pkg.image,
+          pkg.category,
+          language
+        )} />
         <DialogHeader>
           <DialogTitle className="font-serif text-3xl" data-testid="text-package-name">{packageName}</DialogTitle>
           <DialogDescription className="sr-only">

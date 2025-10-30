@@ -1,6 +1,8 @@
 import { useParams, useLocation } from "wouter";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
+import MetaTags from "@/components/MetaTags";
+import { getCategorySEO } from "@/lib/seo";
 import PackageCard from "@/components/PackageCard";
 import PackageModal from "@/components/PackageModal";
 import FilterControls from "@/components/FilterControls";
@@ -234,6 +236,7 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <MetaTags config={getCategorySEO(category, language)} />
       {/* Header Section */}
       <section className="bg-cream py-16 px-4 border-b border-border/40">
         <div className="max-w-7xl mx-auto">

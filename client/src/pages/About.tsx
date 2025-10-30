@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
+import MetaTags from "@/components/MetaTags";
 import type { AboutPage } from "@shared/schema";
 
 export default function About() {
@@ -34,8 +35,20 @@ export default function About() {
   const mission = language === 'me' ? aboutPage.missionME : aboutPage.missionEN;
   const vision = language === 'me' ? aboutPage.visionME : aboutPage.visionEN;
 
+  const aboutSEO = {
+    title,
+    description: language === 'me'
+      ? 'Saznajte više o Brain Box-u - premium poklon paketi sa personalizacijom za korporativne i novogodišnje prilike.'
+      : 'Learn more about Brain Box - premium gift packages with personalization for corporate and New Year occasions.',
+    keywords: language === 'me'
+      ? ['o nama', 'brain box', 'poklon paketi', 'korporativni pokloni', 'misija', 'vizija']
+      : ['about us', 'brain box', 'gift packages', 'corporate gifts', 'mission', 'vision'],
+    type: 'website' as const
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <MetaTags config={aboutSEO} />
       <div className="container mx-auto py-16 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
