@@ -28,7 +28,7 @@ When you republish the application, the production server will automatically:
 **To generate bcrypt hash:**
 ```bash
 # Run this in your terminal (replace YOUR_PASSWORD):
-node -e "const bcrypt = require('bcrypt'); bcrypt.hash('YOUR_PASSWORD', 10).then(h => console.log(h));"
+node -e "const bcrypt = require('bcrypt'); bcrypt.hash('brainBrainpromo2025.', 10).then(h => console.log(h));"
 ```
 
 **Option 2: Through Development Database (Copy Method)**
