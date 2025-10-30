@@ -1,11 +1,10 @@
 import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Globe, Menu, Package as PackageIcon, Sparkles, Briefcase, Leaf, Gift, Cpu, Trophy, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { PackageCategory } from '@shared/schema';
 import logo from '@assets/promo brain box2_1761751687022.png';
@@ -17,6 +16,8 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [location, setLocation] = useLocation();
   const [shouldScrollToContact, setShouldScrollToContact] = useState(false);
+  const [packagesDropdownOpen, setPackagesDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
   // Detect scroll for premium shadow effect
   useEffect(() => {
@@ -92,6 +93,20 @@ export default function Navigation() {
     setLanguage(language === 'me' ? 'en' : 'me');
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setPackagesDropdownOpen(false);
+      }
+    };
+
+    if (packagesDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [packagesDropdownOpen]);
+
   return (
     <nav className={`sticky top-0 z-50 bg-background/80 backdrop-blur-md transition-shadow duration-300 border-b ${
       scrolled ? 'shadow-lg' : ''
@@ -107,48 +122,45 @@ export default function Navigation() {
             />
           </Link>
 
-          {/* Desktop Navigation with Dropdown Menu */}
+          {/* Desktop Navigation with Custom Dropdown Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Packages Dropdown Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost"
-                  className="text-sm font-medium transition-all duration-200 hover:text-primary"
-                  data-testid="button-packages-menu"
-                >
-                  <PackageIcon className="w-4 h-4 mr-2" />
-                  {language === 'me' ? 'Paketi' : 'Packages'}
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="start" 
-                className="w-[520px] p-4 bg-card/95 backdrop-blur-sm"
-                sideOffset={8}
+            {/* Packages Custom Dropdown Menu */}
+            <div className="relative" ref={dropdownRef}>
+              <Button 
+                variant="ghost"
+                className="text-sm font-medium transition-all duration-200 hover:text-primary"
+                data-testid="button-packages-menu"
+                onClick={() => setPackagesDropdownOpen(!packagesDropdownOpen)}
               >
-                <div className="grid grid-cols-2 gap-2">
-                  {categoriesLoading ? (
-                    // Loading skeleton
-                    Array.from({ length: 4 }).map((_, i) => (
-                      <div key={i} className="space-y-2 rounded-md p-3">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-3 w-full" />
-                      </div>
-                    ))
-                  ) : (
-                    activeCategories.map((category) => {
-                      const IconComponent = getCategoryIcon(category.value);
-                      return (
-                        <DropdownMenuItem 
-                          key={category.id}
-                          asChild
-                          className="cursor-pointer"
-                        >
+                <PackageIcon className="w-4 h-4 mr-2" />
+                {language === 'me' ? 'Paketi' : 'Packages'}
+                <ChevronDown className={`w-3 h-3 ml-1 transition-transform duration-200 ${packagesDropdownOpen ? 'rotate-180' : ''}`} />
+              </Button>
+              
+              {packagesDropdownOpen && (
+                <div 
+                  className="absolute top-full left-0 mt-2 w-[520px] p-4 bg-card/95 backdrop-blur-sm border rounded-md shadow-lg z-50"
+                  style={{ animation: 'fadeIn 0.15s ease-out' }}
+                >
+                  <div className="grid grid-cols-2 gap-2">
+                    {categoriesLoading ? (
+                      // Loading skeleton
+                      Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="space-y-2 rounded-md p-3">
+                          <Skeleton className="h-4 w-32" />
+                          <Skeleton className="h-3 w-full" />
+                        </div>
+                      ))
+                    ) : (
+                      activeCategories.map((category) => {
+                        const IconComponent = getCategoryIcon(category.value);
+                        return (
                           <Link 
+                            key={category.id}
                             href={`/packages/${category.value}`}
-                            className="group flex flex-col gap-1.5 p-3.5 rounded-md hover:bg-accent/50 transition-all duration-200"
+                            className="group flex flex-col gap-1.5 p-3.5 rounded-md hover:bg-accent/50 transition-all duration-200 cursor-pointer"
                             data-testid={`link-category-${category.value}`}
+                            onClick={() => setPackagesDropdownOpen(false)}
                           >
                             <div className="flex items-center gap-2">
                               <IconComponent className="w-4 h-4 text-primary transition-transform group-hover:scale-110" />
@@ -163,13 +175,13 @@ export default function Navigation() {
                               }
                             </p>
                           </Link>
-                        </DropdownMenuItem>
-                      );
-                    })
-                  )}
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              )}
+            </div>
 
             {/* Global Search */}
             <GlobalSearch />

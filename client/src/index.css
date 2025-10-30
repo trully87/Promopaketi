@@ -448,6 +448,16 @@
     animation: fadeInUp 600ms ease-out forwards;
   }
   
+  /* Simple Fade In (for dropdowns) */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
   /* Scroll Bounce Animation for Chevron */
   @keyframes bounce {
     0%, 100% {
