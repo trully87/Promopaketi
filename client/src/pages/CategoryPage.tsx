@@ -63,15 +63,29 @@ export default function CategoryPage() {
   // Sync filters with URL query params on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const minPrice = params.get('minPrice');
-    const maxPrice = params.get('maxPrice');
+    const minPriceParam = params.get('minPrice');
+    const maxPriceParam = params.get('maxPrice');
     const search = params.get('search');
     const sortBy = params.get('sortBy');
     const sortOrder = params.get('sortOrder');
 
+    // Parse price params with NaN protection
+    let minPrice: number | undefined;
+    let maxPrice: number | undefined;
+
+    if (minPriceParam) {
+      const parsed = parseFloat(minPriceParam);
+      minPrice = isFinite(parsed) ? parsed : undefined;
+    }
+
+    if (maxPriceParam) {
+      const parsed = parseFloat(maxPriceParam);
+      maxPrice = isFinite(parsed) ? parsed : undefined;
+    }
+
     setFilters({
-      minPrice: minPrice ? parseFloat(minPrice) : undefined,
-      maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+      minPrice,
+      maxPrice,
       search: search || '',
       sortBy: sortBy || 'createdAt',
       sortOrder: sortOrder || 'desc',
