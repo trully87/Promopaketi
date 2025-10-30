@@ -86,6 +86,7 @@ export default function Home() {
                   image={pkg.image}
                   items={[]}
                   category={pkg.category as "newyear" | "corporate"}
+                  packageData={pkg}
                   onLearnMore={() => handleLearnMore(pkg)}
                 />
               ))}
@@ -113,6 +114,7 @@ export default function Home() {
                   image={pkg.image}
                   items={[]}
                   category={pkg.category as "newyear" | "corporate"}
+                  packageData={pkg}
                   onLearnMore={() => handleLearnMore(pkg)}
                 />
               ))}
@@ -140,6 +142,7 @@ export default function Home() {
                   image={pkg.image}
                   items={[]}
                   category={pkg.category}
+                  packageData={pkg}
                   onLearnMore={() => handleLearnMore(pkg)}
                 />
               ))}

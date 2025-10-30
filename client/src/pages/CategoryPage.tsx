@@ -347,6 +347,7 @@ export default function CategoryPage() {
                     image={pkg.image}
                     items={[]}
                     category={pkg.category}
+                    packageData={pkg}
                     onLearnMore={() => handleLearnMore(pkg)}
                   />
                 ))}

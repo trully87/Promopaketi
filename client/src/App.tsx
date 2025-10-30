@@ -4,10 +4,13 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/lib/i18n";
+import { ComparisonProvider } from "@/contexts/ComparisonContext";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ComparisonBar from "@/components/ComparisonBar";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
+import SearchPage from "@/pages/SearchPage";
 import CategoryPage from "@/pages/CategoryPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
@@ -24,6 +27,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/search" component={SearchPage} />
       <Route path="/packages/:category" component={CategoryPage} />
       <Route path="/about" component={About} />
       <Route path="/admin/login" component={AdminLogin} />
@@ -46,14 +50,17 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navigation />
-            <main className="flex-1">
-              <Router />
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
+          <ComparisonProvider>
+            <div className="flex flex-col min-h-screen">
+              <Navigation />
+              <main className="flex-1">
+                <Router />
+              </main>
+              <Footer />
+            </div>
+            <ComparisonBar />
+            <Toaster />
+          </ComparisonProvider>
         </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>

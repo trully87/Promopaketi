@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { PackageCategory } from '@shared/schema';
 import logo from '@assets/promo brain box2_1761751687022.png';
+import GlobalSearch from '@/components/GlobalSearch';
 
 export default function Navigation() {
   const { language, setLanguage } = useLanguage();
@@ -163,6 +164,9 @@ export default function Navigation() {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
+
+            {/* Global Search */}
+            <GlobalSearch />
 
             {/* Contact Link */}
             <button
