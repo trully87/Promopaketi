@@ -6,17 +6,16 @@
 
 import { neon } from '@neondatabase/serverless';
 
-async function migrateProductionDatabase() {
-  const databaseUrl = process.env.DATABASE_URL;
-  
-  if (!databaseUrl) {
+export async function migrateProductionDatabase() {
+  if (!process.env.DATABASE_URL) {
     console.error('❌ DATABASE_URL not found');
     return;
   }
 
   console.log('🔄 Running production database migrations...');
   
-  const sql = neon(databaseUrl);
+  // Create a single connection for all migrations (Neon handles pooling automatically)
+  const sql = neon(process.env.DATABASE_URL);
 
   try {
     // Add is_featured and featured_order columns to packages table
@@ -87,17 +86,3 @@ async function migrateProductionDatabase() {
     throw error;
   }
 }
-
-// Run migrations if in production
-if (process.env.NODE_ENV === 'production') {
-  migrateProductionDatabase()
-    .then(() => {
-      console.log('🎉 Ready to start production server');
-    })
-    .catch((error) => {
-      console.error('💥 Migration failed, but continuing...', error);
-      // Don't crash the server, just log the error
-    });
-}
-
-export { migrateProductionDatabase };

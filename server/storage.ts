@@ -16,6 +16,7 @@ import type {
   CustomPackageSection, InsertCustomPackageSection
 } from '@shared/schema';
 
+// Create a single database connection (Neon handles connection pooling automatically)
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle(sql, { schema });
 
