@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
 import CategorySection from '@/components/CategorySection';
+import CustomPackageSection from '@/components/CustomPackageSection';
 import ContactForm from '@/components/ContactForm';
 import MetaTags from '@/components/MetaTags';
 import StructuredData from '@/components/StructuredData';
@@ -155,6 +156,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Custom Package Section */}
+      <CustomPackageSection />
 
       <ContactForm selectedPackage={contactPackage} />
 

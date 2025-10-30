@@ -197,3 +197,24 @@ export const insertPackageCategorySchema = createInsertSchema(packageCategories)
 
 export type InsertPackageCategory = z.infer<typeof insertPackageCategorySchema>;
 export type PackageCategory = typeof packageCategories.$inferSelect;
+
+// Custom Package Section for homepage (singleton - only one row)
+export const customPackageSection = pgTable("custom_package_section", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  titleME: text("title_me").notNull(),
+  titleEN: text("title_en").notNull(),
+  descriptionME: text("description_me").notNull(),
+  descriptionEN: text("description_en").notNull(),
+  ctaTextME: text("cta_text_me").notNull(),
+  ctaTextEN: text("cta_text_en").notNull(),
+  image: text("image").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCustomPackageSectionSchema = createInsertSchema(customPackageSection).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertCustomPackageSection = z.infer<typeof insertCustomPackageSectionSchema>;
+export type CustomPackageSection = typeof customPackageSection.$inferSelect;

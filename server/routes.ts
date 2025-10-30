@@ -9,7 +9,8 @@ import {
   insertContactInfoSchema,
   insertAboutPageSchema,
   insertNewsletterSubscriberSchema,
-  insertPackageCategorySchema
+  insertPackageCategorySchema,
+  insertCustomPackageSectionSchema
 } from "@shared/schema";
 import { requireAuth } from "./auth";
 import multer from "multer";
@@ -564,6 +565,54 @@ export function registerRoutes(app: Express): http.Server {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete package category" });
+    }
+  });
+
+  // Custom Package Section routes
+  app.get("/api/custom-package-section", async (req: Request, res: Response) => {
+    try {
+      const section = await storage.getCustomPackageSection();
+      if (!section) {
+        return res.status(404).json({ error: "Custom package section not found" });
+      }
+      res.json(section);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch custom package section" });
+    }
+  });
+
+  app.get("/api/admin/custom-package-section", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const section = await storage.getCustomPackageSection();
+      if (!section) {
+        return res.status(404).json({ message: "No custom package section exists yet. Please create one." });
+      }
+      res.json(section);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch custom package section" });
+    }
+  });
+
+  app.post("/api/admin/custom-package-section", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertCustomPackageSectionSchema.parse(req.body);
+      const section = await storage.createCustomPackageSection(validated);
+      res.status(201).json(section);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid custom package section data", details: error });
+    }
+  });
+
+  app.patch("/api/admin/custom-package-section/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validated = insertCustomPackageSectionSchema.partial().parse(req.body);
+      const section = await storage.updateCustomPackageSection(req.params.id, validated);
+      if (!section) {
+        return res.status(404).json({ error: "Custom package section not found" });
+      }
+      res.json(section);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid custom package section data", details: error });
     }
   });
 

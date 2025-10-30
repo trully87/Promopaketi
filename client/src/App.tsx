@@ -24,6 +24,7 @@ import ContactInfoManagement from "@/pages/ContactInfoManagement";
 import AboutPageManagement from "@/pages/AboutPageManagement";
 import NewsletterSubscribers from "@/pages/NewsletterSubscribers";
 import PackageCategoryManagement from "@/pages/PackageCategoryManagement";
+import CustomPackageSectionManagement from "@/pages/CustomPackageSectionManagement";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -44,6 +45,7 @@ function Router() {
       <Route path="/admin/contact-info" component={ContactInfoManagement} />
       <Route path="/admin/about" component={AboutPageManagement} />
       <Route path="/admin/newsletter-subscribers" component={NewsletterSubscribers} />
+      <Route path="/admin/custom-package-section" component={CustomPackageSectionManagement} />
       <Route component={NotFound} />
     </Switch>
   );

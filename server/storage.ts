@@ -12,7 +12,8 @@ import type {
   ContactInfo, InsertContactInfo,
   AboutPage, InsertAboutPage,
   NewsletterSubscriber, InsertNewsletterSubscriber,
-  PackageCategory, InsertPackageCategory
+  PackageCategory, InsertPackageCategory,
+  CustomPackageSection, InsertCustomPackageSection
 } from '@shared/schema';
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -101,6 +102,11 @@ export interface IStorage {
   createPackageCategory(category: InsertPackageCategory): Promise<PackageCategory>;
   updatePackageCategory(id: string, category: Partial<InsertPackageCategory>): Promise<PackageCategory | undefined>;
   deletePackageCategory(id: string): Promise<boolean>;
+
+  // Custom Package Section methods (singleton - only one row)
+  getCustomPackageSection(): Promise<CustomPackageSection | undefined>;
+  updateCustomPackageSection(id: string, section: Partial<InsertCustomPackageSection>): Promise<CustomPackageSection | undefined>;
+  createCustomPackageSection(section: InsertCustomPackageSection): Promise<CustomPackageSection>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -447,6 +453,26 @@ export class DatabaseStorage implements IStorage {
   async deletePackageCategory(id: string): Promise<boolean> {
     const result = await db.delete(schema.packageCategories).where(eq(schema.packageCategories.id, id));
     return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Custom Package Section methods
+  async getCustomPackageSection(): Promise<CustomPackageSection | undefined> {
+    const section = await db.select().from(schema.customPackageSection).limit(1);
+    return section[0];
+  }
+
+  async updateCustomPackageSection(id: string, section: Partial<InsertCustomPackageSection>): Promise<CustomPackageSection | undefined> {
+    const updated = await db
+      .update(schema.customPackageSection)
+      .set({ ...section, updatedAt: new Date() })
+      .where(eq(schema.customPackageSection.id, id))
+      .returning();
+    return updated[0];
+  }
+
+  async createCustomPackageSection(section: InsertCustomPackageSection): Promise<CustomPackageSection> {
+    const created = await db.insert(schema.customPackageSection).values(section).returning();
+    return created[0];
   }
 }
 
