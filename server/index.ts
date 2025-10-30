@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupAuth } from "./auth";
+import { migrateProductionDatabase } from "../scripts/auto-migrate-production";
 
 const app = express();
 
@@ -48,6 +49,15 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Run production database migrations if in production
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      await migrateProductionDatabase();
+    } catch (error) {
+      console.error('Migration failed, but continuing:', error);
+    }
+  }
+  
   setupAuth(app);
   const server = await registerRoutes(app);
 
