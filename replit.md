@@ -1,7 +1,7 @@
 # Brain Box Gift Packages - E-Commerce Platform
 
 ## Overview
-Brain Box is a premium e-commerce web application focused on luxury gift packages for the Serbian/Montenegrin market. It offers diverse product categories like New Year's, Corporate, Eco, Local Producers, and Premium VIP packages, with full bilingual support. The platform includes a customer-facing storefront for browsing and inquiries, and an admin panel for comprehensive management of products, categories, content, and subscribers. The project aims to provide a scalable, feature-rich platform with a premium user experience.
+Brain Box is a premium e-commerce web application focused on luxury gift packages for the Serbian/Montenegrin market. It offers diverse product categories like New Year's, Corporate, Eco, Local Producers, Technology, Sport & Recreation, and Premium VIP packages, with full bilingual support. The platform includes a customer-facing storefront for browsing and inquiries, a custom package CTA section, and an admin panel for comprehensive management of products, categories, content, and subscribers. The project aims to provide a scalable, feature-rich platform with a premium user experience.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -21,7 +21,10 @@ User experience features include Favorites/Wishlist functionality with localStor
 The backend uses Express.js with TypeScript, providing RESTful APIs with `/api` prefixes. Session-based authentication is implemented with Passport.js and Bcrypt for password hashing. Multer handles file uploads (image files only, 5MB limit). Separate admin and public endpoints ensure controlled access to content management functionalities, including hero slides, menu items, contact information, about page content, and newsletter subscribers. Request logging and error handling are robustly implemented. Dynamic sitemap generation endpoint serves XML formatted sitemap with lastmod timestamps, changefreq priorities, and hierarchical URL structure for search engine indexing.
 
 ### Data Storage Solutions
-PostgreSQL is the primary database, utilizing Neon for serverless capabilities and Drizzle ORM for type-safe operations. The schema includes tables for users, packages, package products, categories, inquiries, hero slides, menu items, contact information, about page content, and newsletter subscribers. All prices are stored and displayed in Euros. A repository pattern abstracts database operations. Product images are stored on the local filesystem in the `/uploads` directory with static file serving.
+PostgreSQL is the primary database, utilizing Neon for serverless capabilities and Drizzle ORM for type-safe operations. The schema includes tables for users, packages, package products, categories, inquiries, hero slides, menu items, contact information, about page content, newsletter subscribers, and custom package section. All prices are stored and displayed in Euros. A repository pattern abstracts database operations. Product images are stored on the local filesystem in the `/uploads` directory with static file serving.
+
+#### Custom Package Section
+Singleton content table for managing the homepage custom package CTA section. Includes bilingual fields (ME/EN) for title, description, CTA button text, and image URL. Admins can create or edit this section through the admin panel, and it displays on the homepage between package categories and contact form. If no section exists, the homepage gracefully hides it without errors.
 
 ## External Dependencies
 
