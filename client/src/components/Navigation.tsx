@@ -186,6 +186,16 @@ export default function Navigation() {
             {/* Global Search */}
             <GlobalSearch />
 
+            {/* About Link */}
+            <Link
+              href="/about"
+              className="text-sm font-medium transition-all duration-200 hover:text-primary relative group text-foreground"
+              data-testid="link-about"
+            >
+              {language === 'me' ? 'O Nama' : 'About'}
+              <span className="absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-200 w-0 group-hover:w-full" />
+            </Link>
+
             {/* Contact Link */}
             <button
               onClick={handleContactClick}

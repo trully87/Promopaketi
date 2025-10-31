@@ -12,9 +12,10 @@ const translations = {
   me: {
     // Navigation
     'nav.home': 'Početna',
+    'nav.about': 'O Nama',
+    'nav.packages': 'Paketi',
     'nav.newyear': 'Novogodišnji paketi',
     'nav.corporate': 'Korporativni paketi',
-    'nav.about': 'O nama',
     'nav.contact': 'Kontakt',
     
     // Hero
@@ -90,9 +91,10 @@ const translations = {
   en: {
     // Navigation
     'nav.home': 'Home',
+    'nav.about': 'About Us',
+    'nav.packages': 'Packages',
     'nav.newyear': "New Year's Packages",
     'nav.corporate': 'Corporate Packages',
-    'nav.about': 'About Us',
     'nav.contact': 'Contact',
     
     // Hero
