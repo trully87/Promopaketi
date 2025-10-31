@@ -9,7 +9,7 @@ Brain Box is a premium e-commerce web application focused on luxury gift package
   - **Stats**: Animated counters that count up when scrolling into view, hover scale effects, staggered animations
   - **Clients**: "Brands That Trust Us" section with 12 monochromatic placeholder logos, grayscale-to-color hover effects, staggered entrance animations, subtle glow effects
   - **Story**: Fade-in-up animations, decorative quote marks, gradient backgrounds, 3-image collage (collaboration scene, gift packaging, partnership concept) with hover tilt/scale effects
-  - **Values**: Staggered card animations, rotating icons on hover, hover lift effects (y: -8px), gradient overlays, border color transitions
+  - **Values**: Staggered card animations, hover lift effects (y: -8px), gradient overlays, border color transitions
   - **CTA**: Radial gradient background, scale/tap animations on button
   - All sections use scroll-triggered animations with viewport detection for performance
   - **Generated Premium Images**: 3 AI-generated images in Mentalist Agency style (modern minimalist, pastel colors, business themes) imported from attached_assets/generated_images/

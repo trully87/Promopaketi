@@ -539,15 +539,11 @@ export default function About() {
                     />
                     
                     <div className="relative">
-                      <motion.div 
-                        className="mb-6"
-                        whileHover={{ rotate: 360 }}
-                        transition={{ duration: 0.6 }}
-                      >
+                      <div className="mb-6">
                         <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${value.bgGradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                           <IconComponent className={`w-8 h-8 ${value.color}`} />
                         </div>
-                      </motion.div>
+                      </div>
                       <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
                         {value.title}
                       </h3>
