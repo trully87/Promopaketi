@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import Hero from '@/components/Hero';
+import HowWeWork from '@/components/HowWeWork';
 import PackageCard from '@/components/PackageCard';
 import PackageModal from '@/components/PackageModal';
 import CategorySection from '@/components/CategorySection';
@@ -72,6 +73,9 @@ export default function Home() {
       <MetaTags config={defaultSEO[language]} />
       <StructuredData data={getOrganizationSchema(language)} />
       <Hero />
+      
+      {/* How We Work Section */}
+      <HowWeWork />
 
       <section id="packages" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32">

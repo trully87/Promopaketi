@@ -66,6 +66,18 @@ const translations = {
     'form.submit': 'Pošalji upit',
     'form.success': 'Upit uspješno poslat!',
     
+    // How We Work Section
+    'howwework.title': 'Kako Radimo',
+    'howwework.subtitle': 'Naš pristup kombinuje strategiju, dizajn i besprijekornu realizaciju',
+    'howwework.understanding.title': 'Razumijevanje',
+    'howwework.understanding.desc': 'Pažljivo slušamo Vaše zahtjeve kako bismo precizno razumjeli Vaše potrebe. Naša duboka poznavanje poslovnih procesa osigurava potpuno razumijevanje.',
+    'howwework.design.title': 'Dizajn',
+    'howwework.design.desc': 'Pružamo prilagođena dizajnerska rješenja koja savršeno odgovaraju Vašim poslovnim potrebama. Kreativan tim kreira inovativna rješenja koja ostavljaju utisak.',
+    'howwework.production.title': 'Proizvodnja',
+    'howwework.production.desc': 'Vlastite proizvodne kapacitete omogućavaju nam isporuku marketing materijala vrhunskog kvaliteta po konkurentnim cijenama sa brzim rokovima.',
+    'howwework.delivery.title': 'Isporuka',
+    'howwework.delivery.desc': 'Pouzdana nabavka, pakovanje i isporuka Vaših jedinstvenih poklona. Djelujemo kao Vaši predstavnici, pružajući vrhunski kvalitet po najpovoljnijim cijenama.',
+    
     // Footer
     'footer.tagline': 'End-to-end rješenja za Vaše korporativne i novogodišnje poklone. Partnerski pristup koji donosi rezultate.',
     'footer.quick.links': 'Brzi linkovi',
@@ -131,6 +143,18 @@ const translations = {
     'form.message': 'Message',
     'form.submit': 'Send Inquiry',
     'form.success': 'Inquiry sent successfully!',
+    
+    // How We Work Section
+    'howwework.title': 'How We Work',
+    'howwework.subtitle': 'Our approach combines strategy, design and flawless execution',
+    'howwework.understanding.title': 'Understanding',
+    'howwework.understanding.desc': 'We attentively listen to your requirements to precisely understand your needs. Our deep knowledge of business processes ensures comprehensive understanding.',
+    'howwework.design.title': 'Design',
+    'howwework.design.desc': 'We provide tailored design solutions perfectly aligned with your business needs. Our creative team crafts innovative solutions that leave lasting impressions.',
+    'howwework.production.title': 'Production',
+    'howwework.production.desc': 'Our own production capacity enables delivery of top-quality marketing materials at competitive prices with swift turnarounds.',
+    'howwework.delivery.title': 'Delivery',
+    'howwework.delivery.desc': 'Reliable procurement, packaging and delivery of your unique gifts. We act as your representatives, providing premium quality at the most competitive rates.',
     
     // Footer
     'footer.tagline': 'End-to-end solutions for your corporate and New Year gifts. Partnership approach delivering results.',
