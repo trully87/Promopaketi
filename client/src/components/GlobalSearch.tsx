@@ -43,25 +43,31 @@ export default function GlobalSearch() {
   return (
     <form onSubmit={handleSearch} className="relative">
       <div className={cn(
-        "relative transition-all duration-200",
-        isFocused ? "w-80" : "w-64"
+        "relative transition-all duration-300 ease-in-out",
+        isFocused ? "w-64" : "w-9"
       )}>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Search className={cn(
+          "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-opacity duration-200",
+          isFocused && query && "opacity-100",
+          isFocused && !query && "opacity-100",
+          !isFocused && "opacity-70"
+        )} />
         <Input
           ref={inputRef}
           type="text"
-          placeholder={language === 'me' ? 'Pretraži pakete... (⌘K)' : 'Search packages... (⌘K)'}
+          placeholder={language === 'me' ? 'Pretraži...' : 'Search...'}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={cn(
-            "pl-10 pr-10 transition-all duration-200",
+            "transition-all duration-300 ease-in-out h-9",
+            isFocused ? "pl-10 pr-10 opacity-100 w-full" : "pl-3 pr-3 opacity-0 w-9 cursor-pointer",
             isFocused && "ring-2 ring-primary/20"
           )}
           data-testid="input-global-search"
         />
-        {query && (
+        {query && isFocused && (
           <Button
             type="button"
             variant="ghost"

@@ -183,9 +183,6 @@ export default function Navigation() {
               )}
             </div>
 
-            {/* Global Search */}
-            <GlobalSearch />
-
             {/* About Link */}
             <Link
               href="/about"
@@ -209,6 +206,8 @@ export default function Navigation() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-3">
+            {/* Global Search - Subtle in corner */}
+            <GlobalSearch />
             {/* Admin Button - Desktop Only */}
             <Button
               asChild
