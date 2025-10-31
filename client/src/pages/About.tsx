@@ -6,6 +6,9 @@ import { Sparkles, Target, Handshake, Award } from 'lucide-react';
 import MetaTags from '@/components/MetaTags';
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
+import collaborationImg from '@assets/generated_images/Modern_business_collaboration_scene_eac07c6c.png';
+import giftPackagingImg from '@assets/generated_images/Premium_gift_packaging_preparation_ab15e5a5.png';
+import partnershipImg from '@assets/generated_images/Abstract_business_partnership_concept_016a4b6f.png';
 
 // Animated Counter Component
 function AnimatedCounter({ end, duration = 2 }: { end: string; duration?: number }) {
@@ -287,7 +290,79 @@ export default function About() {
         </div>
       </motion.section>
 
-      {/* Story Section with Fade-in Animation */}
+      {/* Trusted Clients Section - Monochromatic Logos */}
+      <motion.section 
+        className="relative py-20 bg-background overflow-hidden"
+        data-testid="section-clients"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
+        {/* Background decoration */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+            animate={{
+              x: [-50, 50, -50],
+              y: [-30, 30, -30],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div className="text-center mb-12" variants={fadeInUpVariants}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" data-testid="text-clients-title">
+              {t('about.clients.title')}
+            </h2>
+            <p className="text-lg text-muted-foreground" data-testid="text-clients-subtitle">
+              {t('about.clients.subtitle')}
+            </p>
+          </motion.div>
+
+          {/* Client Logo Grid - Placeholder with monochromatic effect */}
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center"
+            variants={containerVariants}
+          >
+            {/* Placeholder logos - You can replace these with actual client logos */}
+            {[...Array(12)].map((_, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ scale: 1.1, y: -5 }}
+                className="group relative"
+              >
+                <div className="w-32 h-20 flex items-center justify-center bg-accent/30 rounded-lg backdrop-blur-sm border border-accent/50 transition-all duration-300 group-hover:bg-accent/50 group-hover:border-primary/30">
+                  {/* Monochromatic placeholder - replace with actual logos */}
+                  <div className="text-4xl font-bold text-muted-foreground/40 grayscale group-hover:grayscale-0 transition-all duration-300">
+                    {String.fromCharCode(65 + index)}
+                  </div>
+                </div>
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 rounded-lg bg-primary/0 group-hover:bg-primary/5 transition-all duration-300 -z-10 blur-xl" />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Optional: Add instruction for admin to upload logos */}
+          <motion.p 
+            className="text-center text-sm text-muted-foreground mt-12 italic"
+            variants={fadeInUpVariants}
+          >
+            {language === 'me' 
+              ? 'Logotipi klijenata mogu se ažurirati kroz admin panel'
+              : 'Client logos can be updated through admin panel'}
+          </motion.p>
+        </div>
+      </motion.section>
+
+      {/* Story Section with Fade-in Animation & Images */}
       <motion.section 
         className="relative py-24"
         data-testid="section-story"
@@ -298,30 +373,83 @@ export default function About() {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/10 to-background" />
         
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
+            className="text-4xl md:text-5xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
             data-testid="text-story-title"
             variants={itemVariants}
           >
             {t('about.story.title')}
           </motion.h2>
-          <motion.div 
-            className="relative"
-            variants={itemVariants}
-          >
-            {/* Decorative quote mark */}
-            <div className="absolute -left-4 -top-4 text-8xl text-primary/10 font-serif leading-none">"</div>
-            
-            <div className="prose prose-lg max-w-none relative">
-              <p 
-                className="text-lg md:text-xl leading-relaxed text-muted-foreground whitespace-pre-line"
-                data-testid="text-story-content"
-              >
-                {t('about.story.content')}
-              </p>
-            </div>
-          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Text Content */}
+            <motion.div 
+              className="relative order-2 lg:order-1"
+              variants={itemVariants}
+            >
+              {/* Decorative quote mark */}
+              <div className="absolute -left-4 -top-4 text-8xl text-primary/10 font-serif leading-none">"</div>
+              
+              <div className="prose prose-lg max-w-none relative">
+                <p 
+                  className="text-lg md:text-xl leading-relaxed text-muted-foreground whitespace-pre-line"
+                  data-testid="text-story-content"
+                >
+                  {t('about.story.content')}
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Image Collage */}
+            <motion.div 
+              className="relative order-1 lg:order-2"
+              variants={itemVariants}
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {/* Large image */}
+                <motion.div 
+                  className="col-span-2 relative overflow-hidden rounded-2xl shadow-2xl"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img 
+                    src={collaborationImg} 
+                    alt="Business collaboration" 
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+
+                {/* Two smaller images */}
+                <motion.div 
+                  className="relative overflow-hidden rounded-2xl shadow-xl"
+                  whileHover={{ scale: 1.05, rotate: -2 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img 
+                    src={giftPackagingImg} 
+                    alt="Premium packaging" 
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+
+                <motion.div 
+                  className="relative overflow-hidden rounded-2xl shadow-xl"
+                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img 
+                    src={partnershipImg} 
+                    alt="Partnership concept" 
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 

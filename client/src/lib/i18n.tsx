@@ -70,6 +70,8 @@ const translations = {
     // About Us Page
     'about.hero.title': 'O Brain Box-u',
     'about.hero.subtitle': 'Vaš pouzdani partner za end-to-end rješenja poslovnih poklona',
+    'about.clients.title': 'Brendovi Koji Nam Vjeruju',
+    'about.clients.subtitle': 'Ponosni smo na partnerstva sa vodećim kompanijama',
     'about.story.title': 'Naša Priča',
     'about.story.content': 'Brain Box je osnovan sa vizijom da transformiše način na koji kompanije prisupaju poslovnim poklonima. Razumijemo da svaki poklon predstavlja priliku da ojačate poslovne odnose i izgradite trajne veze sa klijentima, partnerima i zaposlenima.\n\nNaš pristup zasniva se na dubinskom razumijevanju Vaših potreba, kreativnom dizajnu koji ostavlja utisak, i besprijekornoj realizaciji koja osigurava uspjeh. Sa godinama iskustva u industriji, izgradili smo reputaciju pouzdanog partnera koji donosi rezultate.',
     'about.values.title': 'Naše Vrijednosti',
@@ -171,6 +173,8 @@ const translations = {
     // About Us Page
     'about.hero.title': 'About Brain Box',
     'about.hero.subtitle': 'Your trusted partner for end-to-end business gift solutions',
+    'about.clients.title': 'Brands That Trust Us',
+    'about.clients.subtitle': 'Proud to partner with leading companies',
     'about.story.title': 'Our Story',
     'about.story.content': 'Brain Box was founded with a vision to transform how companies approach corporate gifting. We understand that every gift represents an opportunity to strengthen business relationships and build lasting connections with clients, partners, and employees.\n\nOur approach is built on deep understanding of your needs, creative design that leaves an impression, and flawless execution that ensures success. With years of industry experience, we\'ve built a reputation as a trusted partner that delivers results.',
     'about.values.title': 'Our Values',
