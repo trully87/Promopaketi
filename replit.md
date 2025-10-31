@@ -5,7 +5,7 @@ Brain Box is a premium e-commerce web application focused on luxury gift package
 
 ## Recent Changes (October 31, 2025)
 - **Premium About Us Page with Advanced Animations**: Implemented Mentalist Agency-inspired About page with 5 animated sections using Framer Motion, plus premium visuals and client showcase. Features include:
-  - **Hero**: Floating animated background shapes (primary, blue, emerald gradients), parallax effects, particle animations, smooth fade-in transitions
+  - **Hero**: Fluid animated liquid background with 6 independent flowing gradient shapes (primary/amber/orange, blue/cyan/emerald, purple/pink, yellow, teal combinations), complex multi-axis movement (scale, rotate, translate), staggered timing (18-30s cycles), vignette overlay for depth
   - **Stats**: Animated counters that count up when scrolling into view, hover scale effects, staggered animations
   - **Clients**: "Brands That Trust Us" section with 12 monochromatic placeholder logos, grayscale-to-color hover effects, staggered entrance animations, subtle glow effects
   - **Story**: Fade-in-up animations, decorative quote marks, gradient backgrounds, 3-image collage (collaboration scene, gift packaging, partnership concept) with hover tilt/scale effects

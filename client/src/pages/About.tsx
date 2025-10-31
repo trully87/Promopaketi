@@ -148,53 +148,101 @@ export default function About() {
     <div className="min-h-screen bg-background overflow-hidden">
       <MetaTags config={aboutSEO} />
       
-      {/* Hero Section with Enhanced Gradient & Floating Shapes */}
+      {/* Hero Section with Fluid Animated Background */}
       <section 
-        className="relative py-32 bg-gradient-to-br from-accent/40 via-background to-accent/20 overflow-hidden"
+        className="relative py-32 overflow-hidden"
         data-testid="section-hero"
       >
-        {/* Animated Background Shapes */}
+        {/* Fluid Animated Gradient Background */}
         <div className="absolute inset-0 overflow-hidden">
+          {/* Base gradient layer */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-background to-accent/20" />
+          
+          {/* Animated fluid shapes - multiple layers for depth */}
           <motion.div
             animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 90, 0],
-              opacity: [0.15, 0.25, 0.15],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gradient-to-br from-primary to-amber-500 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              rotate: [0, -90, 0],
-              opacity: [0.1, 0.2, 0.1],
+              scale: [1, 1.3, 1.1, 1],
+              rotate: [0, 120, 240, 360],
+              x: [-100, 100, -50, -100],
+              y: [-50, 50, -100, -50],
+              opacity: [0.2, 0.35, 0.25, 0.2],
             }}
             transition={{
               duration: 25,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 1,
             }}
-            className="absolute -bottom-40 -left-40 w-[700px] h-[700px] bg-gradient-to-tr from-blue-500 to-emerald-500 rounded-full blur-3xl"
+            className="absolute -top-40 -right-40 w-[800px] h-[800px] bg-gradient-to-br from-primary via-amber-500 to-orange-400 rounded-full blur-3xl"
           />
+          
           <motion.div
             animate={{
-              y: [-20, 20, -20],
-              x: [-10, 10, -10],
-              opacity: [0.05, 0.15, 0.05],
+              scale: [1, 1.4, 1.2, 1],
+              rotate: [360, 240, 120, 0],
+              x: [100, -100, 50, 100],
+              y: [50, -50, 100, 50],
+              opacity: [0.15, 0.3, 0.2, 0.15],
             }}
             transition={{
-              duration: 15,
+              duration: 30,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2,
+            }}
+            className="absolute -bottom-40 -left-40 w-[900px] h-[900px] bg-gradient-to-tr from-blue-500 via-cyan-400 to-emerald-500 rounded-full blur-3xl"
+          />
+          
+          <motion.div
+            animate={{
+              scale: [1, 1.25, 1.15, 1],
+              rotate: [0, -90, -180, -270, -360],
+              x: [0, 50, -50, 0],
+              y: [0, -50, 50, 0],
+              opacity: [0.1, 0.25, 0.15, 0.1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-primary/30 rounded-full blur-3xl"
+          />
+          
+          {/* Additional flowing shapes for liquid effect */}
+          <motion.div
+            animate={{
+              x: [-200, 200, -200],
+              y: [0, -100, 0],
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.2, 0.1],
+            }}
+            transition={{
+              duration: 18,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/2 left-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-bl from-amber-400/20 to-yellow-500/20 rounded-full blur-3xl"
           />
+          
+          <motion.div
+            animate={{
+              x: [200, -200, 200],
+              y: [0, 100, 0],
+              scale: [1, 1.3, 1],
+              opacity: [0.08, 0.18, 0.08],
+            }}
+            transition={{
+              duration: 22,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+            }}
+            className="absolute bottom-1/4 right-1/4 w-[700px] h-[700px] bg-gradient-to-tr from-teal-500/20 to-blue-600/20 rounded-full blur-3xl"
+          />
+          
+          {/* Overlay for subtle vignette effect */}
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/40" />
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
