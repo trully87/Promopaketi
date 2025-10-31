@@ -18,18 +18,18 @@ const translations = {
     'nav.contact': 'Kontakt',
     
     // Hero
-    'hero.title': 'Premium Poklon Paketi',
-    'hero.subtitle': 'Jedinstveni novogodišnji i korporativni pokloni sa personalizacijom',
-    'hero.cta.view': 'Pogledaj pakete',
-    'hero.cta.contact': 'Kontaktirajte nas',
+    'hero.title': 'Vaš Partner za Kompletna Poslovna Rješenja',
+    'hero.subtitle': 'Razumijemo, dizajniramo i realizujemo Vaše projekte poklonpaketa. Od ideje do isporuke - kompletan pristup koji osigurava uspjeh.',
+    'hero.cta.view': 'Istražite pakete',
+    'hero.cta.contact': 'Razgovarajmo',
     
     // Categories
     'category.newyear': 'Novogodišnji Paketi',
-    'category.newyear.desc': 'Ekskluzivni novogodišnji pokloni sa custom made kutijama',
+    'category.newyear.desc': 'Kurirana kolekcija luksuznih novogodišnjih poklona. Od ideje do isporuke - sveobuhvatno rješenje koje ostavlja upečatljiv dojam.',
     'category.corporate': 'Korporativni Paketi',
-    'category.corporate.desc': 'Profesionalni poslovni pokloni za Vašu firmu',
+    'category.corporate.desc': 'Strateška poslovna rješenja koja jačaju Vaš brend. Precizan dizajn i impresivna realizacija za rezultate koji se mjere.',
     'category.eko': 'Eko Paketi',
-    'category.eko.desc': 'Održivi i ekološki pokloni sa lokalnim proizvodima',
+    'category.eko.desc': 'Održiva rješenja koja odražavaju Vaše vrijednosti. Autentični lokalni proizvodi sa premium prezentacijom.',
     
     // Packages
     'package.basic.newyear': 'Osnovni Novogodišnji Paket',
@@ -67,7 +67,7 @@ const translations = {
     'form.success': 'Upit uspješno poslat!',
     
     // Footer
-    'footer.tagline': 'Premium poklon paketi sa personalizacijom',
+    'footer.tagline': 'End-to-end rješenja za Vaše korporativne i novogodišnje poklone. Partnerski pristup koji donosi rezultate.',
     'footer.quick.links': 'Brzi linkovi',
     'footer.contact.info': 'Kontakt informacije',
     'footer.newsletter': 'Newsletter',
@@ -84,18 +84,18 @@ const translations = {
     'nav.contact': 'Contact',
     
     // Hero
-    'hero.title': 'Premium Gift Packages',
-    'hero.subtitle': 'Unique New Year and corporate gifts with personalization',
-    'hero.cta.view': 'View Packages',
-    'hero.cta.contact': 'Contact Us',
+    'hero.title': 'Your Partner for Complete Business Solutions',
+    'hero.subtitle': 'We understand, design and deliver your gift package projects. From concept to delivery - a comprehensive approach ensuring success.',
+    'hero.cta.view': 'Explore Packages',
+    'hero.cta.contact': 'Let\'s Talk',
     
     // Categories
     'category.newyear': "New Year's Packages",
-    'category.newyear.desc': 'Exclusive New Year gifts with custom made boxes',
+    'category.newyear.desc': 'Curated collection of luxury New Year gifts. From concept to delivery - comprehensive solution leaving lasting impression.',
     'category.corporate': 'Corporate Packages',
-    'category.corporate.desc': 'Professional business gifts for your company',
+    'category.corporate.desc': 'Strategic business solutions strengthening your brand. Precise design and impressive execution delivering measurable results.',
     'category.eko': 'Eco Packages',
-    'category.eko.desc': 'Sustainable and eco-friendly gifts with local products',
+    'category.eko.desc': 'Sustainable solutions reflecting your values. Authentic local products with premium presentation.',
     
     // Packages
     'package.basic.newyear': "Basic New Year's Package",
@@ -133,7 +133,7 @@ const translations = {
     'form.success': 'Inquiry sent successfully!',
     
     // Footer
-    'footer.tagline': 'Premium gift packages with personalization',
+    'footer.tagline': 'End-to-end solutions for your corporate and New Year gifts. Partnership approach delivering results.',
     'footer.quick.links': 'Quick Links',
     'footer.contact.info': 'Contact Information',
     'footer.newsletter': 'Newsletter',
