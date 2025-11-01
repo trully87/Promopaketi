@@ -252,7 +252,7 @@ export default function About() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.h1 
-              className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-foreground/60"
+              className="font-playfair text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-foreground/60"
               data-testid="text-hero-title"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -365,7 +365,7 @@ export default function About() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div className="text-center mb-12" variants={fadeInUpVariants}>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" data-testid="text-clients-title">
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4" data-testid="text-clients-title">
               {t('about.clients.title')}
             </h2>
             <p className="text-lg text-muted-foreground" data-testid="text-clients-subtitle">
@@ -423,7 +423,7 @@ export default function About() {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
+            className="font-playfair text-4xl md:text-5xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
             data-testid="text-story-title"
             variants={itemVariants}
           >
@@ -512,7 +512,7 @@ export default function About() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-16 text-center"
+            className="font-playfair text-4xl md:text-5xl font-bold mb-16 text-center"
             data-testid="text-values-title"
             variants={fadeInUpVariants}
           >
@@ -544,7 +544,7 @@ export default function About() {
                           <IconComponent className={`w-8 h-8 ${value.color}`} />
                         </div>
                       </div>
-                      <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
+                      <h3 className="font-playfair text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
                         {value.title}
                       </h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">
@@ -573,7 +573,7 @@ export default function About() {
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 
-            className="text-4xl md:text-6xl font-bold mb-6"
+            className="font-playfair text-4xl md:text-6xl font-bold mb-6"
             data-testid="text-cta-title"
             variants={itemVariants}
           >

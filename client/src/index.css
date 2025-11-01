@@ -471,4 +471,9 @@
   .animate-bounce-slow {
     animation: bounce 2s ease-in-out infinite;
   }
+  
+  /* Playfair Display Font Utility */
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
 }

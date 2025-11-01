@@ -3,6 +3,9 @@
 ## Overview
 Brain Box is a premium e-commerce web application focused on luxury gift packages for the Serbian/Montenegrin market. It offers diverse product categories like New Year's, Corporate, Eco, Local Producers, Technology, Sport & Recreation, and Premium VIP packages, with full bilingual support. The platform includes a customer-facing storefront for browsing and inquiries, a custom package CTA section, and an admin panel for comprehensive management of products, categories, content, and subscribers. The project aims to provide a scalable, feature-rich platform with a premium user experience.
 
+## Recent Changes (November 1, 2025)
+- **Playfair Display Typography**: Applied elegant Playfair Display serif font to all headings (h1, h2, h3) on About Us page for premium editorial aesthetic
+
 ## Recent Changes (October 31, 2025)
 - **Premium About Us Page with Advanced Animations**: Implemented Mentalist Agency-inspired About page with 5 animated sections using Framer Motion, plus premium visuals and client showcase. Features include:
   - **Hero**: Fluid animated liquid background with 6 independent flowing gradient shapes (primary/amber/orange, blue/cyan/emerald, purple/pink, yellow, teal combinations), complex multi-axis movement (scale, rotate, translate), staggered timing (18-30s cycles), vignette overlay for depth
